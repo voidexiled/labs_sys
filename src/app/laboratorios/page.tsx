@@ -5,13 +5,13 @@ import { MainWrapperHeader } from "@/components/main-wrapper-header";
 
 export default function LaboratoriesPage() {
     return (
-
         <MainWrapper>
             <MainWrapperHeader title="Laboratorios" />
             <MainWrapperContent>
                 <LaboratoriesList />
             </MainWrapperContent>
         </MainWrapper>
+
 
     )
 }

@@ -11,12 +11,13 @@ import { AnalyticsIcon } from "@/icons/analytics-icon"
 import { ModeToggle } from "./theme-toggle"
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { Input } from "./ui/input";
 export default function LeftMenu() {
 
     return (
-        <aside className="absolute left-0 top-0 h-full w-[0%] overflow-hidden z-50 bg-background xl:relative xl:h-full xl:w-full border-r border-secondary flex flex-col">
+        <aside className="absolute left-0 top-0 h-full w-[0%] overflow-hidden z-50 bg-background xl:relative xl:h-full xl:w-full border-r flex flex-col">
             {/* LOGO SIDE */}
-            <div className="flex flex-row items-center justify-between pt-9 pb-5 px-8 border-b border-secondary stroke-foreground ">
+            <div className="flex flex-row items-center justify-between pt-9 pb-5 px-8 border-b  stroke-foreground ">
                 <Link href="/dashboard" >
                     <div className="logo flex flex-row gap-4 items-center justify-start">
                         <SchoolIcon width={22} height={22} />
@@ -45,6 +46,7 @@ export default function LeftMenu() {
                 <NavItem href="/estadisticas" title="Estadisticas" >
                     <AnalyticsIcon width={20} height={20} />
                 </NavItem>
+
 
             </nav>
 

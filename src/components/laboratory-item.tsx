@@ -51,14 +51,14 @@ export const LaboratoryItem = (props: {
 
 
         <div
-            className="relative grid grid-cols-laboratory-item transition-all duration-300 hover:pl-2 hover:cursor-pointer group min-h-28 "
+            className="relative grid grid-cols-laboratory-item transition-all duration-300 hover:pl-2 hover:cursor-pointer group min-h-32  "
             onClick={() => {
 
             }}
         >
-            <div className="py-3 overflow-visible w-32 ">
+            <div className="py-3 overflow-visible h-full p-4 flex items-center ">
                 <AspectRatio ratio={16 / 9} className="">
-                    <Image src="/laboratory_cx1.webp" alt="" fill className="shadow-sm shadow-black/30 rounded-md object-cover " />
+                    <Image src="/laboratory_cx1.webp" alt="" fill className="drop-shadow-lg shadow-black rounded-md object-cover " />
                 </AspectRatio>
             </div>
 
