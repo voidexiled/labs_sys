@@ -1,8 +1,9 @@
 'use client';
 import { ThemeProvider } from "./theme-provider"
-import { NextUIProvider } from "@nextui-org/react";
 
-export const Providers = (props: Readonly<{ children: React.ReactNode }>) => {
+
+export const Providers = async (props: Readonly<{ children: React.ReactNode }>) => {
+
     return (
 
         <ThemeProvider attribute="class"

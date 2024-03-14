@@ -26,3 +26,8 @@ export type Subject = {
   subject_id: number;
   subject_label: string;
 };
+
+export type User = {
+  email: string;
+  loggedIn: boolean;
+};

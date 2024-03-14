@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image"
 import { AspectRatio } from "./ui/aspect-ratio"
-import { Button } from "./ui/button";
 import { Client, Laboratory } from "@/env";
 import { getType } from "@/services/clients_types.service";
 import { getClient } from "@/services/clients.service";
@@ -51,20 +50,20 @@ export const LaboratoryItem = (props: {
 
 
         <div
-            className="relative grid grid-cols-laboratory-item transition-all duration-300 hover:pl-2 hover:cursor-pointer group min-h-32  "
+            className="relative grid grid-cols-laboratory-item transition-all duration-300 hover:cursor-pointer group min-h-32  "
             onClick={() => {
 
             }}
         >
-            <div className="py-3 overflow-visible h-full p-4 flex items-center ">
+            <div className="py-3 overflow-visible h-full p-4 flex items-center  transition-all ">
                 <AspectRatio ratio={16 / 9} className="">
                     <Image src="/laboratory_cx1.webp" alt="" fill className="drop-shadow-lg shadow-black rounded-md object-cover " />
                 </AspectRatio>
             </div>
 
-            <div className="lab-info py-3 px-5 flex flex-row lg:gap-6 tracking-wider text-sm group-hover:text-foreground/90 transition-all text-pretty">
+            <div className="lab-info py-3 px-5 flex flex-row lg:gap-6 tracking-wider text-sm group-hover:text-foreground/90 transition-all text-pretty group-hover:pl-6">
                 <div className="flex flex-col basis-[320px] text-muted-foreground font-normal">
-                    <h3 className="text-lg text-foreground">{props.lab.lab_label}</h3>
+                    <h3 className="text-lg text-foreground group-hover:underline transition-all">{props.lab.lab_label}</h3>
                     <span className="">{subject}</span>
 
                     {

@@ -13,7 +13,7 @@ type State = {
 };
 
 export const useLabs = create<State>((set) => ({
-  laboratories: LABORATORIES,
+  laboratories: [],
   setLaboratories: (labs) => set({ laboratories: labs }),
   removeLaboratory: (lab_id) =>
     set((state) => ({

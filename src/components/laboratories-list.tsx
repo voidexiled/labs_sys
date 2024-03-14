@@ -8,9 +8,7 @@ import type { Laboratory } from "@/env";
 export const LaboratoriesList = () => {
     const { laboratories } = useLabs()
     const [filteredLaboratories, setFilteredLaboratories] = useState([...laboratories])
-    const [showAll, setShowAll] = useState(true)
-    const [showBusy, setShowBusy] = useState(false)
-    const [showNotBusy, setShowNotBusy] = useState(false)
+
 
     const merge = (arr1: Laboratory[], arr2: Laboratory[]) => {
         const newArr: Laboratory[] = [...arr1];

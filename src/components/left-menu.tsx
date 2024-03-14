@@ -1,7 +1,6 @@
 "use client";
 import { SchoolIcon } from "@/icons/school-icon"
-import { Button } from "./ui/button"
-import { NotificationIcon } from "@/icons/notification-icon"
+
 import Link from "next/link"
 import { HomeIcon } from "@/icons/home-icon"
 import { NavItem } from "./nav-item"
@@ -12,6 +11,8 @@ import { ModeToggle } from "./theme-toggle"
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Input } from "./ui/input";
+import { LogOutButton } from "./logout-button";
+import { ExitIcon } from "@/icons/exit-icon";
 export default function LeftMenu() {
 
     return (
@@ -46,6 +47,9 @@ export default function LeftMenu() {
                 <NavItem href="/estadisticas" title="Estadisticas" >
                     <AnalyticsIcon width={20} height={20} />
                 </NavItem>
+                <LogOutButton title="Cerrar sesión" >
+                    <ExitIcon width={20} height={20} />
+                </LogOutButton>
 
 
             </nav>
