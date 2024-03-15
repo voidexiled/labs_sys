@@ -24,17 +24,41 @@ export default function LeftMenu() {
     const supabase = createClientComponentClient();
 
     const validateSession = () => {
-        if (user.loggedIn) {
-            if (pathname === "login") {
-                router.replace("/");
-            }
-        } else {
-            if (pathname !== "/login") {
-                router.replace("/login");
+
+        const isLogged = async () => {
+
+            const { data, error } = await supabase.auth.getUser();
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(data);
+                if (data.user) {
+                    if (data.user.email) {
+                        setUser({ email: data.user.email, loggedIn: true });
+                    }
+                }
             }
         }
-    }
+        isLogged().then(() => {
+            console.log("then")
+        }).catch(err => {
+            console.log(err);
+        }).finally(() => {
+            // TODO: CHECK REDIRECT BUG (IF NEEDED) TO MANAGE AUTH WHEN ENTERING THE PAGE
+            /* I THINK THIS IS BUGGING THE REDIRECTS !!  */
+            // if (user.loggedIn) {
+            //     if (pathname === "login") {
+            //         router.replace("/");
+            //     }
+            // } else {
+            //     if (pathname !== "/login") {
+            //         router.replace("/login");
+            //     }
+            // }
+        });
 
+
+    }
 
 
 
