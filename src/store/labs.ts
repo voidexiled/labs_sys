@@ -24,8 +24,6 @@ export const useLabs = create<State>((set) => ({
     })),
   updateLaboratory: (lab) =>
     set((state) => ({
-      laboratories: state.laboratories.map((l) =>
-        l.lab_id === lab.lab_id ? lab : l
-      ),
+      laboratories: state.laboratories.map((l) => (l.id === lab.id ? lab : l)),
     })),
 }));
