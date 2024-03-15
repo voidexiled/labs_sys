@@ -58,7 +58,9 @@ export const LaboratoryItem = (props: {
                 >
                     <div className="py-3 overflow-visible h-full p-4 flex items-center  transition-all ">
                         <AspectRatio ratio={16 / 9} className="">
-                            <Image quality={45} src="/laboratory_cx1.webp" alt="" fill className="drop-shadow-lg shadow-black rounded-md object-cover " />
+                            <Image loading="lazy" quality={45} src="/laboratory_cx1.webp" alt="" fill className="drop-shadow-lg shadow-black rounded-md object-cover transition-opacity opacity-0 duration-[2s] "
+                                onLoadingComplete={(image) => { image.classList.remove("opacity-0") }}
+                            />
                         </AspectRatio>
                     </div>
 
