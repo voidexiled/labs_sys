@@ -69,7 +69,9 @@ export default function LoginPage() {
 
             <MainWrapperHeader title="Iniciar Sesión" />
             <MainWrapperContent>
-                <div className="flex flex-col max-w-[320px] gap-6">
+                <form className="flex flex-col max-w-[320px] gap-6" onSubmit={(e) => {
+                    e.preventDefault();
+                }}>
                     <div className='flex flex-col gap-2'>
                         <FormItem >
                             <Label htmlFor="email">Email:</Label>
@@ -95,9 +97,9 @@ export default function LoginPage() {
                     </div>
 
 
-                    <Button onClick={handleSignIn}>Entrar</Button>
+                    <Button onClick={handleSignIn} type='submit' >Entrar</Button>
 
-                </div>
+                </form>
             </MainWrapperContent>
         </MainWrapper>
 
