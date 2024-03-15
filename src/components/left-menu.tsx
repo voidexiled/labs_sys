@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { SchoolIcon } from "@/icons/school-icon"
 
 import Link from "next/link"
@@ -9,11 +9,50 @@ import { TeachersIcon } from "@/icons/teachers-icon"
 import { AnalyticsIcon } from "@/icons/analytics-icon"
 import { ModeToggle } from "./theme-toggle"
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { Input } from "./ui/input";
 import { LogOutButton } from "./logout-button";
-import { ExitIcon } from "@/icons/exit-icon";
+import { LogOutIcon } from "@/icons/logout-icon";
+import { createClientComponentClient, createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import { useAuth } from "@/store/auth"
+import { LogInIcon } from "@/icons/login-icon"
 export default function LeftMenu() {
+    const { user, setUser, removeUser } = useAuth();
+    const router = useRouter();
+    const pathname = usePathname();
+    const supabase = createClientComponentClient();
+
+    const validateSession = () => {
+        if (user.loggedIn) {
+            if (pathname === "login") {
+                router.replace("/");
+            }
+        } else {
+            if (pathname !== "/login") {
+                router.replace("/login");
+            }
+        }
+    }
+
+
+
+
+    useEffect(() => {
+        validateSession();
+    }, [user.loggedIn]);
+
+
+    const handleSignOut = async () => {
+        await supabase.auth.signOut().then(() => {
+            removeUser();
+            router.replace("/login");
+        }).catch((err: any) => {
+
+        });
+        router.refresh();
+    }
+
 
     return (
         <aside className="absolute left-0 top-0 h-full w-[0%] overflow-hidden z-50 bg-background xl:relative xl:h-full xl:w-full border-r flex flex-col">
@@ -32,24 +71,34 @@ export default function LeftMenu() {
             <nav
                 className="flex flex-col items-start justify-start px-4 py-5 w-full h-full"
             >
-                <NavItem href="/dashboard" title="Panel de administración" >
-                    <HomeIcon width={20} height={20} />
-                </NavItem>
-                <NavItem href="/laboratorios" title="Laboratorios" >
-                    <LaboratoriesIcon width={20} height={20} />
-                </NavItem>
-                <NavItem href="/clientes" title="Clientes" >
-                    <TeachersIcon width={20} height={20} />
-                </NavItem>
-                {/* <NavItem href="/materias" title="Materias">
+                {user.loggedIn ? (
+                    <>
+                        <NavItem href="/dashboard" title="Panel de administración" >
+                            <HomeIcon width={20} height={20} />
+                        </NavItem>
+                        <NavItem href="/laboratorios" title="Laboratorios" >
+                            <LaboratoriesIcon width={20} height={20} />
+                        </NavItem>
+                        <NavItem href="/clientes" title="Clientes" >
+                            <TeachersIcon width={20} height={20} />
+                        </NavItem>
+                        {/* <NavItem href="/materias" title="Materias">
                     <TeachersIcon width={20} height={20} />
                 </NavItem> */}
-                <NavItem href="/estadisticas" title="Estadisticas" >
-                    <AnalyticsIcon width={20} height={20} />
-                </NavItem>
-                <LogOutButton title="Cerrar sesión" >
-                    <ExitIcon width={20} height={20} />
-                </LogOutButton>
+                        <NavItem href="/estadisticas" title="Estadisticas" >
+                            <AnalyticsIcon width={20} height={20} />
+                        </NavItem>
+                        <LogOutButton title="Cerrar sesión" handleSignOut={handleSignOut}>
+                            <LogOutIcon width={20} height={20} />
+                        </LogOutButton></>
+                ) :
+                    <>
+                        <NavItem href="/login" title="Iniciar sesión" >
+                            <LogInIcon width={20} height={20} />
+                        </NavItem>
+                    </>
+                }
+
 
 
             </nav>

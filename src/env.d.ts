@@ -1,30 +1,30 @@
 export type Laboratory = {
-  lab_id: number;
-  lab_label: string;
-  lab_subject: int;
-  busy_by?: number;
-  is_busy: boolean;
+  id: number;
+  label: string;
+  subjectId: int;
+  busyBy?: number;
+  isBusy: boolean;
   capacity: number;
 };
 
 export type Client = {
-  client_id: number;
-  no_control: string;
-  first_name: string;
-  last_name: string;
-  type_id: number;
-  created_at: string;
-  created_by: number;
+  id: number;
+  noControl: string;
+  firstName: string;
+  lastName: string;
+  typeId: number;
+  createdAt: string;
+  createdBy: number;
 };
 
 export type ClientType = {
-  type_id: number;
+  id: number;
   type: string;
 };
 
 export type Subject = {
-  subject_id: number;
-  subject_label: string;
+  id: number;
+  label: string;
 };
 
 export type User = {

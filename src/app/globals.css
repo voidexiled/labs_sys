@@ -67,6 +67,29 @@
   
 } */
 
+* {
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.selectable {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+.draggable {
+  -webkit-user-drag: initial;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 a {
   @apply hover:text-muted-foreground  hover:stroke-muted-foreground transition-all;
   
@@ -111,6 +134,26 @@ h1 {
     animation-range: 80px;
     transition: none;
   }
+}
+
+
+
+@keyframes loadingRectangle {
+  0% {
+    width: 0%;
+    opacity: 0;
+  }
+  10% {
+    width: 10%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.loading-bar {
+  animation: loadingRectangle 0.5s ease-in-out;
 }
 
 
