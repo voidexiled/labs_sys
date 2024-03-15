@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { type Laboratory } from "@/env";
 
 // BORRAR CONSTANTES -> REEMPLAZAR POR FETCH..
-import { LABORATORIES } from "@/data/lab_data.data";
 
 type State = {
   laboratories: Laboratory[];
