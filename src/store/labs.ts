@@ -16,7 +16,7 @@ export const useLabs = create<State>((set) => ({
   setLaboratories: (labs) => set({ laboratories: labs }),
   removeLaboratory: (lab_id) =>
     set((state) => ({
-      laboratories: state.laboratories.filter((lab) => lab.lab_id !== lab_id),
+      laboratories: state.laboratories.filter((lab) => lab.id !== lab_id),
     })),
   addLaboratory: (lab) =>
     set((state) => ({
