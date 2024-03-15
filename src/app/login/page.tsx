@@ -12,11 +12,15 @@ import { MainWrapperHeader } from '@/components/main-wrapper-header';
 import { MainWrapperContent } from '@/components/main-wrapper-content';
 import { Label } from '@/components/ui/label';
 import { FormItem } from '@/components/ui/form';
+import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
+import { PasswordInput } from '@/components/ui/password-input';
 
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isShowingPassword, setIsShowingPassword] = useState(false);
+
     const { user, setUser, removeUser } = useAuth();
 
     const router = useRouter();
@@ -75,10 +79,18 @@ export default function LoginPage() {
                         </FormItem>
                         <FormItem>
                             <Label htmlFor="password">Password:</Label>
-                            <Input id="password" name="password" type="password"
+                            <PasswordInput
+                                className='transition-all duration-300 ease-in-out relative'
+                                type={isShowingPassword ? 'text' : 'password'}
+                                id="password" name="password"
                                 value={password}
                                 onChange={(e) => { setPassword(e.target.value) }}
+
                                 required />
+
+
+
+
                         </FormItem>
                     </div>
 
