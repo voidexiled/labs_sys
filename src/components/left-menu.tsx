@@ -17,6 +17,8 @@ import { createClientComponentClient, createServerComponentClient } from "@supab
 import { cookies } from "next/headers";
 import { useAuth } from "@/store/auth"
 import { LogInIcon } from "@/icons/login-icon"
+import { ServicesIcon } from "@/icons/services-icon"
+import { EquipmentIcon } from "@/icons/equipment-icon"
 export default function LeftMenu() {
     const { user, setUser, removeUser } = useAuth();
     const router = useRouter();
@@ -29,7 +31,7 @@ export default function LeftMenu() {
 
             const { data, error } = await supabase.auth.getUser();
             if (error) {
-                console.log(error);
+
             } else {
                 console.log(data);
                 if (data.user) {
@@ -100,12 +102,21 @@ export default function LeftMenu() {
                         <NavItem href="/dashboard" title="Panel de administración" >
                             <HomeIcon width={20} height={20} />
                         </NavItem>
-                        <NavItem href="/laboratorios" title="Laboratorios" >
-                            <LaboratoriesIcon width={20} height={20} />
-                        </NavItem>
                         <NavItem href="/clientes" title="Clientes" >
                             <TeachersIcon width={20} height={20} />
                         </NavItem>
+                        <NavItem href="/laboratorios" title="Laboratorios" >
+                            <LaboratoriesIcon width={20} height={20} />
+                        </NavItem>
+
+                        <NavItem href="/servicios" title="Servicios" >
+                            <ServicesIcon width={20} height={20} />
+                        </NavItem>
+                        <NavItem href="/equipment" title="Equipamento" >
+                            <EquipmentIcon width={20} height={20} />
+                        </NavItem>
+
+
                         {/* <NavItem href="/materias" title="Materias">
                     <TeachersIcon width={20} height={20} />
                 </NavItem> */}
