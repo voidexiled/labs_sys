@@ -26,11 +26,13 @@ export default function LoginPage() {
     const router = useRouter();
 
     const supabase = createClientComponentClient();
-    supabase.auth.getUser().then((user) => {
+    supabase.auth.getUser().then(async (user) => {
         if (user.data.user) {
             const email = user.data.user.email;
+            const userInDb = await verifyIsInDB();
+
             if (email) {
-                setUser({ email: email, loggedIn: true });
+                setUser({ email: email, loggedIn: true, role: userInDb.roleId });
                 router.replace("/dashboard");
             }
         }
@@ -48,11 +50,16 @@ export default function LoginPage() {
     }
 
     const handleSignIn = async () => {
+
         await supabase.auth.signInWithPassword({
             email, password
-        }).then((res) => {
+        }).then(async (res) => {
             if (!res.error) {
-                setUser({ email: email, loggedIn: true });
+                const user = await verifyIsInDB();
+                const userToStore = { email: email, loggedIn: true, role: user.roleId };
+                // console.log(userToStore)
+                setUser(userToStore);
+
                 router.replace("/dashboard");
             } else {
                 alert(res.error.message);
@@ -64,6 +71,52 @@ export default function LoginPage() {
         router.refresh();
     }
 
+    const verifyIsInDB = async () => {
+        let user: {
+            email: string;
+            roleId: number;
+            uuid: string;
+        } = {
+            email: email,
+            roleId: 5,
+            uuid: "",
+
+        };
+        // Verify if exist in db Users
+        const { data, error } = await supabase.from('users').select('*').eq('email', email);
+        // Getting UUID by cookies
+        const uuid = (await supabase.auth.getUser()).data.user?.id;
+
+
+        if (uuid) {
+            user = { email: email, uuid: uuid, roleId: 5 }
+        }
+        if (data) {
+
+            if (data.length === 0) {
+
+                // console.log(uuid);
+                if (uuid) {
+                    // const createdAt = Date();
+                    // const lastLoginAt = Date.now().valueOf();
+                    // console.log(createdAt, lastLoginAt);
+
+                    // insert the user row in users table if not exists
+                    await supabase.from('users').insert(user);
+                }
+            } else {
+                if (data[0]) {
+                    user = { email: email, uuid: data[0].uuid, roleId: data[0].roleId }
+                }
+            }
+        }
+        if (error) {
+
+            // console.log(error?.message)
+        }
+
+        return user;
+    }
     return (
         <MainWrapper>
 

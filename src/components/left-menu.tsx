@@ -25,6 +25,53 @@ export default function LeftMenu() {
     const pathname = usePathname();
     const supabase = createClientComponentClient();
 
+    const verifyIsInDB = async (email: string) => {
+        let user: {
+            email: string;
+            roleId: number;
+            uuid: string;
+        } = {
+            email: email,
+            roleId: 5,
+            uuid: "",
+
+        };
+        // Verify if exist in db Users
+        const { data, error } = await supabase.from('users').select('*').eq('email', email);
+        // Getting UUID by cookies
+        const uuid = (await supabase.auth.getUser()).data.user?.id;
+
+
+        if (uuid) {
+            user = { email: email, uuid: uuid, roleId: 5 }
+        }
+        if (data) {
+
+            if (data.length === 0) {
+
+                // console.log(uuid);
+                if (uuid) {
+                    // const createdAt = Date();
+                    // const lastLoginAt = Date.now().valueOf();
+                    // console.log(createdAt, lastLoginAt);
+
+                    // insert the user row in users table if not exists
+                    await supabase.from('users').insert(user);
+                }
+            } else {
+                if (data[0]) {
+                    user = { email: email, uuid: data[0].uuid, roleId: data[0].roleId }
+                }
+            }
+        }
+        if (error) {
+
+            // console.log(error?.message)
+        }
+
+        return user;
+    }
+
     const validateSession = () => {
 
         const isLogged = async () => {
@@ -36,7 +83,8 @@ export default function LeftMenu() {
                 console.log(data);
                 if (data.user) {
                     if (data.user.email) {
-                        setUser({ email: data.user.email, loggedIn: true });
+                        const userInDb = await verifyIsInDB(data.user.email);
+                        setUser({ email: data.user.email, loggedIn: true, role: userInDb.roleId });
                     }
                 }
             }
@@ -81,13 +129,15 @@ export default function LeftMenu() {
 
 
     return (
+
         <aside className="absolute left-0 top-0 h-full w-[0%] overflow-hidden z-50 bg-background xl:relative xl:h-full xl:w-full border-r flex flex-col">
+            {/* TODO: MOBILE ASIDE */}
             {/* LOGO SIDE */}
             <div className="flex flex-row items-center justify-between pt-9 pb-5 px-8 border-b  stroke-foreground ">
                 <Link href="/dashboard" >
                     <div className="logo flex flex-row gap-4 items-center justify-start">
                         <SchoolIcon width={22} height={22} />
-                        <h1 className="font-medium">Gestión Académica</h1>
+                        <h1 className="font-medium">Gestión de Laboratorios</h1>
                     </div>
                 </Link>
                 <ModeToggle />
