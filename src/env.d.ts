@@ -29,5 +29,6 @@ export type Subject = {
 
 export type User = {
   email: string;
+  role: number;
   loggedIn: boolean;
 };
