@@ -24,13 +24,15 @@ export default function RootLayout({
 
 
   return (
-    <html lang="en">
+    <html lang="es">
 
-      <body className={"min-h-screen bg-background text-foreground grid grid-cols-body-small xl:grid-cols-body-big " + inter.className}>
+      <body className={"min-h-screen bg-background text-foreground " + inter.className}>
         <Providers>
-          <LeftMenu />
+          <main className="grid grid-cols-body-small xl:grid-cols-body-big ">
+            <LeftMenu />
 
-          {children}
+            {children}
+          </main>
         </Providers>
       </body>
 
