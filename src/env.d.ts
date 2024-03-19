@@ -15,6 +15,8 @@ export type Client = {
   typeId: number;
   createdAt: string;
   createdBy: number;
+  inLab: boolean;
+  labAt: number | null;
 };
 
 export type ClientType = {
