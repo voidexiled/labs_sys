@@ -19,6 +19,7 @@ import { useAuth } from "@/store/auth"
 import { LogInIcon } from "@/icons/login-icon"
 import { ServicesIcon } from "@/icons/services-icon"
 import { EquipmentIcon } from "@/icons/equipment-icon"
+import { ScheduleIcon } from "@/icons/schedule-icon"
 export default function LeftMenu() {
     const { user, setUser, removeUser } = useAuth();
     const router = useRouter();
@@ -152,6 +153,7 @@ export default function LeftMenu() {
                         <NavItem href="/dashboard" title="Panel de administración" >
                             <HomeIcon width={20} height={20} />
                         </NavItem>
+
                         <NavItem href="/clientes" title="Clientes" >
                             <TeachersIcon width={20} height={20} />
                         </NavItem>
@@ -165,17 +167,18 @@ export default function LeftMenu() {
                         <NavItem href="/equipment" title="Equipamento" >
                             <EquipmentIcon width={20} height={20} />
                         </NavItem>
-
-
-                        {/* <NavItem href="/materias" title="Materias">
-                    <TeachersIcon width={20} height={20} />
-                </NavItem> */}
                         <NavItem href="/estadisticas" title="Estadisticas" >
                             <AnalyticsIcon width={20} height={20} />
                         </NavItem>
+                        <NavItem href="/horario" title="Horario" >
+                            <ScheduleIcon width={20} height={20} />
+                        </NavItem>
+
+
                         <LogOutButton title="Cerrar sesión" handleSignOut={handleSignOut}>
                             <LogOutIcon width={20} height={20} />
-                        </LogOutButton></>
+                        </LogOutButton>
+                    </>
                 ) :
                     <>
                         <NavItem href="/login" title="Iniciar sesión" >
