@@ -78,6 +78,7 @@ const config = {
         "body-big": "340px 1fr",
         "body-small": "1fr",
         "laboratory-item": "200px 3fr",
+        "client-item": "100px 3fr",
       },
       gridTemplateRows: {
         main: "1fr 6fr",
