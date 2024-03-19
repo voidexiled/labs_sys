@@ -10,17 +10,16 @@ import { useClients } from "@/store/clients";
 import { useClientsTypes } from "@/store/clients_types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Button } from "./ui/button";
-import { Input } from "@nextui-org/react";
+
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Label } from "./ui/label";
+import { Input } from "./ui/input";
 
 export const LaboratoriesList = () => {
-    const [searchQuery, setSearchQuery] = useState("");
     const { laboratories, setLaboratories } = useLabs();
+    const [searchQuery, setSearchQuery] = useState("");
     const [filteredLaboratories, setFilteredLaboratories] = useState(laboratories)
-    const { subjects, setSubjects } = useSubjects();
-    const { clients, setClients } = useClients();
-    const { types, setTypes } = useClientsTypes();
+
     const supabase = createClientComponentClient();
 
     useEffect(() => {
@@ -32,36 +31,7 @@ export const LaboratoriesList = () => {
     }, [searchQuery])
 
 
-    useEffect(() => {
 
-        const fetchData = async () => {
-
-            // Fetch Subjects from supabase
-            const { data, error } = await supabase.from("subjects").select("*")
-            if (data) {
-                setSubjects(data);
-            }
-
-            // Fetch Clients from supabase
-            await supabase.from("clients").select("*").then((data) => {
-                if (data.data) {
-                    setClients(data.data);
-                }
-            });
-            // Fetch Client Types from supabase
-            await supabase.from("clients_types").select("*").then((data) => {
-                if (data.data) {
-                    setTypes(data.data);
-                }
-            });
-            console.log("!!!! FETCHING ----")
-            console.log("---Subjects: ", subjects);
-            console.log("---Clients: ", clients);
-            console.log("---Types: ", types);
-            console.log("---- END FETCHING!!!!");
-        }
-        fetchData();
-    }, [])
 
 
     useEffect(() => {
@@ -124,19 +94,20 @@ export const LaboratoriesList = () => {
                     <Label htmlFor="search">Buscar</Label>
                     <Input
                         className="w-80"
-                        size="sm"
-                        placeholder="Lab..."
+
+                        placeholder="Laboratorio..."
                         value={searchQuery}
 
                         onChange={(e) => {
                             setSearchQuery(e.target.value);
-                        }} />
+                        }}
+                    />
                 </ToggleGroup>
 
 
 
             </div>
-            <ScrollArea className="h-[600px] ">
+            <ScrollArea className="h-[600px] pr-8">
 
                 {
                     filteredLaboratories.map((lab) => (
