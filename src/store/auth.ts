@@ -8,7 +8,7 @@ type State = {
 };
 
 export const useAuth = create<State>((set) => ({
-  user: { email: "", loggedIn: false },
+  user: { email: "", loggedIn: false, role: 5 },
   setUser: (user) => set({ user }),
-  removeUser: () => set({ user: { email: "", loggedIn: false } }),
+  removeUser: () => set({ user: { email: "", loggedIn: false, role: 5 } }),
 }));
