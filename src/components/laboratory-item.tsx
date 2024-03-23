@@ -64,23 +64,25 @@ export const LaboratoryItem = (props: {
                         </AspectRatio>
                     </div>
 
-                    <div className="lab-info py-3 px-5 flex flex-row lg:gap-6 tracking-wider text-sm group-hover:text-foreground/90 transition-all text-pretty group-hover:pl-6">
+                    <div className="lab-info py-3 px-5 flex flex-row lg:gap-6 tracking-wider text-sm group-hover:text-foreground/90 transition-all text-pretty ">
                         <div className="flex flex-col basis-[320px] text-muted-foreground font-normal text-sm gap-1 ">
-                            <h3 className="text-base text-foreground transition-all hover:font-medium">{props.lab.label}</h3>
-                            <span className="">{subject}</span>
+                            <h3 className="text-sm text-foreground transition-all hover:font-medium"><span className="transition-all group-hover:font-medium">{props.lab.label}</span> <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">	&middot; {subject}</span> </h3>
+                            <div className="transition-all group-hover:pl-2 gap-1 flex flex-col">
+                                <span className="flex flex-col transition-colors group-hover:text-foreground">Capacidad: {props.lab.capacity}</span>
 
-                            {
-                                props.lab.isBusy
-                                    ? <><span className="text-primary">Ocupado por <span className="">{clientType}</span></span>
-                                        <span className="decoration-primary text-primary">{client ? `${client.firstName} ${client.lastName}` : ''}</span>
-                                    </>
-                                    : <span className="text-green-700 font-semibold">Disponible</span>
-                            }
+                                {
+                                    props.lab.isBusy
+                                        ? <><span className="text-primary">Ocupado por <span className="">{clientType}</span></span>
+                                            <span className="decoration-primary text-primary">{client ? `${client.firstName} ${client.lastName}` : ''}</span>
+                                        </>
+                                        : <span className="text-green-700 font-semibold">Disponible</span>
+                                }
+                            </div>
 
                         </div>
-                        <div className="flex flex-col basis-[120px] text-muted-foreground">
-                            <span>Capacidad: {props.lab.capacity}</span>
-                        </div>
+                        {/* <div className="flex flex-col basis-[120px] text-muted-foreground">
+                            
+                        </div> */}
                         {/* <div className="ml-10">
                     <Button size="sm" variant="ghost" className="transition-all">Mantenimiento</Button>
                 </div> */}
@@ -100,7 +102,7 @@ export const LaboratoryItem = (props: {
                         <ContextMenuItem>Desocupar</ContextMenuItem>
                     </> :
                     <ContextMenuSub>
-                        <ContextMenuSubTrigger inset>Ocupar</ContextMenuSubTrigger>
+                        <ContextMenuSubTrigger >Ocupar</ContextMenuSubTrigger>
                         <ContextMenuSubContent>
                             <ContextMenuItem>Agendar</ContextMenuItem>
                             <ContextMenuItem>Ahora</ContextMenuItem>
@@ -110,6 +112,14 @@ export const LaboratoryItem = (props: {
 
                 }
                 <ContextMenuSeparator />
+                <ContextMenuSub>
+                    <ContextMenuSubTrigger>Ver</ContextMenuSubTrigger>
+                    <ContextMenuSubContent>
+                        <ContextMenuItem>Agenda</ContextMenuItem>
+                        <ContextMenuItem>Historial</ContextMenuItem>
+                        <ContextMenuItem>Ultima sesión</ContextMenuItem>
+                    </ContextMenuSubContent>
+                </ContextMenuSub>
                 <ContextMenuItem>Editar</ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem>Más...</ContextMenuItem>

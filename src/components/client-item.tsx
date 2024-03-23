@@ -50,7 +50,7 @@ export const ClientItem = (props: { client: Client }) => {
                         />
                     </AspectRatio>
                 </div>
-                <div className="py-4 px-5 flex flex-col justify-between tracking-wider text-sm text-foreground-90 transition-all text-pretty">
+                <div className="py-4 px-5 flex flex-col justify-between tracking-wider text-sm text-muted-foreground transition-all text-pretty">
                     <span className="text-foreground group-hover:font-medium transition-all">{firstName + " " + lastName}</span>
                     <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
                         <span>{noControl}</span>
