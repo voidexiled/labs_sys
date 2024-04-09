@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import type { User } from "@/env";
+import type { Profile } from "@/env";
 
 type State = {
-  user: User;
-  setUser: (user: User) => void;
+  user: Profile;
+  setUser: (user: Profile) => void;
   removeUser: () => void;
 };
 
