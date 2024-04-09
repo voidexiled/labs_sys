@@ -27,18 +27,19 @@ export default function ConfiguracionPage() {
                         <Link href="#" className="font-semibold text-primary">
                             General
                         </Link>
-                        <Link href="#">Security</Link>
-                        <Link href="#">Integrations</Link>
-                        <Link href="#">Support</Link>
-                        <Link href="#">Organizations</Link>
-                        <Link href="#">Advanced</Link>
+                        <Link href="#">Seguridad</Link>
+                        <Link href="#">Integraciones</Link>
+                        <Link href="#">Soporte</Link>
+                        <Link href="#">Organizaciones</Link>
+                        <Link href="#">Avanzado</Link>
                     </nav>
                     <div className="grid gap-6">
                         <Card>
                             <CardHeader>
                                 <CardTitle>Información personal</CardTitle>
                                 <CardDescription>
-                                    Used to identify your store in the marketplace.
+
+                                    Tus datos personales son utilizados para identificarte dentro de la pagina web.
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
