@@ -7,7 +7,7 @@ export type Laboratory = {
   capacity: number;
 };
 
-export type Client = {
+export type User = {
   id: number;
   noControl: string;
   firstName: string;
@@ -19,7 +19,7 @@ export type Client = {
   labAt: number | null;
 };
 
-export type ClientType = {
+export type UserType = {
   id: number;
   type: string;
 };
@@ -29,7 +29,7 @@ export type Subject = {
   label: string;
 };
 
-export type User = {
+export type Profile = {
   email: string;
   role: number;
   loggedIn: boolean;
