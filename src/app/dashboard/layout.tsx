@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     }
 };
 
-export default function RootLayout({
+export default function AdminLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
@@ -22,12 +22,11 @@ export default function RootLayout({
 
 
     return (
-
-        <div className="flex flex-row">
+        <div className="flex flex-row flex-nowrap flex-shrink flex-grow-0">
             <LeftMenu />
-
-            {children}
-            {/* <Toaster /> */}
+            <div className="relative flex w-full h-full">
+                {children}
+            </div>
         </div>
 
     );
