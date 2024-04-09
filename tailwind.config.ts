@@ -4,6 +4,8 @@ import { nextui } from "@nextui-org/react";
 const config = {
   darkMode: ["class"],
   content: [
+    "./src/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
@@ -75,7 +77,7 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       gridTemplateColumns: {
-        "body-big": "340px 1fr",
+        "body-big": "290px 1fr",
         "body-small": "1fr",
         "laboratory-item": "200px 3fr",
         "client-item": "100px 3fr",
