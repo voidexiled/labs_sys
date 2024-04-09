@@ -2,9 +2,17 @@ export const HomeIcon = (props: Readonly<{ width: number; height: number }>) => 
 
     return (
         <svg width={props.width} height={props.height} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9.00127 22L8.75064 18.4911C8.61589 16.6046 10.11 15 12.0013 15C13.8926 15 15.3867 16.6046 15.2519 18.4911L15.0013 22" strokeWidth="1.5" />
-            <path d="M2.35139 13.2135C1.99837 10.9162 1.82186 9.76763 2.25617 8.74938C2.69047 7.73112 3.65403 7.03443 5.58114 5.64106L7.02099 4.6C9.41829 2.86667 10.6169 2 12 2C13.3831 2 14.5817 2.86667 16.979 4.6L18.4189 5.64106C20.346 7.03443 21.3095 7.73112 21.7438 8.74938C22.1781 9.76763 22.0016 10.9162 21.6486 13.2135L21.3476 15.1724C20.8471 18.4289 20.5969 20.0572 19.429 21.0286C18.2611 22 16.5537 22 13.1388 22H10.8612C7.44633 22 5.73891 22 4.571 21.0286C3.40309 20.0572 3.15287 18.4289 2.65243 15.1724L2.35139 13.2135Z" strokeWidth="1.5" strokeLinejoin="round" />
+
+            <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" strokeWidth="1.5" />
+            <path d="M2.5 9H21.5" strokeWidth="1.5" strokeLinejoin="round" />
+            <path d="M13 13L17 13" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M13 17H15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M6.99981 6H7.00879" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M10.9998 6H11.0088" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M9 9V21.5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
+
+
 
 
 
