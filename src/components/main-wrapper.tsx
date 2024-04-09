@@ -1,13 +1,22 @@
-import { ScrollArea } from "./ui/scroll-area"
+"use client"
 
+import { ScrollArea } from "./ui/scroll-area"
+import { motion } from "framer-motion";
 export const MainWrapper = (props: { children: React.ReactNode }) => {
     return (
-        <ScrollArea className="h-screen pb-[100px]">
-            <main className="h-full w-full grid  bg-background">
-                <div className="m-auto relative rounded-sm bg-card w-full h-full flex flex-col">
+        <ScrollArea className="h-full w-full bg-muted/40">
+
+
+            <motion.main
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="h-full w-full grid min-h-screen">
+                <div className="m-auto relative rounded-sm  w-full h-full flex flex-col">
                     {props.children}
                 </div>
-            </main>
+            </motion.main>
         </ScrollArea>
     )
 }
