@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
-export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setFile?: Dispatch<SetStateAction<File | null>> }) => {
+export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setFile?: Dispatch<SetStateAction<File | null>>, setPpHasChanged?: Dispatch<SetStateAction<boolean>>, name: string }) => {
     const router = useRouter();
     const [imgUrl, setImgUrl] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -61,6 +61,9 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
         const basePathStorage = supabase.storage.from("avatars").getPublicUrl("").data.publicUrl;
         const file: File = e.target.files[0];
         if (!file) return;
+        if (props.setPpHasChanged) {
+            props.setPpHasChanged(true);
+        }
 
         if (props.setFile) {
             props.setFile(file);
@@ -114,6 +117,7 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
                     type="file"
                     className="hidden w-full h-full"
                     onChange={handleFileInputChange}
+                    name={props.name}
                 />
             </div>
             <AvatarImage src={imgUrl ? imgUrl : ""} className="object-cover" />
