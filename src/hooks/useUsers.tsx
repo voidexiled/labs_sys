@@ -1,5 +1,5 @@
 "use client";
-import { createSupabaseBrowser, createSupabaseBrowserAdmin } from "@/lib/supabase/browser";
+import { createSupabaseBrowser } from "@/lib/supabase/browser";
 import { Tables } from "@/lib/types/supabase";
 import { useQuery } from "@tanstack/react-query";
 const initUsers = [{
@@ -16,6 +16,7 @@ const initUsers = [{
 export function useUsers() {
     return useQuery({
         queryKey: ["users"],
+        _optimisticResults: "optimistic",
         queryFn: async () => {
             const supabase = createSupabaseBrowser();
             const { data: { user } } = await supabase.auth.getUser();
@@ -26,6 +27,7 @@ export function useUsers() {
                 return users as Tables<"users_profile">[];
             }
             return initUsers;
-        }
+        },
+
     })
 }

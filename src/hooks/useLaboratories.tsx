@@ -14,6 +14,7 @@ const initLabs = [{
 export function useLaboratories() {
     return useQuery({
         queryKey: ["laboratories"],
+        _optimisticResults: "optimistic",
         queryFn: async () => {
             const supabase = createSupabaseBrowser();
             const { data: { user } } = await supabase.auth.getUser();

@@ -8,6 +8,7 @@ const initUsersRoles = [{
 export function useUserRoles() {
     return useQuery({
         queryKey: ["userRoles"],
+        _optimisticResults: "optimistic",
         queryFn: async () => {
             const supabase = createSupabaseBrowser();
             const { data: { user } } = await supabase.auth.getUser();

@@ -14,6 +14,7 @@ const initUser = {
 export function useUser() {
     return useQuery({
         queryKey: ["user"],
+        _optimisticResults: "optimistic",
         queryFn: async () => {
             const supabase = createSupabaseBrowser();
             const { data: { user } } = await supabase.auth.getUser();
