@@ -26,33 +26,23 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
     }, [user]);
 
     useEffect(() => {
-        const getImageFromSupabase = async () => {
+        const updateImageUrl = async () => {
             if (user) {
-
                 if (user.image_url) {
-                    const pathUrl = user.image_url
-                    console.log(" correct image_url");
-                    console.log(pathUrl)
-                    if (pathUrl) {
-                        console.log(" correct pathUrl");
-                        console.log(pathUrl, user.image_url)
-                        const { data: dataImg, error: errorImg } = await supabase.storage.from("avatars").download(user.image_url);
-                        if (errorImg) {
-                            console.log("Error downloading image: ", errorImg);
-                            return;
-                        }
-                        if (dataImg) {
-                            console.log(" correct dataImg");
-                            //const arrBuffer = await dataImg.arrayBuffer();
-                            setImgUrl(dataImg ? URL.createObjectURL(dataImg) : "");
-                            console.log("Image setted: ", dataImg);
-                        }
+                    const { data, error } = await supabase.from("users_profile").select("updated_at").eq("id", user.id).single();
+                    if (error) {
+                        console.error(error.message);
+                        return;
                     }
 
+                    const pathUrl = supabase.storage.from("avatars").getPublicUrl(user.image_url);
+                    console.log(pathUrl.data.publicUrl + "?t=" + data.updated_at);
+                    setImgUrl(pathUrl.data.publicUrl + "?t=" + data.updated_at);
                 }
             }
         }
-        getImageFromSupabase();
+        updateImageUrl();
+
     }, [imageUrl, user]);
 
 
@@ -100,7 +90,7 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
             // setImageUrl(file);
         }
         setImgUrl(URL.createObjectURL(file));
-        // refetchUsers();
+        refetchUsers();
 
     }
 
@@ -120,7 +110,7 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
                     name={props.name}
                 />
             </div>
-            <AvatarImage src={imgUrl ? imgUrl : ""} className="object-cover" />
+            <AvatarImage src={"" + imgUrl} className="object-cover" />
             <AvatarFallback>
                 {props.targetUser ? props.targetUser.display_name?.split(" ").map((name) => name[0]).join("").slice(0, 1).toUpperCase() : "?"}
             </AvatarFallback>

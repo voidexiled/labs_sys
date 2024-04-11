@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import axios from "axios"
 import { useToast } from "../ui/use-toast"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 
 type prefetchUsersType = {
@@ -59,6 +60,13 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
     const [type, setType] = useState("???");
 
     useEffect(() => {
+        setDisplayName(user.display_name);
+        setCorreo(user.email);
+        setNoId(user.noIdentificador);
+        setRole(user.role_id);
+    }, [user])
+
+    useEffect(() => {
         if (types) {
             const type = types.filter((t) => t.id === role_id)[0];
 
@@ -68,51 +76,21 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
         }
 
     }, [types])
-
     useEffect(() => {
-        const checkFileExists = async (filepath: string) => {
-            const { data, error } = await supabase.storage.from("avatars").list();
-            if (error) {
-                console.log(error);
-                return;
-            }
-
-            const files = data.filter(item => item.name === filepath)
-            return files.length > 0;
-        }
-
-        const getImageFromSupabase = async () => {
+        const updateImageUrl = async () => {
             if (image_url) {
-                const pathUrl = image_url
-                if (pathUrl) {
-                    const fileExists = await checkFileExists(pathUrl);
-                    if (fileExists) {
-                        const { data: dataImg, error: errorImg } = (await supabase.storage.from("avatars").download(pathUrl));
-                        if (errorImg) {
-                            console.log("Error downloading image: ", errorImg);
-                            return;
-                        }
-                        if (dataImg) {
-                            setImgUrl(dataImg ? URL.createObjectURL(dataImg) : "");
-                        }
-                    }
+                const { data, error } = await supabase.from("users_profile").select("updated_at").eq("id", id).single();
+                if (error) {
+                    console.error(error.message);
+                    return;
                 }
+
+                const pathUrl = supabase.storage.from("avatars").getPublicUrl(image_url);
+                console.log(pathUrl.data.publicUrl + "?t=" + data.updated_at);
+                setImgUrl(pathUrl.data.publicUrl + "?t=" + data.updated_at);
             }
         }
-        getImageFromSupabase();
-        const getUsersFromSupabase = async () => {
-            const { data: users, error: usersError } = await supabase.auth.admin.listUsers();
-            if (users) {
-                console.log("users: ", users);
-            }
-            if (usersError) {
-                console.log("error: ", usersError.message);
-            }
-
-        }
-
-        // getUsersFromSupabase();
-
+        updateImageUrl();
     }, [])
 
     const handleSaveChanges = async () => {
@@ -182,7 +160,37 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
                 console.log("storageData: ", storageData);
             }
         }
+
+        const updatedAt = formatDate(new Date());
+        const { data: updateUpdatedAt, error: updateUpdatedAtError } = await supabase.from("users_profile").update({ updated_at: updatedAt }).eq("id", id).select("*");
+        if (updateUpdatedAtError) {
+            toast({
+                title: "Error",
+                description: updateUpdatedAtError.message,
+                variant: "destructive",
+            });
+            return;
+        } else {
+            toast({
+                title: "Usuario actualizado",
+                description: "" + data["display_name"].toString() + " actualizado.",
+                variant: "default",
+            });
+            console.log("updateUpdatedAt: ", updateUpdatedAt);
+        }
         refetchUsers();
+    }
+
+    function formatDate(date: Date): string {
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const hours = String(date.getUTCHours()).padStart(2, '0');
+        const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+        const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+        const milliseconds = String(date.getUTCMilliseconds()).padStart(6, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}+00`;
     }
 
 
@@ -196,13 +204,19 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
                             className="relative grid grid-cols-client-item transition-all duration-300 hover:cursor-pointer group min-h-24 max-h-24 hover:bg-secondary rounded-md "
                         >
                             <div className=" flex items-center transition-all h-full w-full p-4 ">
-                                <AspectRatio ratio={1 / 1} className="bg-zinc-400/80 rounded-md">
-                                    <Image loading="lazy" quality={5} src={image_url && imgUrl ? `${imgUrl}` : "/profile-default.svg"} alt="" fill className="drop-shadow-lg shadow-black rounded-md object-cover transition-all opacity-0 duration-[2s] group-hover:opacity-100 group-hover:[box-shadow:0_0_6px_1px_rgba(0,0,0,0.08)] "
-                                        onLoad={(event: SyntheticEvent<HTMLImageElement>) => {
-                                            event.currentTarget.classList.remove("opacity-0")
-                                            event.currentTarget.classList.add("opacity-80")
-                                        }}
-                                    />
+                                <AspectRatio ratio={1 / 1} className=" ">
+                                    <Avatar className="group w-full h-full overflow-hidden [box-shadow:0_0_6px_1px_rgba(0,0,0,0.10)] shadow-black transition-all group-hover:[box-shadow:0_0_6px_1px_rgba(0,0,0,0.18)] duration-[2s]">
+                                        <AvatarImage loading="lazy" alt="" className="object-cover transition-all opacity-0 duration-[2s] group-hover:opacity-100"
+                                            onLoad={(event: SyntheticEvent<HTMLImageElement>) => {
+                                                event.currentTarget.classList.remove("opacity-0")
+                                                event.currentTarget.classList.add("opacity-80")
+                                            }}
+                                            src={"" + imgUrl} />
+                                        <AvatarFallback className="text-2x">
+                                            {display_name?.split(" ").map((name) => name[0]).join("").slice(0, 1).toUpperCase()}
+                                        </AvatarFallback>
+                                    </Avatar>
+
                                 </AspectRatio>
                             </div>
                             <div className="py-4 px-5 flex flex-col justify-between tracking-wider text-sm text-muted-foreground transition-all text-pretty">
