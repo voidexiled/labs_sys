@@ -16,6 +16,8 @@ import axios from "axios"
 import { useToast } from "../ui/use-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import updateUserById from "@/api/db/updateUserById"
+import { useUserRoles } from "@/hooks/useUserRoles"
+import { useRouter } from "next/navigation"
 
 
 type prefetchUsersType = {
@@ -43,6 +45,8 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
 
     const supabase = createSupabaseBrowser();
     // const admin = createSupabaseBrowserAdmin();
+
+    const router = useRouter();
 
     // Decomposing user data
     const { user, laboratories, types } = props;
@@ -76,7 +80,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
             }
         }
 
-    }, [types])
+    }, [types, role_id])
 
     useEffect(() => {
         const updateImageUrl = async () => {
@@ -88,7 +92,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
                 }
 
                 const pathUrl = supabase.storage.from("avatars").getPublicUrl(image_url);
-                console.log(pathUrl.data.publicUrl + "?t=" + data.updated_at);
+                // console.log(pathUrl.data.publicUrl + "?t=" + data.updated_at);
                 setImgUrl(pathUrl.data.publicUrl + "?t=" + data.updated_at);
             }
         }
@@ -113,8 +117,9 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
         const dataWithoutPpFile = { ...data };
         delete dataWithoutPpFile.pp_file;
 
-
+        console.log("SUBMITTING...")
         // try to update at users_profile table
+        console.log("data to upload: ", dataWithoutPpFile);
         const { data: updatedData, error: updateError } = await supabase.from("users_profile").update(dataWithoutPpFile).eq("id", id).select("*");
 
         if (updateError) {
@@ -171,7 +176,8 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
             });
             console.log("updateUpdatedAt: ", updateUpdatedAt);
         }
-        //refetchUsers();
+        refetchUsers();
+        // router.refresh();
     }
 
 
@@ -255,7 +261,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
                                 </div>
                                 <div className="flex flex-col w-full gap-2">
                                     <Label htmlFor="role_id">Rol</Label>
-                                    <Select onValueChange={(e) => { console.log("e:", e) }} defaultValue={"" + props.user.role_id} >
+                                    <Select onValueChange={(e) => { setRole(parseInt(e) | 5) }} defaultValue={"" + role} name="role_id">
                                         <SelectTrigger>
                                             <SelectValue placeholder="Selecciona un rol" />
                                         </SelectTrigger>
