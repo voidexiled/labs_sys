@@ -4,7 +4,7 @@ import { useUsers } from "@/hooks/useUsers";
 import { createSupabaseBrowser } from "@/lib/supabase/browser";
 import { Tables } from "@/lib/types/supabase";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ChangeEventHandler, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -47,7 +47,6 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
 
 
     const handleFileInputChange = async (e: any) => {
-
         const basePathStorage = supabase.storage.from("avatars").getPublicUrl("").data.publicUrl;
         const file: File = e.target.files[0];
         if (!file) return;
@@ -88,9 +87,10 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
                 console.log("❌ user null")
             }
             // setImageUrl(file);
+            refetchUser();
         }
         setImgUrl(URL.createObjectURL(file));
-        refetchUsers();
+        // refetchUsers();
 
     }
 
@@ -107,7 +107,9 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
                     type="file"
                     className="hidden w-full h-full"
                     onChange={handleFileInputChange}
+
                     name={props.name}
+
                 />
             </div>
             <AvatarImage src={"" + imgUrl} className="object-cover" />
