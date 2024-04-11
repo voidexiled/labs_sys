@@ -132,7 +132,7 @@ const UsersList = () => {
             {
                 isFetchingUsers || isFetchingUserRoles || isFetchingLaboratories
                     ? <UsersListSkeleton len={filteredClients.length} />
-                    : filteredClients.map((user) => {
+                    : filteredClients.sort((a, b) => a.display_name?.localeCompare(b.display_name!, undefined, { numeric: true })! | 0).map((user) => {
                         return <ClientItem key={user.id} user={user as Tables<"users_profile">} laboratories={laboratories as Tables<"laboratories">[]} types={roles as Tables<"user_roles">[]} refetchUsers={refetchUsers} />
                     })
             }
