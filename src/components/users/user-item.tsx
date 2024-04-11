@@ -171,7 +171,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
             });
             console.log("updateUpdatedAt: ", updateUpdatedAt);
         }
-        refetchUsers();
+        //refetchUsers();
     }
 
 
