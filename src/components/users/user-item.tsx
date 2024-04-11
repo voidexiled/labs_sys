@@ -15,6 +15,7 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 import axios from "axios"
 import { useToast } from "../ui/use-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import updateUserById from "@/api/db/updateUserById"
 
 
 type prefetchUsersType = {
@@ -76,6 +77,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
         }
 
     }, [types])
+
     useEffect(() => {
         const updateImageUrl = async () => {
             if (image_url) {
@@ -92,17 +94,6 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
         }
         updateImageUrl();
     }, [])
-
-    const handleSaveChanges = async () => {
-        if (file && correo && noId && displayName && role) {
-
-            // Update user in Supabase
-
-            // refetchUsers();
-        }
-    }
-
-
 
     const getLabNameById = (id: number) => {
         if (laboratories) {
@@ -161,8 +152,10 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
             }
         }
 
-        const updatedAt = formatDate(new Date());
-        const { data: updateUpdatedAt, error: updateUpdatedAtError } = await supabase.from("users_profile").update({ updated_at: updatedAt }).eq("id", id).select("*");
+
+
+        const { data: updateUpdatedAt, error: updateUpdatedAtError } = await updateUserById({ id });
+
         if (updateUpdatedAtError) {
             toast({
                 title: "Error",
@@ -181,17 +174,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
         refetchUsers();
     }
 
-    function formatDate(date: Date): string {
-        const year = date.getUTCFullYear();
-        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(date.getUTCDate()).padStart(2, '0');
-        const hours = String(date.getUTCHours()).padStart(2, '0');
-        const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-        const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-        const milliseconds = String(date.getUTCMilliseconds()).padStart(6, '0');
 
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}+00`;
-    }
 
 
 
