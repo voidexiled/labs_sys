@@ -44,7 +44,7 @@ export default function ConfiguracionPage() {
                             </CardHeader>
                             <CardContent>
                                 <form>
-                                    <ProfilePhoto />
+                                    <ProfilePhoto name="pp_user_config" />
                                 </form>
                             </CardContent>
                             <CardFooter className="border-t px-6 py-4">
