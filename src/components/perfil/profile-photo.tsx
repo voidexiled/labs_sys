@@ -8,6 +8,7 @@ import { ChangeEventHandler, Dispatch, SetStateAction, useEffect, useState } fro
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import imageCompression from 'browser-image-compression';
 
 export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setFile?: Dispatch<SetStateAction<File | null>>, setPpHasChanged?: Dispatch<SetStateAction<boolean>>, name: string }) => {
     const router = useRouter();
@@ -49,13 +50,35 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
     const handleFileInputChange = async (e: any) => {
         const basePathStorage = supabase.storage.from("avatars").getPublicUrl("").data.publicUrl;
         const file: File = e.target.files[0];
+
         if (!file) return;
+        const options = {
+            maxWidthOrHeight: 100,
+            useWebWorker: true,
+            fileType: "webp",
+        }
+
+
+
+
+        const compressedFile = await imageCompression(file, {
+            maxWidthOrHeight: 300,
+            useWebWorker: true,
+            maxSizeMB: 0.05,
+
+
+        });
+        console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+        console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+
+
         if (props.setPpHasChanged) {
             props.setPpHasChanged(true);
         }
 
         if (props.setFile) {
-            props.setFile(file);
+            props.setFile(compressedFile);
         } else {
             if (user) {
                 console.log("✅ user not null")
@@ -64,7 +87,7 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
                 // Uploading to storage
                 const pathToUpload: string = `${basePathStorage}${user.id}`;
                 console.log("✅ pathToUpload", pathToUpload);
-                const { data, error } = await supabase.storage.from("avatars").upload(user.id, file,
+                const { data, error } = await supabase.storage.from("avatars").upload(user.id, compressedFile,
                     { upsert: true, contentType: "image/jpeg", cacheControl: "0" }
                 );
 
@@ -89,7 +112,7 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
             // setImageUrl(file);
             refetchUser();
         }
-        setImgUrl(URL.createObjectURL(file));
+        setImgUrl(URL.createObjectURL(compressedFile));
         // refetchUsers();
 
     }
