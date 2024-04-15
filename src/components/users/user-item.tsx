@@ -295,13 +295,13 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
             </Sheet>
             <ContextMenuContent>
                 <ContextMenuItem>
-                    Ver
+                    Vista rápida
                 </ContextMenuItem>
                 <ContextMenuItem>
-                    Editar
+                    Inspeccionar
                 </ContextMenuItem>
-                <ContextMenuItem>
-                    Eliminar
+                <ContextMenuItem inset>
+                    Más opciones
                 </ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>)
