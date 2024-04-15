@@ -1,9 +1,7 @@
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import LeftMenu from "@/components/left-menu";
-import { Providers } from "@/components/providers";
-import { Toaster } from "@/components/ui/toaster"
+
 
 
 export const metadata: Metadata = {
