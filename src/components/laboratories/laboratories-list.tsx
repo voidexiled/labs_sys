@@ -12,6 +12,7 @@ import { useUsers } from "@/hooks/useUsers";
 import { Tables } from "@/lib/types/supabase";
 import { Input } from "../ui/input";
 import { LaboratoriesListSkeleton } from "./skeletons/laboratories-list-skeleton";
+import { ScrollAreaDashboard } from "../scroll-area-dashboard";
 
 export const LaboratoriesList = () => {
     // Fetching 
@@ -104,7 +105,7 @@ export const LaboratoriesList = () => {
 
 
             </div>
-            <ScrollArea className="h-[600px] pr-8">
+            <ScrollAreaDashboard>
                 {
                     isFetchingLaboratories || isFetchingSubjects || isFetchingTypesUsers || isFetchingUsers
                         ? <LaboratoriesListSkeleton len={filteredLaboratories.length} />
@@ -116,7 +117,7 @@ export const LaboratoriesList = () => {
                         ))
 
                 }
-            </ScrollArea>
+            </ScrollAreaDashboard>
         </div>
 
     )
