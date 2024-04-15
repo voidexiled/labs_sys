@@ -17,6 +17,7 @@ export function useUsers() {
     return useQuery({
         queryKey: ["users"],
         _optimisticResults: "optimistic",
+        staleTime: 120 * 1000,
         queryFn: async () => {
             const supabase = createSupabaseBrowser();
             const { data: { user } } = await supabase.auth.getUser();
