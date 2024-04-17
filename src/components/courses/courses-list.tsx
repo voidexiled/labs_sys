@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/pagination"
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { CourseItemSkeleton } from "./skeletons/course-item-skeleton";
+import { CoursesListSkeleton } from "./skeletons/courses-list-skeleton";
 export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: string, status: string, subject: string, teacher: string, currentPage: number }) => {
     const itemsPerPage = 5;
     const { replace } = useRouter();
@@ -113,18 +115,21 @@ export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: s
     return (<>
         <ScrollAreaDashboard>
             {
-                pagedCourses?.map((course) => {
-                    const subject = subjects?.find((s) => s.id === course.subject_id);
-                    const teacher = users?.find((u) => u.id === course.teacher_id);
+                isFetchingCourses || isFetchingSubjects || isFetchingUsers ?
+                    <CoursesListSkeleton len={5} /> :
 
-                    return (
-                        <CourseItem key={course.id}
-                            course={course}
-                            subject={subject as Tables<"subjects">}
-                            teacher={teacher as Tables<"users_profile">}
-                        />
-                    )
-                })
+                    pagedCourses?.map((course) => {
+                        const subject = subjects?.find((s) => s.id === course.subject_id);
+                        const teacher = users?.find((u) => u.id === course.teacher_id);
+
+                        return (
+                            <CourseItem key={course.id}
+                                course={course}
+                                subject={subject as Tables<"subjects">}
+                                teacher={teacher as Tables<"users_profile">}
+                            />
+                        )
+                    })
             }
         </ScrollAreaDashboard>
         <Pagination>
