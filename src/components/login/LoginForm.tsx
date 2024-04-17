@@ -60,6 +60,15 @@ export const LoginForm = (props: {}) => {
 
 
             <div className="w-full lg:grid lg:grid-cols-2 h-screen ">
+                <div className="hidden bg-muted lg:block">
+                    <Image
+                        src="/itcm-central.jpg"
+                        alt="Image"
+                        width="1920"
+                        height="1080"
+                        className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+                    />
+                </div>
                 <div className="flex items-center justify-center py-12">
                     <div className="mx-auto grid w-[350px] gap-6">
                         <div className="grid gap-2 text-center">
@@ -95,16 +104,16 @@ export const LoginForm = (props: {}) => {
                             <Button className="w-full"
                                 onClick={
                                     async (e) => {
-                                        e.preventDefault();
-                                        e.currentTarget.disabled = true;
-                                        e.currentTarget.innerText = "Iniciando sesión...";
-                                        console.log(e.currentTarget.parentElement);
+                                        // e.preventDefault();
+                                        // e.currentTarget.disabled = true;
+                                        // e.currentTarget.innerText = "Iniciando sesión...";
+                                        // console.log(e.currentTarget.parentElement);
                                         const formData = new FormData(e.currentTarget.parentElement as HTMLFormElement);
                                         await handleSignIn(formData);
-                                        if (e.currentTarget) {
-                                            e.currentTarget.disabled = false;
-                                            e.currentTarget.innerText = "Iniciar sesión";
-                                        }
+                                        // if (e.currentTarget) {
+                                        //     e.currentTarget.disabled = false;
+                                        //     e.currentTarget.innerText = "Iniciar sesión";
+                                        // }
                                     }
                                 }
                             >
@@ -122,15 +131,7 @@ export const LoginForm = (props: {}) => {
                         </div>
                     </div>
                 </div>
-                <div className="hidden bg-muted lg:block">
-                    <Image
-                        src="/itcm-central.jpg"
-                        alt="Image"
-                        width="1920"
-                        height="1080"
-                        className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-                    />
-                </div>
+
             </div>
 
 

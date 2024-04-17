@@ -1,6 +1,6 @@
 
 import type { Metadata } from "next";
-import LeftMenu from "@/components/left-menu";
+import LeftMenu from "@/components/left-side-bar/left-menu";
 
 
 

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createSupabaseBrowser } from "@/lib/supabase/browser";
 import { useAuth } from "@/store/auth";
 import { useQueryClient } from "@tanstack/react-query";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 
 
 export const LogOutButton = (props: { title: string, children: React.ReactNode }) => {

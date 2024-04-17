@@ -1,14 +1,16 @@
 "use client";
 import { createSupabaseBrowser } from "@/lib/supabase/browser";
+import { Tables } from "@/lib/types/supabase";
 import { useQuery } from "@tanstack/react-query";
 
 const initLabs = [{
-    busyBy: 0,
+    busy_by: "",
     capacity: 0,
     id: 0,
-    isBusy: false,
     label: "",
-    subjectId: 0,
+    subject_id: 0,
+    updated_at: "",
+
 }]
 
 export function useLaboratories() {
@@ -21,7 +23,7 @@ export function useLaboratories() {
             if (user) {
                 // fetch labs info
                 const { data: labs } = await supabase.from("laboratories").select("*");
-                return labs;
+                return labs as Tables<"laboratories">[];
             }
             return initLabs;
         }

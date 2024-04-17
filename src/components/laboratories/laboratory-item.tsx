@@ -14,57 +14,29 @@ import {
 } from "@/components/ui/context-menu";
 import Image from "next/image";
 // React
-import { useEffect, useState } from "react";
+
 // Supabase & hooks
 import { Tables } from "@/lib/types/supabase";
-
 // Skeletons
 
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 export const LaboratoryItem = (props: {
     lab: Tables<"laboratories">;
-    subjects: Tables<"subjects">[];
-    types: Tables<"subjects">[];
-    users: Tables<"users_profile">[];
+    subject: Tables<"subjects">;
+    type: Tables<"user_roles">
+    user: Tables<"users_profile">;
+    isBusy: boolean;
 }) => {
-    // LOCAL STATES
-    const [user, setUser] = useState<Tables<"users_profile">>();
-    const [userRole, setUserRole] = useState<string>("");
-    const [subject, setSubject] = useState<string>("");
-    const [isBusy, setIsBusy] = useState<boolean>(false);
 
     // DECOMPOSING PROPS
-    const { lab, subjects, types, users } = props;
+    const { lab, subject, type, user, isBusy } = props;
 
-    useEffect(() => {
-        if (users && types && subjects) {
-            const busyBy = lab.busyBy;
-            const valid = busyBy?.length! > 0;
+    // LOCAL VARS
 
-            if (valid && busyBy) {
-                setIsBusy(true);
-                const _user: Tables<"users_profile"> = users.filter(
-                    (u) => u.id === busyBy,
-                )[0] as Tables<"users_profile">;
-
-                if (_user) {
-                    setUser(_user);
-                    const type = types.filter((t) => t.id === _user.role_id)[0];
-                    if (type) {
-                        setUserRole(type.label);
-                    }
-                }
-            }
-            if (lab.subjectId) {
-                const sub: Tables<"subjects"> = subjects.filter(
-                    (s) => s.id === lab.subjectId,
-                )[0];
-                if (sub) {
-                    setSubject(sub.label);
-                }
-            }
-        }
-    }, [types, users, subjects]);
+    // const user = users.filter((user) => user.id === lab.busy_by)[0];
+    // const subject = subjects.filter((subject) => subject.id === lab.subject_id)[0];
+    // const userRole = types.filter((type) => isBusy ? type.id === user.role_id : false)[0];
 
     return (
         <ContextMenu>
@@ -98,7 +70,7 @@ export const LaboratoryItem = (props: {
                                 <span className="">{lab.label}</span>{" "}
                                 <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
                                     {" "}
-                                    &middot; {subject}
+                                    &middot; {subject && subject.label}
                                 </span>{" "}
                             </h3>
                             <div className="flex flex-col gap-1 transition-all group-hover:pl-2">
@@ -109,7 +81,7 @@ export const LaboratoryItem = (props: {
                                 {isBusy ? (
                                     <>
                                         <span className="text-primary">
-                                            Ocupado por <span className="">{userRole}</span>
+                                            Ocupado por <span className="">{type.label}</span>
                                         </span>
                                         <span className="text-primary decoration-primary">
                                             {user ? user.display_name : "???"}
@@ -138,7 +110,7 @@ export const LaboratoryItem = (props: {
                         <ContextMenuItem disabled>
                             Ocupando {user && user.display_name}{" "}
                         </ContextMenuItem>
-                        <ContextMenuItem disabled>{userRole}</ContextMenuItem>
+                        <ContextMenuItem disabled>{type.label}</ContextMenuItem>
                         <ContextMenuItem>Desocupar</ContextMenuItem>
                     </>
                 ) : (

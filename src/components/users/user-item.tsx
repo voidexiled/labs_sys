@@ -4,20 +4,20 @@ import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } 
 import { createSupabaseBrowser } from "@/lib/supabase/browser"
 import { Tables } from "@/lib/types/supabase"
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query"
-import Image from "next/image"
-import { FormEvent, ReactEventHandler, SyntheticEvent, memo, useEffect, useState } from "react"
+
+import { FormEvent, SyntheticEvent, memo, useEffect, useState } from "react"
 import { ProfilePhoto } from "../perfil/profile-photo"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
-import axios from "axios"
 import { useToast } from "../ui/use-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import updateUserById from "@/api/db/updateUserById"
-import { useUserRoles } from "@/hooks/useUserRoles"
+
 import { useRouter } from "next/navigation"
+import { avatar } from "@nextui-org/react"
 
 
 type prefetchUsersType = {
@@ -27,7 +27,7 @@ type prefetchUsersType = {
     id: string;
     image_url: string | null;
     lab_at: number | null;
-    noIdentificador: string | null;
+    no_identificador: string | null;
     role_id: number;
     updated_at: string;
 }
@@ -51,14 +51,14 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
     // Decomposing user data
     const { user, laboratories, types } = props;
     const { refetchUsers } = props;
-    const { id, display_name, email, created_at, image_url, lab_at, noIdentificador, role_id } = user;
+    const { id, display_name, email, created_at, image_url, lab_at, no_identificador, role_id, updated_at } = user;
 
     const [displayName, setDisplayName] = useState<string | null>(display_name);
     const [correo, setCorreo] = useState<string | null>(email);
-    const [noId, setNoId] = useState<string | null>(noIdentificador);
+    const [noId, setNoId] = useState<string | null>(no_identificador);
     const [role, setRole] = useState<number | null>(role_id);
 
-
+    const avatar_src = supabase.storage.from("avatars").getPublicUrl(image_url!).data.publicUrl + "?t=" + updated_at;
 
     // Local States
     const [file, setFile] = useState<File | null>(null);
@@ -67,7 +67,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
     useEffect(() => {
         setDisplayName(user.display_name);
         setCorreo(user.email);
-        setNoId(user.noIdentificador);
+        setNoId(user.no_identificador);
         setRole(user.role_id);
     }, [user])
 
@@ -157,8 +157,6 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
             }
         }
 
-
-
         const { data: updateUpdatedAt, error: updateUpdatedAtError } = await updateUserById({ id });
 
         if (updateUpdatedAtError) {
@@ -180,10 +178,6 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
         // router.refresh();
     }
 
-
-
-
-
     return (
         <ContextMenu>
             <Sheet>
@@ -200,7 +194,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
                                                 event.currentTarget.classList.remove("opacity-0")
                                                 event.currentTarget.classList.add("opacity-80")
                                             }}
-                                            src={"" + imgUrl} />
+                                            src={"" + avatar_src} />
                                         <AvatarFallback className="text-2x">
                                             {display_name?.split(" ").map((name) => name[0]).join("").slice(0, 1).toUpperCase()}
                                         </AvatarFallback>
@@ -211,7 +205,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
                             <div className="py-4 px-5 flex flex-col justify-between tracking-wider text-sm text-muted-foreground transition-all text-pretty h">
                                 <span className="text-foreground  transition-all">{display_name}</span>
                                 <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
-                                    <span>{noIdentificador}</span>
+                                    <span>{no_identificador}</span>
                                 </div>
                                 <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
                                     <span className="">{type}</span>
@@ -273,8 +267,8 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
                                     </Select>
                                 </div>
                                 <div className="flex flex-col w-full gap-2">
-                                    <Label htmlFor="noIdentificador">No Identificador</Label>
-                                    <Input name="noIdentificador" id="noIdentificador" type="text" placeholder="123456" value={noId || ""} onChange={(e) => {
+                                    <Label htmlFor="no_identificador">No Identificador</Label>
+                                    <Input name="no_identificador" id="no_identificador" type="text" placeholder="123456" value={noId || ""} onChange={(e) => {
                                         setNoId(e.target.value)
                                     }} />
                                 </div>

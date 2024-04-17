@@ -3,7 +3,8 @@ import { createSupabaseBrowser } from "@/lib/supabase/browser";
 import { useQuery } from "@tanstack/react-query";
 const initSubjects = [{
     id: 0,
-    label: ""
+    label: "",
+    key: "",
 }]
 export function useSubjects() {
     return useQuery({

@@ -23,9 +23,9 @@ import { ModeToggle } from "./theme-toggle"
 
 // Next Components
 import Link from "next/link"
-import UserPreview from "./left-side-bar/user-preview"
+import UserPreview from "./user-preview"
 import Image from "next/image"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 import { TagIcon } from "lucide-react"
 import { useState } from "react"
 import clsx from "clsx"

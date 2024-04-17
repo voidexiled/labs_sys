@@ -1,14 +1,42 @@
+"use server";
+import { CoursesFilters } from "@/components/courses/courses-filters";
+import { CoursesList } from "@/components/courses/courses-list";
+import { Filters } from "@/components/filters";
 import { MainWrapper } from "@/components/main-wrapper";
 import { MainWrapperContent } from "@/components/main-wrapper-content";
 import { MainWrapperHeader } from "@/components/main-wrapper-header";
+import readUserSession from "@/lib/actions";
+import createSupabaseServer from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function CursosPage() {
-    return (<MainWrapper>
-        <MainWrapperHeader title="Cursos" />
-        <MainWrapperContent>
-            <div>
-            </div>
-        </MainWrapperContent>
 
-    </MainWrapper>);
+
+export default async function CursosPage({ searchParams }: { searchParams?: { q?: string, status?: string, subject?: string, teacher?: string, page?: string } }) {
+    const query = searchParams?.q || '';
+    const status = searchParams?.status || '';
+    const subject = searchParams?.subject || '';
+    const teacher = searchParams?.teacher || '';
+    const currentPage = Number(searchParams?.page) || 1;
+    const supabase = await createSupabaseServer();
+
+
+
+    const { data: roles } = await supabase.from("user_roles").select("*");
+    const { data: { user } } = await readUserSession();
+
+    if (!user) {
+        return redirect("/login");
+    }
+
+
+    return (
+        <MainWrapper>
+            <MainWrapperHeader title="Cursos" />
+            <MainWrapperContent>
+                {/* <Filters page="courses" tabs={["active", "inactive", "completed"]} /> */}
+                <CoursesFilters />
+                <CoursesList q={query} status={status} subject={subject} teacher={teacher} currentPage={currentPage} />
+            </MainWrapperContent>
+
+        </MainWrapper>);
 }

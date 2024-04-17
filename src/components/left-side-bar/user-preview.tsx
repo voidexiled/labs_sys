@@ -9,7 +9,7 @@ import { createSupabaseBrowser } from "@/lib/supabase/browser";
 
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { ModeToggle } from "../theme-toggle";
+import { ModeToggle } from "./theme-toggle";
 
 export default function UserPreview(props: {}) {
     const { isFetching: isFetchingUser, data: user } = useUser();

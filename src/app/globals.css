@@ -97,11 +97,15 @@ h1 {
 @keyframes colorizeNavBar {
   0% {
     /* background: linear-gradient(to bottom, transparent, transparent); */
+    backdrop-filter: blur(2px);
+
+    box-shadow: 0 0 12px 1px (var(--background));
   }
+
   100% {
     /* background: linear-gradient(to bottom, hsla(var(--foreground) ) , transparent); */
     /* color: hsl(var(--background)); */
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(4px);
 
     box-shadow: 0 0 10px 3px (var(--background));
     @apply py-3;
@@ -113,10 +117,15 @@ h1 {
 }
 
 .section-header {
+  -webkit-transform: translate3d(0, 0, 0);
   animation: colorizeNavBar linear both;
-  animation-timeline: scroll();
+  animation-timeline: scroll(root);
   animation-range: 120px;
   transition: all 0.3s;
+
+  backdrop-filter: blur(2px);
+
+  box-shadow: 0 0 12px 1px (var(--background));
 }
 
 @media (max-width: 1024px) {

@@ -9,6 +9,105 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      courses: {
+        Row: {
+          classroom_code: string | null
+          created_at: string
+          current_enrollment: number | null
+          end_date: string | null
+          enrollment_limit: number | null
+          id: number
+          label: string | null
+          meeting_schedule: Json | null
+          start_date: string | null
+          status: string | null
+          subject_id: number | null
+          teacher_id: string | null
+          type: string | null
+          updated_at: string | null
+          visibility: string | null
+        }
+        Insert: {
+          classroom_code?: string | null
+          created_at?: string
+          current_enrollment?: number | null
+          end_date?: string | null
+          enrollment_limit?: number | null
+          id?: number
+          label?: string | null
+          meeting_schedule?: Json | null
+          start_date?: string | null
+          status?: string | null
+          subject_id?: number | null
+          teacher_id?: string | null
+          type?: string | null
+          updated_at?: string | null
+          visibility?: string | null
+        }
+        Update: {
+          classroom_code?: string | null
+          created_at?: string
+          current_enrollment?: number | null
+          end_date?: string | null
+          enrollment_limit?: number | null
+          id?: number
+          label?: string | null
+          meeting_schedule?: Json | null
+          start_date?: string | null
+          status?: string | null
+          subject_id?: number | null
+          teacher_id?: string | null
+          type?: string | null
+          updated_at?: string | null
+          visibility?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_cursos_subjectId_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_cursos_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "users_profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses_students: {
+        Row: {
+          course_id: number
+          student_id: string
+        }
+        Insert: {
+          course_id: number
+          student_id: string
+        }
+        Update: {
+          course_id?: number
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_courses_students_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_courses_students_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "users_profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       equipment: {
         Row: {
           createdAt: string
@@ -70,37 +169,40 @@ export type Database = {
       }
       laboratories: {
         Row: {
-          busyBy: string | null
+          busy_by: string | null
           capacity: number | null
           id: number
           label: string
-          subjectId: number | null
+          subject_id: number | null
+          updated_at: string | null
         }
         Insert: {
-          busyBy?: string | null
+          busy_by?: string | null
           capacity?: number | null
           id?: number
           label: string
-          subjectId?: number | null
+          subject_id?: number | null
+          updated_at?: string | null
         }
         Update: {
-          busyBy?: string | null
+          busy_by?: string | null
           capacity?: number | null
           id?: number
           label?: string
-          subjectId?: number | null
+          subject_id?: number | null
+          updated_at?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "public_laboratories_busyBy_fkey"
-            columns: ["busyBy"]
+            columns: ["busy_by"]
             isOneToOne: false
             referencedRelation: "users_profile"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "public_laboratories_subjectId_fkey"
-            columns: ["subjectId"]
+            columns: ["subject_id"]
             isOneToOne: false
             referencedRelation: "subjects"
             referencedColumns: ["id"]
@@ -158,14 +260,17 @@ export type Database = {
       subjects: {
         Row: {
           id: number
+          key: string | null
           label: string
         }
         Insert: {
           id?: number
+          key?: string | null
           label: string
         }
         Update: {
           id?: number
+          key?: string | null
           label?: string
         }
         Relationships: []
@@ -193,7 +298,7 @@ export type Database = {
           id: string
           image_url: string | null
           lab_at: number | null
-          noIdentificador: string | null
+          no_identificador: string | null
           role_id: number
           updated_at: string
         }
@@ -204,7 +309,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           lab_at?: number | null
-          noIdentificador?: string | null
+          no_identificador?: string | null
           role_id?: number
           updated_at?: string
         }
@@ -215,23 +320,23 @@ export type Database = {
           id?: string
           image_url?: string | null
           lab_at?: number | null
-          noIdentificador?: string | null
+          no_identificador?: string | null
           role_id?: number
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "public_profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "public_profiles_labAt_fkey"
             columns: ["lab_at"]
             isOneToOne: false
             referencedRelation: "laboratories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_users_profile_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
