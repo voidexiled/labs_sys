@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import { Chip } from "@nextui-org/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Eye, Pencil, Trash } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 type Props = {
     course: Tables<"courses">;
@@ -19,7 +21,7 @@ type MeetingSchedule = {
 
 
 export const CourseItem = ({ course, teacher, subject }: Props) => {
-
+    const searchParams = useSearchParams();
     const { status, meeting_schedule } = course as Tables<"courses">;
     const schedule: MeetingSchedule = meeting_schedule as MeetingSchedule;
 
@@ -41,85 +43,72 @@ export const CourseItem = ({ course, teacher, subject }: Props) => {
     }
 
 
+
     return (
         <AnimatePresence>
             <ContextMenu>
                 <ContextMenuTrigger >
+                    {/* searchParams que se le pasa no debe tener "&" para que no lo interprete como query la siguiente pagina  */}
+                    <Link href={`/dashboard/cursos/${course.id}?prev=${searchParams}`}>
 
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{
-                            opacity: 1,
-                            transition: {
-                                duration: 0.35
-                            }
-                        }}
-                        exit={{
-                            opacity: 0,
-                            transition: {
-                                duration: 0.35
-                            }
-                        }}
-                        className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-28 max-h-28 hover:bg-card rounded-md mb-3 border"
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{
+                                opacity: 1,
+                                transition: {
+                                    duration: 0.35
+                                }
+                            }}
+                            exit={{
+                                opacity: 0,
+                                transition: {
+                                    duration: 0.35
+                                }
+                            }}
+                            className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-28 max-h-28 hover:bg-card rounded-md mb-3 border"
 
-                    >
-                        <div className={
-                            // cn("mx-3 flex items-center justify-center h-[64px] w-[64px] rounded-full self-center border transition-all ",
-                            //     status === "completed" ? "bg-success/90 group-hover:bg-success"
-                            //         : status === "active" ? "bg-primary/90 group-hover:bg-primary"
-                            //             : "bg-destructive/90 group-hover:bg-destructive"
-                            // )
-                            cn("mx-3 flex items-center justify-center h-[64px] w-[64px] rounded-full self-center border transition-all bg-accent group-hover:bg-secondary ",
-                                status === "completed" ? "group-hover:border-success"
-                                    : status === "active" ? "group-hover:border-warning"
-                                        : "group-hover:border-danger"
-                            )
-                        }>
-                            <span className={
-                                // cn("text-sm",
-                                //     status === "completed" ? "text-success-foreground"
-                                //         : status === "active" ? "text-primary-foreground"
-                                //             : "text-destructive-foreground"
-
-                                // )
-                                "text-sm text-accent-foreground group-hover:text-secondary-foreground"
+                        >
+                            <div className={
+                                cn("mx-3 flex items-center justify-center h-[64px] w-[64px] rounded-full self-center border transition-all bg-accent group-hover:bg-secondary ",
+                                    status === "completed" ? "group-hover:border-success"
+                                        : status === "active" ? "group-hover:border-warning"
+                                            : "group-hover:border-danger"
+                                )
                             }>
-                                {clase}
-                            </span>
-                        </div>
-                        <div className="py-4 px-5 flex flex-col justify-between tracking-wider text-sm text-muted-foreground transition-all text-pretty h">
-                            <span className="text-foreground  transition-all">{teacher?.display_name}</span>
-                            <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
-                                <span className="">{subject?.label}</span>
-                                <span className="">&middot;</span>
-                                <span className="">  Tema 01 - Practica </span>
-                                {/* Ultima practica terminada o cursando */}
+                                <span className={
+                                    "text-sm text-accent-foreground group-hover:text-secondary-foreground"
+                                }>
+                                    {clase}
+                                </span>
+                            </div>
+                            <div className="py-4 px-5 flex flex-col justify-between tracking-wider text-sm text-muted-foreground transition-all text-pretty h">
+                                <span className="text-foreground  transition-all">{teacher?.display_name}</span>
+                                <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
+                                    <span className="">{subject?.label}</span>
+                                    <span className="">&middot;</span>
+                                    <span className="">  Tema 01 - Practica </span>
+                                    {/* Ultima practica terminada o cursando */}
+
+                                </div>
+                                {
+
+                                    <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
+                                        {
+                                            status === "completed" ?
+                                                <Chip size="sm" color="success" className="text-success-foreground" classNames={{
+                                                    base: "py-1",
+                                                    content: "text-xs",
+                                                }}>Completado</Chip>
+                                                : status === "active" ?
+                                                    <Chip size="sm" color="warning" className="text-primary-foreground">En clase</Chip> :
+                                                    <Chip size="sm" color="danger" className="text-destructive-foreground">En espera</Chip>
+                                        }
+                                    </div>
+                                }
 
                             </div>
-                            {
-
-                                <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
-                                    {
-                                        status === "completed" ?
-                                            // <span>Finaliza a las {schedule[dayOfToday].end_time}</span>
-                                            <Chip size="sm" color="success" className="text-success-foreground" classNames={{
-                                                base: "py-1",
-                                                content: "text-xs",
-                                            }}>Completado</Chip>
-                                            : status === "active" ?
-                                                <Chip size="sm" color="warning" className="text-primary-foreground">En clase</Chip> :
-                                                <Chip size="sm" color="danger" className="text-destructive-foreground">En espera</Chip>
-                                        // <span>Empieza a las {schedule[dayOfToday].start_time}</span>
-                                    }
-                                </div>
-                            }
-
-                        </div>
-                    </motion.div>
-
-
-                    {/* </Link> */}
-
+                        </motion.div>
+                    </Link>
                 </ContextMenuTrigger>
                 <ContextMenuContent>
                     <ContextMenuItem>

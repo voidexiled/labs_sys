@@ -9,66 +9,161 @@ import { useUsers } from "@/hooks/useUsers";
 import { Tables } from "@/lib/types/supabase";
 import { LaboratoriesListSkeleton } from "./skeletons/laboratories-list-skeleton";
 import { ScrollAreaDashboard } from "../scroll-area-dashboard";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { cn, normalizeString } from "@/lib/utils";
 
-export default function LaboratoriesList({ q, status, currentPage }: { q: string, status: string, currentPage: number }) {
+
+import { ListPagination } from "../list-pagination";
+
+export default function LaboratoriesList(
+    { q, status, subject, teacher, currentPage }
+        : {
+            q: string,
+            status: string,
+            subject: string,
+            teacher: string,
+            currentPage: number
+        }) {
+    const itemsPerPage = 4;
+
+    const { replace } = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
     // Fetching 
-    const { isFetching: isFetchingLaboratories, refetch: refetchLabs, data: laboratories } = useLaboratories();
+    const { isFetching: isFetchingLaboratories, data: laboratories } = useLaboratories();
     const { isFetching: isFetchingSubjects, data: subjects } = useSubjects();
     const { isFetching: isFetchingTypesUsers, data: types } = useUserRoles();
     const { isFetching: isFetchingUsers, data: users } = useUsers();
-    const [filteredLaboratories, setFilteredLaboratories] = useState(laboratories)
 
+
+    const [filteredLaboratories, setFilteredLaboratories] = useState(laboratories);
+    const [pagedLaboratories, setPagedLaboratories] = useState(laboratories);
+
+    const [pages, setPages] = useState<number[]>([]);
+
+
+    /* Definir la lista filtrada y la lista filtrada y paginada */
     useEffect(() => {
+        const lastIndex = currentPage * itemsPerPage;
+        const firstIndex = lastIndex - itemsPerPage;
+
         const filtered = filterLaboratories();
         setFilteredLaboratories(filtered);
-    }, [laboratories, q, currentPage, status])
+        setPagedLaboratories(filtered.slice(firstIndex, lastIndex));
+    }, [laboratories, users, subjects, q, currentPage, status, subject, teacher]);
+
+    /* Definir las páginas */
+    useEffect(() => {
+        if (filteredLaboratories) {
+            const temp = []
+            for (let i = 1; i <= Math.ceil(filteredLaboratories.length / itemsPerPage); i++) {
+                temp.push(i);
+            }
+            setPages(temp);
+        }
+    }, [filteredLaboratories])
+
+    useEffect(() => {
+        if (pages) {
+            if (currentPage > pages.length) {
+                const params = new URLSearchParams(searchParams)
+                params.set("page", "" + pages.length);
+                replace(`${pathname}?${params.toString()}`);
+            }
+        }
+    }, [pages])
+
 
     const filterLaboratories = () => {
         if (!laboratories) return [];
         return laboratories.filter((lab) => {
-            const _q = q.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            const { label } = lab;
 
-            // const { noIdentificador, display_name, role_id } = user;
-            const { busy_by, capacity, id, label, subject_id } = lab
+            const _searchQuery = normalizeString(q);
+            const _displayName = normalizeString(label);
 
-            const normalized_display_name = label?.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            const _search = _displayName?.toLowerCase().includes(_searchQuery);
 
-            const search = normalized_display_name?.toLowerCase().includes(_q);
+            const _subject = subjects?.find((s) => s.key === subject)
+            const _teacher = users?.find((u) => u.id === teacher)
+
+            const subjectFilter = subject ? lab.subject_id === _subject?.id : true;
+
+            const teacherFilter = teacher ? lab.busy_by === _teacher?.id : true;
+
+            const checkFilters = _search && subjectFilter && teacherFilter;
 
             if (status === "all") {
-                return search;
+                return checkFilters;
+            } else if (status === "busy") {
+                return lab.busy_by !== null && checkFilters;
+            } else if (status === "idle") {
+                return lab.busy_by === null && checkFilters;
+            } else if (status === "oos") {
+                return true && checkFilters;
             } else {
-                if (status === "busy") {
-                    return lab.busy_by !== null && search;
-                } else {
-                    return lab.busy_by === null && search;
-                }
+                return true && checkFilters;
             }
         });
     }
 
-    if (!filteredLaboratories) return <></>
+    if (!pagedLaboratories) return <></>
     return (
-        <ScrollAreaDashboard>
-            {
-                isFetchingLaboratories || isFetchingSubjects || isFetchingTypesUsers || isFetchingUsers
-                    ? <LaboratoriesListSkeleton len={filteredLaboratories.length} />
-                    : filteredLaboratories.map((lab) => {
+        <>
+            <ScrollAreaDashboard>
+                {
+                    isFetchingLaboratories || isFetchingSubjects || isFetchingTypesUsers || isFetchingUsers
+                        ? <LaboratoriesListSkeleton len={itemsPerPage} />
+                        : pagedLaboratories.map((lab) => {
 
-                        const user = users?.filter((user) => user.id === lab.busy_by)[0];
-                        const subject = subjects?.filter((subject) => subject.id === lab.subject_id)[0];
-                        const userRole = types?.filter((type) => lab.busy_by ? type.id === user?.role_id : false)[0];
-                        const isBusy = lab.busy_by !== null;
-
-                        // return <LaboratoryItem key={lab.id} lab={lab as Tables<"laboratories">} subjects={subjects as Tables<"subjects">[]} types={types as Tables<"user_roles">[]} users={users as Tables<"users_profile">[]} />
-                        console.log(lab);
-                        return <LaboratoryItem key={lab.id} lab={lab as Tables<"laboratories">} subject={subject as Tables<"subjects">} type={userRole as Tables<"user_roles">} user={user as Tables<"users_profile">} isBusy={isBusy} />
+                            const user = users?.find((user) => user.id === lab.busy_by) as Tables<"users_profile">;
+                            const subject = subjects?.find((subject) => subject.id === lab.subject_id) as Tables<"subjects">;
+                            const userRole = types?.find((type) => lab.busy_by ? type.id === user?.role_id : false) as Tables<"user_roles">;
+                            const isBusy = lab.busy_by !== null;
 
 
+                            return <LaboratoryItem key={lab.id}
+                                lab={lab}
+                                subject={subject}
+                                type={userRole}
+                                user={user}
+                                isBusy={isBusy}
+                            />
 
-                    })
 
-            }
-        </ScrollAreaDashboard>
+
+                        })
+
+                }
+            </ScrollAreaDashboard>
+            <ListPagination
+                currentPage={currentPage}
+                pages={pages}
+                query=
+                {{
+                    q: q,
+                    status: status,
+                    subject: subject,
+                    teacher: teacher,
+                }}
+                nextQuery=
+                {{
+                    q: q,
+                    status: status,
+                    subject: subject,
+                    teacher: teacher,
+                    page: currentPage + 1,
+                }}
+                previousQuery=
+                {{
+                    q: q,
+                    status: status,
+                    subject: subject,
+                    teacher: teacher,
+                    page: currentPage - 1,
+                }}
+            />
+        </>
     )
 }

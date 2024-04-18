@@ -1,20 +1,5 @@
 "use client";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
-import Search from "@/components/users/search-input";
-import { Tables } from "@/lib/types/supabase";
-
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-
-import { Select } from "../ui/select";
-
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-
-import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { useSubjects } from "@/hooks/useSubjects";
-
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
     Command,
     CommandEmpty,
@@ -22,16 +7,23 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/components/ui/popover"
-import { File, ListFilter } from "lucide-react";
+} from "@/components/ui/popover";
+import Search from "@/components/users/search-input";
+import { useSubjects } from "@/hooks/useSubjects";
 import { useUsers } from "@/hooks/useUsers";
-
-type cursosTabs = "active" | "inactive" | "completed";
+import { Tables } from "@/lib/types/supabase";
+import { cn } from "@/lib/utils";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { File, ListFilter } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ScrollArea } from "../ui/scroll-area";
 
 export const CoursesFilters = () => {
     const { data: subjects } = useSubjects();
@@ -47,12 +39,22 @@ export const CoursesFilters = () => {
 
     const [teachers, setTeachers] = useState<Tables<"users_profile">[]>([])
 
+    /* Este useEffect se encarga de:
+        * 1. Verificar si la URL tiene el parametro "page"
+        * 2. Si la URL no tiene el parametro "page", se lo agrega y le da el valor de 1
+     (Se ejecuta solo una vez, al montarse el componente.)
+    */
     useEffect(() => {
         if (!searchParams.has("page")) {
             replace(`${pathname}?page=1`)
         }
     });
 
+    /* Este useEffect se encarga de:
+        * 1. Verificar si users tiene datos
+        * 2. Si users tiene datos, filtra a los usuarios que tengan el role_id 4 (Docente)
+     (Se ejecuta al montarse el componente y cada que el valor de users cambia.)
+    */
     useEffect(() => {
         if (users) {
             const _teachers = users.filter((user) => user.role_id === 4);
@@ -61,6 +63,13 @@ export const CoursesFilters = () => {
 
     }, [users])
 
+    /* Este useEffect se encarga de:
+        * 1. Verificar si hay una materia seleccionada para filtrar
+        * 2. Si hay una seleccionada, agrega la clave de materia al parametro "subject"
+        * 3. Si no hay una seleccionada, elimina el parametro "subject"
+        * 4. Pasa los parametros a la URL
+     (Se ejecuta al montarse el componente y cada que la materia cambia.)
+    */
     useEffect(() => {
         const params = new URLSearchParams(searchParams)
         if (selectedSubject) {
@@ -71,6 +80,13 @@ export const CoursesFilters = () => {
         replace(`${pathname}?${params.toString()}`);
     }, [selectedSubject])
 
+    /* Este useEffect se encarga de:
+        * 1. Verificar si hay un profesor seleccionado para filtrar
+        * 2. Si hay un profesor seleccionado, agrega el id del profesor al parametro "teacher"
+        * 3. Si no hay un profesor seleccionado, elimina el parametro "teacher"
+        * 4. Pasa los parametros a la URL
+     (Se ejecuta al montarse el componente y cada que el profesor cambia.)
+    */
     useEffect(() => {
         const params = new URLSearchParams(searchParams)
         if (selectedTeacher) {
@@ -80,8 +96,6 @@ export const CoursesFilters = () => {
         }
         replace(`${pathname}?${params.toString()}`);
     }, [selectedTeacher])
-
-
 
 
     function handleFilter(term: string) {
@@ -167,10 +181,12 @@ export const CoursesFilters = () => {
                         <Command>
                             <CommandInput placeholder="Buscar docente..." className="h-9" />
                             <CommandEmpty>No se encontraron docentes.</CommandEmpty>
-                            <CommandList>
+                            <CommandList className="max-h-[130px]" data-radix-scroll-area-viewport>
 
 
                                 <CommandGroup>
+
+
                                     {
                                         teachers?.map((teacher) => {
                                             return (
@@ -193,7 +209,13 @@ export const CoursesFilters = () => {
 
                                         })
                                     }
+
                                 </CommandGroup>
+
+
+
+
+
                             </CommandList>
                         </Command>
                     </PopoverContent>

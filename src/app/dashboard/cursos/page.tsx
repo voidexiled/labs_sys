@@ -33,7 +33,6 @@ export default async function CursosPage({ searchParams }: { searchParams?: { q?
         <MainWrapper>
             <MainWrapperHeader title="Cursos" />
             <MainWrapperContent>
-                {/* <Filters page="courses" tabs={["active", "inactive", "completed"]} /> */}
                 <CoursesFilters />
                 <CoursesList q={query} status={status} subject={subject} teacher={teacher} currentPage={currentPage} />
             </MainWrapperContent>

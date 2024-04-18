@@ -40,7 +40,7 @@ export default function LeftMenu() {
 
     return (
 
-        <aside className={clsx("relative basis-[350px]; w-[350px] max-w-[350px] h-screen border-r overflow-hidden z-50 bg-background flex flex-col items-start shadow-sm ")}
+        <aside className={clsx("relative basis-[300px] min-w-[300px] max-w-[300px] h-screen border-r overflow-hidden z-50 bg-background flex flex-col items-start shadow-sm ")}
         >
             {/* TODO: MOBILE ASIDE */}
             {/* LOGO SIDE */}

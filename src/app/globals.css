@@ -173,3 +173,6 @@ h1 {
 .toppest {
   /* background: rgba(15, 15, 15, 0.3); */
 }
+
+
+[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}

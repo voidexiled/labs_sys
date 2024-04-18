@@ -15,12 +15,13 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
-import { cn } from "@/lib/utils";
+import { cn, normalizeString } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CourseItemSkeleton } from "./skeletons/course-item-skeleton";
 import { CoursesListSkeleton } from "./skeletons/courses-list-skeleton";
+import { ListPagination } from "../list-pagination";
 export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: string, status: string, subject: string, teacher: string, currentPage: number }) => {
-    const itemsPerPage = 5;
+    const itemsPerPage = 4;
     const { replace } = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
@@ -28,10 +29,6 @@ export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: s
     const { isFetching: isFetchingCourses, data: courses } = useCourses();
     const { isFetching: isFetchingUsers, data: users } = useUsers();
     const { isFetching: isFetchingSubjects, data: subjects } = useSubjects();
-
-    const [lastIndex, setLastIndex] = useState(currentPage * itemsPerPage);
-    const [firstIndex, setFirstIndex] = useState(lastIndex - itemsPerPage);
-
 
     const [filteredCourses, setFilteredCourses] = useState(courses);
     const [pagedCourses, setPagedCourses] = useState(courses);
@@ -64,10 +61,7 @@ export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: s
 
     useEffect(() => {
         if (pages) {
-
             if (currentPage > pages.length) {
-                console.log("currentPage", currentPage)
-                console.log("pages.length", pages.length)
                 const params = new URLSearchParams(searchParams)
                 params.set("page", "" + (pages.length));
                 replace(`${pathname}?${params.toString()}`);
@@ -79,13 +73,12 @@ export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: s
         if (!courses) return [];
         return courses.filter((course) => {
 
-            const { classroom_code, subject_id, teacher_id } = course;
+            const { classroom_code } = course;
 
-            const _q = q.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            const normalized_code = classroom_code?.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            const _querySearch = normalizeString(q);
+            const _normalizedCode = normalizeString(classroom_code || "");
 
-
-            const search = normalized_code?.toLowerCase().includes(_q);
+            const _search = _normalizedCode?.toLowerCase().includes(_querySearch);
 
             const _subject = subjects?.find((s) => s.key === subject)
             const _teacher = users?.find((u) => u.id === teacher)
@@ -93,18 +86,18 @@ export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: s
             const subjectFilter = subject ? course.subject_id === _subject?.id : true;
             const teacherFilter = teacher ? course.teacher_id === _teacher?.id : true;
 
-
+            const checkFilters = _search && subjectFilter && teacherFilter;
 
             if (status === "all") {
-                return (search && subjectFilter && teacherFilter);
+                return checkFilters;
             } else if (status === "completed") {
-                return course.status === "completed" && (search && subjectFilter && teacherFilter);
+                return course.status === "completed" && checkFilters;
             } else if (status === "active") {
-                return course.status === "active" && (search && subjectFilter && teacherFilter);
+                return course.status === "active" && checkFilters;
             } else if (status === "inactive") {
-                return course.status === "inactive" && (search && subjectFilter && teacherFilter);
+                return course.status === "inactive" && checkFilters;
             } else {
-                return true && (search && subjectFilter && teacherFilter);
+                return true && checkFilters;
             }
         });
     }
@@ -116,84 +109,47 @@ export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: s
         <ScrollAreaDashboard>
             {
                 isFetchingCourses || isFetchingSubjects || isFetchingUsers ?
-                    <CoursesListSkeleton len={5} /> :
+                    <CoursesListSkeleton len={itemsPerPage} /> :
 
                     pagedCourses?.map((course) => {
-                        const subject = subjects?.find((s) => s.id === course.subject_id);
-                        const teacher = users?.find((u) => u.id === course.teacher_id);
+                        const subject = subjects?.find((s) => s.id === course.subject_id) as Tables<"subjects">;
+                        const teacher = users?.find((u) => u.id === course.teacher_id) as Tables<"users_profile">;
 
                         return (
                             <CourseItem key={course.id}
                                 course={course}
-                                subject={subject as Tables<"subjects">}
-                                teacher={teacher as Tables<"users_profile">}
+                                subject={subject}
+                                teacher={teacher}
                             />
                         )
                     })
             }
         </ScrollAreaDashboard>
-        <Pagination>
-            <PaginationContent>
-                {
-                    currentPage > 1 && (
-                        <PaginationItem>
-                            <PaginationPrevious href={{
-                                pathname: ``,
-                                query: {
-                                    q,
-                                    status,
-                                    subject,
-                                    teacher,
-                                    page: currentPage - 1,
-                                }
-                            }} />
-                        </PaginationItem>
-                    )
-                }
-
-                {
-                    pages.map((page) => (
-                        <PaginationItem key={page.toString()}
-
-                        >
-                            <PaginationLink href={{
-                                pathname: ``,
-                                query: {
-                                    q,
-                                    status,
-                                    subject,
-                                    teacher,
-                                    page: page,
-                                }
-                            }}
-                                className={cn(currentPage === page && "bg-primary text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground/80")}>
-                                {page.toString()}
-                            </PaginationLink>
-                        </PaginationItem>
-                    ))
-                }
-                <PaginationItem>
-                    <PaginationEllipsis />
-                </PaginationItem>
-                {
-                    currentPage <= pages.length - 1 && (
-                        <PaginationItem>
-                            <PaginationNext href={{
-                                pathname: ``,
-                                query: {
-                                    q,
-                                    status,
-                                    subject,
-                                    teacher,
-                                    page: currentPage + 1
-                                }
-                            }} />
-                        </PaginationItem>
-                    )
-                }
-
-            </PaginationContent>
-        </Pagination></>
+        <ListPagination currentPage={currentPage} pages={pages} query=
+            {{
+                q: q,
+                status: status,
+                subject: subject,
+                teacher: teacher,
+            }}
+            nextQuery=
+            {{
+                q: q,
+                status: status,
+                subject: subject,
+                teacher: teacher,
+                page: currentPage + 1,
+            }}
+            previousQuery=
+            {{
+                q: q,
+                status: status,
+                subject: subject,
+                teacher: teacher,
+                page: currentPage - 1,
+            }}
+        />
+    </>
 
     )
 }

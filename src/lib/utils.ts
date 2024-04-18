@@ -17,3 +17,10 @@ export function formatDate(date: Date): string {
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}+00`;
 }
+
+export function normalizeString (str: string): string{
+  return str
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase();
+}

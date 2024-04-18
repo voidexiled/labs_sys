@@ -3,9 +3,9 @@ import { Skeleton } from "@nextui-org/react";
 
 export function LaboratoryItemSkeleton() {
     return (<div
-        className="relative grid grid-cols-laboratory-item transition-all duration-300 hover:cursor-pointer group min-h-32 rounded-md hover:bg-secondary  "
+        className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-32 max-h-32 hover:bg-card rounded-md mb-3 border "
     >
-        <div className="py-3 overflow-visible h-full p-4 flex items-center transition-all">
+        <div className="flex h-full items-center overflow-visible p-4 py-3 transition-all w-[200px] self-center">
             <AspectRatio ratio={16 / 9} className="">
                 <Skeleton className="rounded-md object-cover w-full h-full"
                 />

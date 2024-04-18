@@ -20,7 +20,7 @@ export default function AdminLayout({
 
 
     return (
-        <div className="flex flex-row flex-nowrap flex-shrink flex-grow-0">
+        <div className="flex flex-row ">
             <LeftMenu />
             <div className="relative flex w-full h-screen">
                 {children}

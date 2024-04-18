@@ -40,7 +40,7 @@ export default function RootLayout({
 
       <body className={"min-h-screen bg-background text-foreground " + roboto.className}>
         <Providers>
-          <main className="h-full w-full relative">
+          <main className="h-full w-full relative flex flex-col overflow-hidden" >
             {children}
             <Toaster />
           </main>
