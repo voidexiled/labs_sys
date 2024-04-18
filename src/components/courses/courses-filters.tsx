@@ -114,8 +114,8 @@ export const CoursesFilters = () => {
     const _teacher = searchParams.get("teacher") || "";
 
     return <>
-        <div className="flex flex-row w-full mb-4 rounded-md gap-1 py-1 justify-between pr-8">
-            <div className="flex items-center gap-2">
+        <div className="flex flex-row w-full mb-4 rounded-md gap-1 py-1 justify-between pr-8 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap">
                 <Search placeholder="Buscar por codigo de clase..." />
                 <Popover open={openSubjectComboBox} onOpenChange={setOpenSubjectComboBox}>
                     <PopoverTrigger asChild>
