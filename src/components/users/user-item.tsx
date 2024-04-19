@@ -17,8 +17,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import updateUserById from "@/api/db/updateUserById"
 
 import { useRouter } from "next/navigation"
-import { avatar } from "@nextui-org/react"
+import { Chip, avatar } from "@nextui-org/react"
 
+import { motion } from "framer-motion"
+import { cn } from "@/lib/utils"
 
 type prefetchUsersType = {
     created_at: string;
@@ -32,7 +34,7 @@ type prefetchUsersType = {
     updated_at: string;
 }
 
-const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables<"laboratories">[], types: Tables<"user_roles">[], refetchUsers: (options?: RefetchOptions | undefined) => Promise<QueryObserverResult<prefetchUsersType[], Error>> }) => {
+const UserItem = (props: { user: Tables<"users_profile">, laboratory: Tables<"laboratories">, userRole: Tables<"user_roles">, types: Tables<"user_roles">[], refetchUsers: (options?: RefetchOptions | undefined) => Promise<QueryObserverResult<prefetchUsersType[], Error>> }) => {
 
     const { toast } = useToast();
 
@@ -49,20 +51,21 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
     const router = useRouter();
 
     // Decomposing user data
-    const { user, laboratories, types } = props;
+    const { user, laboratory, userRole, types } = props;
     const { refetchUsers } = props;
     const { id, display_name, email, created_at, image_url, lab_at, no_identificador, role_id, updated_at } = user;
 
+    // Edit page
     const [displayName, setDisplayName] = useState<string | null>(display_name);
     const [correo, setCorreo] = useState<string | null>(email);
     const [noId, setNoId] = useState<string | null>(no_identificador);
-    const [role, setRole] = useState<number | null>(role_id);
+    const [_role, setRole] = useState<number | null>(role_id);
 
     const avatar_src = supabase.storage.from("avatars").getPublicUrl(image_url!).data.publicUrl + "?t=" + updated_at;
 
     // Local States
     const [file, setFile] = useState<File | null>(null);
-    const [type, setType] = useState("???");
+    // const [type, setType] = useState("???");
 
     useEffect(() => {
         setDisplayName(user.display_name);
@@ -71,16 +74,16 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
         setRole(user.role_id);
     }, [user])
 
-    useEffect(() => {
-        if (types) {
-            const type = types.filter((t) => t.id === role_id)[0];
+    // useEffect(() => {
+    //     if (types) {
+    //         const type = types.filter((t) => t.id === role_id)[0];
 
-            if (type) {
-                setType(type.label);
-            }
-        }
+    //         if (type) {
+    //             setType(type.label);
+    //         }
+    //     }
 
-    }, [types, role_id])
+    // }, [types, role_id])
 
     useEffect(() => {
         const updateImageUrl = async () => {
@@ -99,16 +102,16 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
         updateImageUrl();
     }, [])
 
-    const getLabNameById = (id: number) => {
-        if (laboratories) {
-            const lab = laboratories.filter((lab) => lab.id === id)[0];
-            if (lab) {
-                return lab.label;
-            } else {
-                return "not found";
-            }
-        }
-    }
+    // const getLabNameById = (id: number) => {
+    //     if (laboratories) {
+    //         const lab = laboratories.filter((lab) => lab.id === id)[0];
+    //         if (lab) {
+    //             return lab.label;
+    //         } else {
+    //             return "not found";
+    //         }
+    //     }
+    // }
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -183,12 +186,27 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
             <Sheet>
                 <ContextMenuTrigger>
                     <SheetTrigger asChild>
-                        <div
-                            className="relative grid grid-cols-client-item transition-all duration-300 hover:cursor-pointer group min-h-24 max-h-24 hover:bg-secondary rounded-md "
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{
+                                opacity: 1,
+                                transition: {
+                                    duration: 0.35
+                                }
+                            }}
+                            exit={{
+                                opacity: 0,
+                                transition: {
+                                    duration: 0.35
+                                }
+                            }}
+                            className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-24 max-h-24 hover:bg-card rounded-md mb-3 border"
                         >
-                            <div className=" flex items-center transition-all h-full w-full p-4 ">
-                                <AspectRatio ratio={1 / 1} className=" ">
-                                    <Avatar className="group w-full h-full overflow-hidden [box-shadow:0_0_6px_1px_rgba(0,0,0,0.10)] shadow-black transition-all group-hover:[box-shadow:0_0_6px_1px_rgba(0,0,0,0.18)] duration-[2s]">
+                            <div className="flex h-full items-center overflow-visible p-4 py-3 transition-all w-[100px] self-center">
+                                <AspectRatio ratio={1 / 1} >
+                                    <Avatar className={cn("group w-full h-full overflow-hidden [box-shadow:0_0_6px_1px_rgba(0,0,0,0.10)] shadow-black transition-all group-hover:[box-shadow:0_0_6px_1px_rgba(0,0,0,0.18)] duration-[2s] border border-transparent",
+                                        user.lab_at ? "group-hover:border-primary" : "group-hover:border-transparent"
+                                    )}>
                                         <AvatarImage loading="lazy" alt="" className="object-cover transition-all opacity-0 duration-[2s] group-hover:opacity-100"
                                             onLoad={(event: SyntheticEvent<HTMLImageElement>) => {
                                                 event.currentTarget.classList.remove("opacity-0")
@@ -202,17 +220,17 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
 
                                 </AspectRatio>
                             </div>
-                            <div className="py-4 px-5 flex flex-col justify-between tracking-wider text-sm text-muted-foreground transition-all text-pretty h">
+                            <div className="py-4 px-5 flex flex-col justify-between tracking-wider text-sm text-muted-foreground transition-all text-pretty ">
                                 <span className="text-foreground  transition-all">{display_name}</span>
-                                <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
+                                <div className="flex flex-row  text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
                                     <span>{no_identificador}</span>
                                 </div>
                                 <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
-                                    <span className="">{type}</span>
+                                    <span >{userRole ? userRole.label : "not found"}</span>
                                     {
                                         lab_at && lab_at >= 0 ? (<>
                                             <span> 	&middot; </span>
-                                            <span className="text-primary">  {lab_at ? getLabNameById(lab_at) : "not found"}</span>
+                                            <span className="text-primary">  {lab_at ? laboratory.label : "not found"}</span>
                                         </>) :
                                             (<>
 
@@ -220,7 +238,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
                                     }
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </SheetTrigger>
 
                     {/* </Link> */}
@@ -255,7 +273,7 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
                                 </div>
                                 <div className="flex flex-col w-full gap-2">
                                     <Label htmlFor="role_id">Rol</Label>
-                                    <Select onValueChange={(e) => { setRole(parseInt(e) | 5) }} defaultValue={"" + role} name="role_id">
+                                    <Select onValueChange={(e) => { setRole(parseInt(e) | 5) }} defaultValue={"" + userRole.id} name="role_id">
                                         <SelectTrigger>
                                             <SelectValue placeholder="Selecciona un rol" />
                                         </SelectTrigger>
@@ -301,4 +319,4 @@ const ClientItem = (props: { user: Tables<"users_profile">, laboratories: Tables
         </ContextMenu>)
 }
 
-export default memo(ClientItem);
+export default memo(UserItem);

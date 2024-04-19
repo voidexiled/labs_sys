@@ -35,14 +35,15 @@ import Search from "@/components/users/search-input";
 /* Icons */
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { File, ListFilter } from "lucide-react";
+import { useUserRoles } from "@/hooks/useUserRoles";
 
 
 
 
 
 export const UsersFilters = () => {
-    const { data: subjects } = useSubjects();
-    const { data: users } = useUsers();
+    const { data: roles } = useUserRoles();
+
 
     const searchParams = useSearchParams();
     const pathname = usePathname();
@@ -50,15 +51,12 @@ export const UsersFilters = () => {
     const { replace } = useRouter();
 
     // COMBOBOX TRIGGER OPEN 
-    const [openSubjectComboBox, setOpenSubjectComboBox] = useState(false);
-    const [openUserComboBox, setOpenUserComboBox] = useState(false);
+    const [openRoleComboBox, setOpenRoleComboBox] = useState(false);
+
 
     // SELECTED FILTERS
-    const [selectedSubject, setSelectedSubject] = useState<Tables<"subjects"> | null>(null);
-    const [selectedTeacher, setSelectedTeacher] = useState<Tables<"users_profile"> | null>(null);
+    const [selectedRole, setSelectedRole] = useState<Tables<"user_roles"> | null>(null);
 
-    // FILTER USERS THAT ARE TEACHERS
-    const [teachers, setTeachers] = useState<Tables<"users_profile">[]>([]);
 
     /* Este useEffect se encarga de:
         * 1. Verificar si la URL tiene el parametro "page"
@@ -72,19 +70,6 @@ export const UsersFilters = () => {
     });
 
     /* Este useEffect se encarga de:
-        * 1. Verificar si users tiene datos
-        * 2. Si users tiene datos, filtra a los usuarios que tengan el role_id 4 (Docente)
-     (Se ejecuta al montarse el componente y cada que el valor de users cambia.)
-    */
-    useEffect(() => {
-        if (users) {
-            const _teachers = users.filter((user) => user.role_id === 4);
-            setTeachers(_teachers);
-        }
-
-    }, [users])
-
-    /* Este useEffect se encarga de:
         * 1. Verificar si hay una materia seleccionada para filtrar
         * 2. Si hay una seleccionada, agrega la clave de materia al parametro "subject"
         * 3. Si no hay una seleccionada, elimina el parametro "subject"
@@ -93,30 +78,13 @@ export const UsersFilters = () => {
     */
     useEffect(() => {
         const params = new URLSearchParams(searchParams)
-        if (selectedSubject) {
-            params.set("subject", selectedSubject.key || "");
+        if (selectedRole) {
+            params.set("role", selectedRole.id.toString() || "");
         } else {
-            params.delete("subject");
+            params.delete("role");
         }
         replace(`${pathname}?${params.toString()}`);
-    }, [selectedSubject])
-
-    /* Este useEffect se encarga de:
-        * 1. Verificar si hay un profesor seleccionado para filtrar
-        * 2. Si hay un profesor seleccionado, agrega el id del profesor al parametro "teacher"
-        * 3. Si no hay un profesor seleccionado, elimina el parametro "teacher"
-        * 4. Pasa los parametros a la URL
-     (Se ejecuta al montarse el componente y cada que el profesor cambia.)
-    */
-    useEffect(() => {
-        const params = new URLSearchParams(searchParams)
-        if (selectedTeacher) {
-            params.set("teacher", selectedTeacher.id);
-        } else {
-            params.delete("teacher");
-        }
-        replace(`${pathname}?${params.toString()}`);
-    }, [selectedTeacher])
+    }, [selectedRole])
 
     function handleFilter(term: string) {
         console.log(term);
@@ -129,50 +97,50 @@ export const UsersFilters = () => {
         replace(`${pathname}?${params.toString()}`);
     }
 
-    const status = searchParams.get("status") || "all";
-    const _subject = searchParams.get("subject") || "";
-    const _teacher = searchParams.get("teacher") || "";
+    const _status = searchParams.get("status") || "all";
+    const _role = searchParams.get("role") || "";
+
 
     return (
         <>
             <div className="flex flex-row w-full mb-4 rounded-md gap-1 py-1 justify-between pr-8">
                 <div className="flex items-center gap-2">
-                    <Search placeholder="Buscar por codigo de clase..." />
-                    <Popover open={openSubjectComboBox} onOpenChange={setOpenSubjectComboBox}>
+                    <Search placeholder="Buscar por nombre o folio..." />
+                    <Popover open={openRoleComboBox} onOpenChange={setOpenRoleComboBox}>
                         <PopoverTrigger asChild>
                             <Button
                                 variant="outline"
                                 role="combobox"
-                                aria-expanded={openSubjectComboBox}
+                                aria-expanded={openRoleComboBox}
                                 className="w-[200px] justify-between"
                             >
-                                {_subject ? subjects?.find((s) => s.key === _subject)?.label : selectedSubject ? selectedSubject.label : "Seleccionar materia..."}
+                                {_role ? roles?.find((r) => r.id.toString() === _role)?.label : selectedRole ? selectedRole.label : "Seleccionar rango..."}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-[200px] p-0">
                             <Command>
-                                <CommandInput placeholder="Buscar materia..." className="h-9" />
-                                <CommandEmpty>No se encontraron materias.</CommandEmpty>
+                                <CommandInput placeholder="Buscar rango..." className="h-9" />
+                                <CommandEmpty>No se encontraron rangos de usuarios.</CommandEmpty>
                                 <CommandList>
 
 
                                     <CommandGroup>
                                         {
-                                            subjects?.map((subject) => {
+                                            roles?.map((r) => {
                                                 return (
-                                                    <CommandItem key={subject.id} value={subject.label} onSelect={(value) => {
-                                                        setSelectedSubject(
-                                                            selectedSubject?.label === value ? null :
-                                                                subjects.find((s) => s.label === value) as Tables<"subjects"> || null
+                                                    <CommandItem key={r.id} value={r.label} onSelect={(value) => {
+                                                        setSelectedRole(
+                                                            selectedRole?.label === value ? null :
+                                                                roles.find((r) => r.label === value) as Tables<"user_roles"> || null
                                                         )
-                                                        setOpenSubjectComboBox(false);
+                                                        setOpenRoleComboBox(false);
                                                     }}>
-                                                        {subject.label}
+                                                        {r.label}
                                                         <CheckIcon
                                                             className={cn(
                                                                 "ml-auto h-4 w-4",
-                                                                selectedSubject?.label === subject.label ? "opacity-100" : "opacity-0"
+                                                                selectedRole?.label === r.label ? "opacity-100" : "opacity-0"
                                                             )}
                                                         />
                                                     </CommandItem>
@@ -185,55 +153,6 @@ export const UsersFilters = () => {
                             </Command>
                         </PopoverContent>
                     </Popover>
-
-                    <Popover open={openUserComboBox} onOpenChange={setOpenUserComboBox}>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant="outline"
-                                role="combobox"
-                                aria-expanded={openUserComboBox}
-                                className="w-[300px] justify-between"
-                            >
-                                {_teacher ? teachers?.find((t) => t.id === _teacher)?.display_name : selectedTeacher ? selectedTeacher.display_name : "Seleccionar docente..."}
-                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[300px] p-0">
-                            <Command>
-                                <CommandInput placeholder="Buscar docente..." className="h-9" />
-                                <CommandEmpty>No se encontraron docentes.</CommandEmpty>
-                                <CommandList>
-
-
-                                    <CommandGroup>
-                                        {
-                                            teachers?.map((teacher) => {
-                                                return (
-                                                    <CommandItem key={teacher.id} value={teacher.display_name || ""} onSelect={(value) => {
-                                                        setSelectedTeacher(
-                                                            selectedTeacher?.display_name === value ? null :
-                                                                teachers.find((s) => s.display_name === value) as Tables<"users_profile"> || null
-                                                        )
-                                                        setOpenUserComboBox(false);
-                                                    }}>
-                                                        {teacher.display_name}
-                                                        <CheckIcon
-                                                            className={cn(
-                                                                "ml-auto h-4 w-4",
-                                                                selectedTeacher?.display_name === teacher.display_name ? "opacity-100" : "opacity-0"
-                                                            )}
-                                                        />
-                                                    </CommandItem>
-                                                )
-
-                                            })
-                                        }
-                                    </CommandGroup>
-                                </CommandList>
-                            </Command>
-                        </PopoverContent>
-                    </Popover>
-
                 </div>
                 <div className=" flex items-center gap-2">
                     <DropdownMenu>
@@ -250,17 +169,14 @@ export const UsersFilters = () => {
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Filtrar por</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuCheckboxItem onSelect={() => handleFilter("all")} checked={status === "all"}>
+                            <DropdownMenuCheckboxItem onSelect={() => handleFilter("all")} checked={_status === "all"}>
                                 Mostrar todos
                             </DropdownMenuCheckboxItem>
-                            <DropdownMenuCheckboxItem onSelect={() => handleFilter("active")} checked={status === "busy"}>
+                            <DropdownMenuCheckboxItem onSelect={() => handleFilter("busy")} checked={_status === "busy"}>
                                 Ocupado
                             </DropdownMenuCheckboxItem>
-                            <DropdownMenuCheckboxItem onSelect={() => handleFilter("inactive")} checked={status === "idle"}>
+                            <DropdownMenuCheckboxItem onSelect={() => handleFilter("active")} checked={_status === "active"}>
                                 Disponible
-                            </DropdownMenuCheckboxItem>
-                            <DropdownMenuCheckboxItem onSelect={() => handleFilter("completed")} checked={status === "oos"}>
-                                Fuera de servicio
                             </DropdownMenuCheckboxItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

@@ -102,9 +102,6 @@ export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: s
         });
     }
 
-
-
-    if (!pagedCourses) return <></>
     return (<>
         <ScrollAreaDashboard>
             {

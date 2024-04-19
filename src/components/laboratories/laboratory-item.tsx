@@ -50,6 +50,12 @@ export const LaboratoryItem = (props: {
                             duration: 0.35
                         }
                     }}
+                    exit={{
+                        opacity: 0,
+                        transition: {
+                            duration: 0.35
+                        }
+                    }}
 
                     className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-32 max-h-32 hover:bg-card rounded-md mb-3 border "
                 >

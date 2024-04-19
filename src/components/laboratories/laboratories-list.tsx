@@ -45,13 +45,19 @@ export default function LaboratoriesList(
 
     /* Definir la lista filtrada y la lista filtrada y paginada */
     useEffect(() => {
-        const lastIndex = currentPage * itemsPerPage;
-        const firstIndex = lastIndex - itemsPerPage;
 
         const filtered = filterLaboratories();
         setFilteredLaboratories(filtered);
-        setPagedLaboratories(filtered.slice(firstIndex, lastIndex));
     }, [laboratories, users, subjects, q, currentPage, status, subject, teacher]);
+
+    useEffect(() => {
+        if (filteredLaboratories) {
+            const lastIndex = currentPage * itemsPerPage;
+            const firstIndex = lastIndex - itemsPerPage;
+            setPagedLaboratories(filteredLaboratories.slice(firstIndex, lastIndex));
+        }
+    }, [filteredLaboratories])
+
 
     /* Definir las páginas */
     useEffect(() => {
@@ -108,14 +114,13 @@ export default function LaboratoriesList(
         });
     }
 
-    if (!pagedLaboratories) return <></>
     return (
         <>
             <ScrollAreaDashboard>
                 {
                     isFetchingLaboratories || isFetchingSubjects || isFetchingTypesUsers || isFetchingUsers
                         ? <LaboratoriesListSkeleton len={itemsPerPage} />
-                        : pagedLaboratories.map((lab) => {
+                        : pagedLaboratories?.map((lab) => {
 
                             const user = users?.find((user) => user.id === lab.busy_by) as Tables<"users_profile">;
                             const subject = subjects?.find((subject) => subject.id === lab.subject_id) as Tables<"subjects">;
