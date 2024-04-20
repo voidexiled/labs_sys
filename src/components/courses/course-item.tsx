@@ -27,6 +27,8 @@ export const CourseItem = ({ course, teacher, subject }: Props) => {
 
     const clase = subject?.key + "-" + course.label;
 
+    const teacherNames = teacher.display_name?.split(" ");
+
     const dayOfToday = new Date().toLocaleDateString("en-US", { weekday: 'long' });
 
     const hourOfToday = new Date().toLocaleTimeString("es-MX", { hour: 'numeric', minute: 'numeric' });
@@ -36,6 +38,7 @@ export const CourseItem = ({ course, teacher, subject }: Props) => {
     const todayHaveSchedule = Object.keys(schedule).includes(dayOfToday);
 
     const todayIsBusy = Object.keys(schedule).includes(dayOfToday) && schedule[dayOfToday].start_time < hourOfToday && schedule[dayOfToday].end_time > hourOfToday;
+
 
 
     if (todayIsBusy) {
@@ -65,11 +68,11 @@ export const CourseItem = ({ course, teacher, subject }: Props) => {
                                     duration: 0.35
                                 }
                             }}
-                            className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-28 max-h-28 hover:bg-card rounded-md mb-3 border overflow-hidden"
+                            className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-28 max-h-28 hover:bg-card rounded-md mb-3 border "
 
                         >
                             <div className={
-                                cn("hidden sm:flex mx-3 items-center justify-center h-[64px] w-[64px] rounded-full self-center border transition-all bg-accent group-hover:bg-secondary ",
+                                cn("flex mx-3 items-center justify-center h-[64px] w-[64px] rounded-full self-center border transition-all bg-accent group-hover:bg-secondary ",
                                     status === "completed" ? "group-hover:border-success"
                                         : status === "active" ? "group-hover:border-warning"
                                             : "group-hover:border-danger"
@@ -82,13 +85,12 @@ export const CourseItem = ({ course, teacher, subject }: Props) => {
                                 </span>
                             </div>
                             <div className="py-4 px-5 flex flex-col justify-between tracking-wider text-sm text-muted-foreground transition-all text-pretty h">
-                                <span className="text-foreground  transition-all">{teacher?.display_name}</span>
+                                <span className="hidden xs:flex text-foreground transition-all" >{teacher.display_name}</span>
+                                <span className="flex xs:hidden text-foreground transition-all" >{teacherNames ? teacherNames[0]! + " " + teacherNames[1]! : teacher.display_name}</span>
                                 <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
                                     <span className="">{subject?.label}</span>
-                                    <span className="">&middot;</span>
-                                    <span className="">  Tema 01 - Practica </span>
-                                    {/* Ultima practica terminada o cursando */}
-
+                                    <span className="hidden lg:flex">&middot;</span>
+                                    <span className="hidden lg:flex">  Tema 01 - Practica </span>
                                 </div>
                                 {
 

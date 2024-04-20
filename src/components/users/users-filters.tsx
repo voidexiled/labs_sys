@@ -154,7 +154,7 @@ export const UsersFilters = () => {
                         </PopoverContent>
                     </Popover>
                 </div>
-                <div className=" flex items-center gap-2 justify-center lg:justify-normal flex-wrap flex-grow lg:flex-grow-0">
+                <div className="flex items-center gap-2 justify-center lg:justify-normal flex-wrap flex-grow lg:flex-grow-0">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button

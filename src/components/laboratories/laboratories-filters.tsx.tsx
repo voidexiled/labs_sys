@@ -135,8 +135,8 @@ export const LaboratoriesFilters = () => {
 
     return (
         <>
-            <div className="flex flex-row w-full mb-4 rounded-md gap-1 py-1 justify-between flex-wrap pr-8">
-                <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex flex-row w-full mb-4 rounded-md gap-1 py-1 justify-between flex-wrap p-3 lg:pl-0 lg:pr-8">
+                <div className="flex items-center gap-2 flex-wrap justify-center lg:justify-normal">
                     <Search placeholder="Buscar por codigo de clase..." />
                     <Popover open={openSubjectComboBox} onOpenChange={setOpenSubjectComboBox}>
                         <PopoverTrigger asChild>
@@ -235,7 +235,7 @@ export const LaboratoriesFilters = () => {
                     </Popover>
 
                 </div>
-                <div className=" flex items-center gap-2">
+                <div className="flex items-center gap-2 justify-center lg:justify-normal flex-wrap flex-grow lg:flex-grow-0">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
