@@ -6,7 +6,7 @@ import clsx from "clsx";
 
 export const ScrollAreaDashboard = ({ className, children }: { className?: string, children?: ReactNode }) => {
     return (
-        <ScrollArea className={clsx("max-h-[420px] 2xl:max-h-[600px] pr-8 ", className)}>
+        <ScrollArea className={clsx("max-h-[70vh] xl:max-h-[500px] 2xl:max-h-[600px] px-6 lg:pr-8 lg:pl-0 ", className)}>
             {children}
         </ScrollArea>
     )

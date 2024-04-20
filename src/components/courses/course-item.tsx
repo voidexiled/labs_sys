@@ -65,11 +65,11 @@ export const CourseItem = ({ course, teacher, subject }: Props) => {
                                     duration: 0.35
                                 }
                             }}
-                            className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-28 max-h-28 hover:bg-card rounded-md mb-3 border"
+                            className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-28 max-h-28 hover:bg-card rounded-md mb-3 border overflow-hidden"
 
                         >
                             <div className={
-                                cn("mx-3 flex items-center justify-center h-[64px] w-[64px] rounded-full self-center border transition-all bg-accent group-hover:bg-secondary ",
+                                cn("hidden sm:flex mx-3 items-center justify-center h-[64px] w-[64px] rounded-full self-center border transition-all bg-accent group-hover:bg-secondary ",
                                     status === "completed" ? "group-hover:border-success"
                                         : status === "active" ? "group-hover:border-warning"
                                             : "group-hover:border-danger"
