@@ -103,8 +103,8 @@ export const UsersFilters = () => {
 
     return (
         <>
-            <div className="flex flex-row w-full mb-4 rounded-md gap-1 py-1 justify-between pr-8 flex-wrap">
-                <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex flex-row w-full mb-4 rounded-md gap-1 py-1 justify-between lg:pr-8 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap justify-center lg:justify-normal ">
                     <Search placeholder="Buscar por nombre o folio..." />
                     <Popover open={openRoleComboBox} onOpenChange={setOpenRoleComboBox}>
                         <PopoverTrigger asChild>
@@ -154,7 +154,7 @@ export const UsersFilters = () => {
                         </PopoverContent>
                     </Popover>
                 </div>
-                <div className=" flex items-center gap-2">
+                <div className=" flex items-center gap-2 justify-center lg:justify-normal flex-wrap flex-grow lg:flex-grow-0">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
@@ -166,7 +166,7 @@ export const UsersFilters = () => {
                                 <span className="sr-only sm:not-sr-only">Filtros</span>
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="center">
                             <DropdownMenuLabel>Filtrar por</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuCheckboxItem onSelect={() => handleFilter("all")} checked={_status === "all"}>

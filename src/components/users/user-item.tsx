@@ -202,7 +202,7 @@ const UserItem = (props: { user: Tables<"users_profile">, laboratory: Tables<"la
                             }}
                             className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-24 max-h-24 hover:bg-card rounded-md mb-3 border"
                         >
-                            <div className="flex h-full items-center overflow-visible p-4 py-3 transition-all w-[100px] self-center">
+                            <div className="hidden xs:flex lg:h-full lg:w-[100px] items-center overflow-visible p-4 py-3 transition-all self-center">
                                 <AspectRatio ratio={1 / 1} >
                                     <Avatar className={cn("group w-full h-full overflow-hidden [box-shadow:0_0_6px_1px_rgba(0,0,0,0.10)] shadow-black transition-all group-hover:[box-shadow:0_0_6px_1px_rgba(0,0,0,0.18)] duration-[2s] border border-transparent",
                                         user.lab_at ? "group-hover:border-primary" : "group-hover:border-transparent"
@@ -220,7 +220,7 @@ const UserItem = (props: { user: Tables<"users_profile">, laboratory: Tables<"la
 
                                 </AspectRatio>
                             </div>
-                            <div className="py-4 px-5 flex flex-col justify-between tracking-wider text-sm text-muted-foreground transition-all text-pretty ">
+                            <div className="flex py-4 px-5 flex-col justify-between tracking-wider text-sm text-muted-foreground transition-all text-pretty ">
                                 <span className="text-foreground  transition-all">{display_name}</span>
                                 <div className="flex flex-row  text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
                                     <span>{no_identificador}</span>
