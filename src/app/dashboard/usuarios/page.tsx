@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { Filters } from "@/components/filters";
 import createSupabaseServer from "@/lib/supabase/server";
 import { Tables } from "@/lib/types/supabase";
-import { UsersFilters } from "@/components/users/users-flters";
+import { UsersFilters } from "@/components/users/users-filters";
 
 
 

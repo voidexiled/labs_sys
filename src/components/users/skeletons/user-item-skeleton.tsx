@@ -1,6 +1,6 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@nextui-org/react";
-import Image from "next/image";
+
 
 
 export function UserItemSkeleton() {
