@@ -47,6 +47,7 @@ export const LoginForm = (props: {}) => {
         toast({
             title: "Logged In",
             description: "Sesión iniciada correctamente como " + data.user?.email,
+
         })
 
         router.refresh();

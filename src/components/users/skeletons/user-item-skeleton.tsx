@@ -8,7 +8,7 @@ export function UserItemSkeleton() {
         className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-24 max-h-24 rounded-md border mb-3"
 
     >
-        <div className="flex h-full items-center overflow-visible p-4 py-3 transition-all w-[100px] self-center">
+        <div className="hidden xs:flex xs:h-full xs:w-[100px] items-center overflow-visible p-4 py-3 transition-all self-center">
             <AspectRatio ratio={1 / 1} className=" rounded-md">
                 <Skeleton className=" rounded-full object-cover w-full h-full" />
             </AspectRatio>
