@@ -202,7 +202,7 @@ const UserItem = (props: { user: Tables<"users_profile">, laboratory: Tables<"la
                             }}
                             className="relative flex flex-row transition-all duration-300 hover:cursor-pointer group min-h-24 max-h-24 hover:bg-card rounded-md mb-3 border"
                         >
-                            <div className="hidden xs:flex xs:h-full xs:w-[100px] items-center overflow-visible p-4 py-3 transition-all self-center">
+                            <div className="relative hidden xs:flex xs:h-full xs:w-[100px] items-center overflow-visible p-4 py-3 transition-all self-center">
                                 <AspectRatio ratio={1 / 1} >
                                     <Avatar className={cn("group w-full h-full overflow-hidden [box-shadow:0_0_6px_1px_rgba(0,0,0,0.10)] shadow-black transition-all group-hover:[box-shadow:0_0_6px_1px_rgba(0,0,0,0.18)] duration-[2s] border border-transparent",
                                         user.lab_at ? "group-hover:border-primary" : "group-hover:border-transparent"
