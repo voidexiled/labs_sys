@@ -47,7 +47,7 @@ export default function LeftMenu() {
 
     return (
 
-        <aside className={clsx("sticky lg:relative h-[60px] w-full lg:w-[300px] lg:h-screen border-r overflow-hidden z-50 bg-background flex flex-row lg:flex-col items-center justify-between lg:items-start lg:justify-normal shadow-sm ")}
+        <aside className={clsx("sticky lg:relative h-[60px] w-full lg:w-[320px] lg:h-screen border-r overflow-hidden z-50 bg-background flex flex-row lg:flex-col items-center justify-between lg:items-start lg:justify-normal shadow-sm ")}
         >
             {/* TODO: MOBILE ASIDE */}
             {/* LOGO SIDE */}
@@ -55,7 +55,7 @@ export default function LeftMenu() {
                 <Link href="/dashboard/panel" >
                     <div className="logo flex flex-row gap-4 items-center justify-start">
                         <Image width={150} height={150} alt="ITCM Logo" src="/logo-itcm-full-resolution.webp" className="h-[32px] w-[32px]"></Image>
-                        <h1 className="text-pretty">Gestión de Laboratorios</h1>
+                        <h1 className="hidden xl:flex">ITCM Laboratorios</h1>
                     </div>
                 </Link>
 
