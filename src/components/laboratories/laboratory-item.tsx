@@ -24,8 +24,8 @@ import { SyntheticEvent, useEffect, useState } from "react";
 export const LaboratoryItem = (props: {
     lab: Tables<"laboratories">;
     subject: Tables<"subjects">;
-    type: Tables<"user_roles">
-    user: Tables<"users_profile">;
+    type: Tables<"roles">
+    user: Tables<"users">;
     isBusy: boolean;
 }) => {
 

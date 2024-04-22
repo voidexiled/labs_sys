@@ -3,7 +3,7 @@ import { createSupabaseBrowser } from "@/lib/supabase/browser";
 import { Tables } from "@/lib/types/supabase";
 import { useQuery } from "@tanstack/react-query";
 
-const initLabs = [{
+const initLabs: Tables<"laboratories">[] = [{
     busy_by: "",
     capacity: 0,
     id: 0,

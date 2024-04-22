@@ -114,9 +114,9 @@ const UsersList = ({ q, role, status, currentPage }: { q: string, role: string, 
                         ? <UsersListSkeleton len={itemsPerPage} />
                         : pagedUsers!.sort((a, b) => a.display_name?.localeCompare(b.display_name!, undefined, { numeric: true })! | 0).map((user) => {
                             const laboratory = laboratories?.find((lab) => lab.id === user.lab_at) as Tables<"laboratories">;
-                            const _role = roles?.find((r) => r.id === user.role_id) as Tables<"user_roles">;
-                            return <UserItem key={user.id} user={user as Tables<"users_profile">} laboratory={laboratory} userRole={_role} refetchUsers={refetchUsers}
-                                types={roles as Tables<"user_roles">[]} />
+                            const _role = roles?.find((r) => r.id === user.role_id) as Tables<"roles">;
+                            return <UserItem key={user.id} user={user as Tables<"users">} laboratory={laboratory} userRole={_role} refetchUsers={refetchUsers}
+                                types={roles as Tables<"roles">[]} />
                         })
                 }
             </ScrollAreaDashboard>

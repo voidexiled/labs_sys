@@ -17,7 +17,7 @@ export default async function PanelPage() {
     const admin = await createSupabaseAdmin();
     const supabase = await createSupabaseServer();
     const authUsers = await admin.auth.admin.listUsers();
-    const users = await supabase.from("users_profile").select("*");
+    const users = await supabase.from("users").select("*");
     // console.log("authUsers: ", authUsers.data.users);
     // console.log("users: ", users.data);
 

@@ -4,21 +4,22 @@ import { Tables } from "@/lib/types/supabase";
 import { useQuery } from "@tanstack/react-query";
 
 const initCourses: Tables<"courses">[] = [{
-    classroom_code: null,
+    classroom_code: "",
     created_at: "",
-    current_enrollment: null,
-    end_date: null,
-    enrollment_limit: null,
+    current_enrollment: 0,
+    end_date: "",
+    enrollment_limit: 0,
     id: 0,
-    label: null,
-    meeting_schedule: null,
-    start_date: null,
-    status: null,
-    subject_id: null,
-    teacher_id: null,
-    type: null,
-    updated_at: null,
-    visibility: null
+    label: "",
+    meeting_schedule: "",
+    status: "",
+    subject_id: 0,
+    teacher_id: "",
+    type: "",
+    updated_at: "",
+    visibility: "",
+    syllabus_id: 0,
+    units: 0,
 }]
 
 export function useCourses() {

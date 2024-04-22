@@ -122,9 +122,9 @@ export default function LaboratoriesList(
                         ? <LaboratoriesListSkeleton len={itemsPerPage} />
                         : pagedLaboratories?.map((lab) => {
 
-                            const user = users?.find((user) => user.id === lab.busy_by) as Tables<"users_profile">;
+                            const user = users?.find((user) => user.id === lab.busy_by) as Tables<"users">;
                             const subject = subjects?.find((subject) => subject.id === lab.subject_id) as Tables<"subjects">;
-                            const userRole = types?.find((type) => lab.busy_by ? type.id === user?.role_id : false) as Tables<"user_roles">;
+                            const userRole = types?.find((type) => lab.busy_by ? type.id === user?.role_id : false) as Tables<"roles">;
                             const isBusy = lab.busy_by !== null;
 
 

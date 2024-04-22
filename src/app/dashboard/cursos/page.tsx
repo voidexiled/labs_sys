@@ -21,7 +21,7 @@ export default async function CursosPage({ searchParams }: { searchParams?: { q?
 
 
 
-    const { data: roles } = await supabase.from("user_roles").select("*");
+    const { data: roles } = await supabase.from("roles").select("*");
     const { data: { user } } = await readUserSession();
 
     if (!user) {

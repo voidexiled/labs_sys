@@ -55,10 +55,10 @@ export const LaboratoriesFilters = () => {
 
     // SELECTED FILTERS
     const [selectedSubject, setSelectedSubject] = useState<Tables<"subjects"> | null>(null);
-    const [selectedTeacher, setSelectedTeacher] = useState<Tables<"users_profile"> | null>(null);
+    const [selectedTeacher, setSelectedTeacher] = useState<Tables<"users"> | null>(null);
 
     // FILTER USERS THAT ARE TEACHERS
-    const [teachers, setTeachers] = useState<Tables<"users_profile">[]>([]);
+    const [teachers, setTeachers] = useState<Tables<"users">[]>([]);
 
     /* Este useEffect se encarga de:
         * 1. Verificar si la URL tiene el parametro "page"
@@ -212,7 +212,7 @@ export const LaboratoriesFilters = () => {
                                                     <CommandItem key={teacher.id} value={teacher.display_name || ""} onSelect={(value) => {
                                                         setSelectedTeacher(
                                                             selectedTeacher?.display_name === value ? null :
-                                                                teachers.find((s) => s.display_name === value) as Tables<"users_profile"> || null
+                                                                teachers.find((s) => s.display_name === value) as Tables<"users"> || null
                                                         )
                                                         setOpenUserComboBox(false);
                                                     }}>

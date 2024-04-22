@@ -34,7 +34,7 @@ type prefetchUsersType = {
     updated_at: string;
 }
 
-const UserItem = (props: { user: Tables<"users_profile">, laboratory: Tables<"laboratories">, userRole: Tables<"user_roles">, types: Tables<"user_roles">[], refetchUsers: (options?: RefetchOptions | undefined) => Promise<QueryObserverResult<prefetchUsersType[], Error>> }) => {
+const UserItem = (props: { user: Tables<"users">, laboratory: Tables<"laboratories">, userRole: Tables<"roles">, types: Tables<"roles">[], refetchUsers: (options?: RefetchOptions | undefined) => Promise<QueryObserverResult<prefetchUsersType[], Error>> }) => {
 
     const { toast } = useToast();
 
@@ -88,7 +88,7 @@ const UserItem = (props: { user: Tables<"users_profile">, laboratory: Tables<"la
     useEffect(() => {
         const updateImageUrl = async () => {
             if (image_url) {
-                const { data, error } = await supabase.from("users_profile").select("updated_at").eq("id", id).single();
+                const { data, error } = await supabase.from("users").select("updated_at").eq("id", id).single();
                 if (error) {
                     console.error(error.message);
                     return;
@@ -123,7 +123,7 @@ const UserItem = (props: { user: Tables<"users_profile">, laboratory: Tables<"la
         console.log("SUBMITTING...")
         // try to update at users_profile table
         console.log("data to upload: ", dataWithoutPpFile);
-        const { data: updatedData, error: updateError } = await supabase.from("users_profile").update(dataWithoutPpFile).eq("id", id).select("*");
+        const { data: updatedData, error: updateError } = await supabase.from("users").update(dataWithoutPpFile).eq("id", id).select("*");
 
         if (updateError) {
             toast({

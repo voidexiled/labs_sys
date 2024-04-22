@@ -55,7 +55,7 @@ export const UsersFilters = () => {
 
 
     // SELECTED FILTERS
-    const [selectedRole, setSelectedRole] = useState<Tables<"user_roles"> | null>(null);
+    const [selectedRole, setSelectedRole] = useState<Tables<"roles"> | null>(null);
 
 
     /* Este useEffect se encarga de:
@@ -132,7 +132,7 @@ export const UsersFilters = () => {
                                                     <CommandItem key={r.id} value={r.label} onSelect={(value) => {
                                                         setSelectedRole(
                                                             selectedRole?.label === value ? null :
-                                                                roles.find((r) => r.label === value) as Tables<"user_roles"> || null
+                                                                roles.find((r) => r.label === value) as Tables<"roles"> || null
                                                         )
                                                         setOpenRoleComboBox(false);
                                                     }}>

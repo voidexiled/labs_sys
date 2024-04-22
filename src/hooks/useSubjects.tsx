@@ -1,7 +1,8 @@
 "use client";
 import { createSupabaseBrowser } from "@/lib/supabase/browser";
+import { Tables } from "@/lib/types/supabase";
 import { useQuery } from "@tanstack/react-query";
-const initSubjects = [{
+const initSubjects: Tables<"subjects">[] = [{
     id: 0,
     label: "",
     key: "",

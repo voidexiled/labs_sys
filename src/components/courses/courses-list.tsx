@@ -110,7 +110,7 @@ export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: s
 
                     pagedCourses?.map((course) => {
                         const subject = subjects?.find((s) => s.id === course.subject_id) as Tables<"subjects">;
-                        const teacher = users?.find((u) => u.id === course.teacher_id) as Tables<"users_profile">;
+                        const teacher = users?.find((u) => u.id === course.teacher_id) as Tables<"users">;
 
                         return (
                             <CourseItem key={course.id}

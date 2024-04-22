@@ -35,9 +35,9 @@ export const CoursesFilters = () => {
     const [openSubjectComboBox, setOpenSubjectComboBox] = useState(false)
     const [openUserComboBox, setOpenUserComboBox] = useState(false)
     const [selectedSubject, setSelectedSubject] = useState<Tables<"subjects"> | null>()
-    const [selectedTeacher, setSelectedTeacher] = useState<Tables<"users_profile"> | null>()
+    const [selectedTeacher, setSelectedTeacher] = useState<Tables<"users"> | null>()
 
-    const [teachers, setTeachers] = useState<Tables<"users_profile">[]>([])
+    const [teachers, setTeachers] = useState<Tables<"users">[]>([])
 
     /* Este useEffect se encarga de:
         * 1. Verificar si la URL tiene el parametro "page"
@@ -193,7 +193,7 @@ export const CoursesFilters = () => {
                                                 <CommandItem key={teacher.id} value={teacher.display_name || ""} onSelect={(value) => {
                                                     setSelectedTeacher(
                                                         selectedTeacher?.display_name === value ? null :
-                                                            teachers.find((s) => s.display_name === value) as Tables<"users_profile"> || null
+                                                            teachers.find((s) => s.display_name === value) as Tables<"users"> || null
                                                     )
                                                     setOpenUserComboBox(false);
                                                 }}>

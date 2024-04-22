@@ -9,7 +9,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 type Props = {
     course: Tables<"courses">;
-    teacher: Tables<"users_profile">;
+    teacher: Tables<"users">;
     subject: Tables<"subjects">;
 }
 type MeetingSchedule = {

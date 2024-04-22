@@ -9,71 +9,125 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      courses: {
+      assignments: {
         Row: {
-          classroom_code: string | null
           created_at: string
-          current_enrollment: number | null
+          description: string
           end_date: string | null
-          enrollment_limit: number | null
+          file_name: string | null
+          grade_value: number
           id: number
-          label: string | null
-          meeting_schedule: Json | null
-          start_date: string | null
-          status: string | null
-          subject_id: number | null
-          teacher_id: string | null
-          type: string | null
+          title: string
+          unit_id: number
           updated_at: string | null
-          visibility: string | null
         }
         Insert: {
-          classroom_code?: string | null
           created_at?: string
-          current_enrollment?: number | null
+          description: string
           end_date?: string | null
-          enrollment_limit?: number | null
+          file_name?: string | null
+          grade_value?: number
           id?: number
-          label?: string | null
-          meeting_schedule?: Json | null
-          start_date?: string | null
-          status?: string | null
-          subject_id?: number | null
-          teacher_id?: string | null
-          type?: string | null
+          title: string
+          unit_id: number
           updated_at?: string | null
-          visibility?: string | null
         }
         Update: {
-          classroom_code?: string | null
           created_at?: string
-          current_enrollment?: number | null
+          description?: string
           end_date?: string | null
-          enrollment_limit?: number | null
+          file_name?: string | null
+          grade_value?: number
           id?: number
-          label?: string | null
-          meeting_schedule?: Json | null
-          start_date?: string | null
-          status?: string | null
-          subject_id?: number | null
-          teacher_id?: string | null
-          type?: string | null
+          title?: string
+          unit_id?: number
           updated_at?: string | null
-          visibility?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "public_cursos_subjectId_fkey"
+            foreignKeyName: "public_assignments_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses: {
+        Row: {
+          classroom_code: string
+          created_at: string
+          current_enrollment: number
+          end_date: string
+          enrollment_limit: number
+          id: number
+          label: string
+          meeting_schedule: Json
+          status: string
+          subject_id: number
+          syllabus_id: number | null
+          teacher_id: string
+          type: string
+          units: number
+          updated_at: string
+          visibility: string
+        }
+        Insert: {
+          classroom_code: string
+          created_at?: string
+          current_enrollment?: number
+          end_date: string
+          enrollment_limit: number
+          id?: number
+          label: string
+          meeting_schedule: Json
+          status?: string
+          subject_id: number
+          syllabus_id?: number | null
+          teacher_id: string
+          type?: string
+          units?: number
+          updated_at?: string
+          visibility?: string
+        }
+        Update: {
+          classroom_code?: string
+          created_at?: string
+          current_enrollment?: number
+          end_date?: string
+          enrollment_limit?: number
+          id?: number
+          label?: string
+          meeting_schedule?: Json
+          status?: string
+          subject_id?: number
+          syllabus_id?: number | null
+          teacher_id?: string
+          type?: string
+          units?: number
+          updated_at?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_courses_subject_id_fkey"
             columns: ["subject_id"]
             isOneToOne: false
             referencedRelation: "subjects"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "public_cursos_teacher_id_fkey"
+            foreignKeyName: "public_courses_syllabus_id_fkey"
+            columns: ["syllabus_id"]
+            isOneToOne: false
+            referencedRelation: "syllabuses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_courses_teacher_id_fkey"
             columns: ["teacher_id"]
             isOneToOne: false
-            referencedRelation: "users_profile"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -81,14 +135,17 @@ export type Database = {
       courses_students: {
         Row: {
           course_id: number
+          id: number
           student_id: string
         }
         Insert: {
           course_id: number
+          id?: number
           student_id: string
         }
         Update: {
           course_id?: number
+          id?: number
           student_id?: string
         }
         Relationships: [
@@ -103,66 +160,7 @@ export type Database = {
             foreignKeyName: "public_courses_students_student_id_fkey"
             columns: ["student_id"]
             isOneToOne: false
-            referencedRelation: "users_profile"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      equipment: {
-        Row: {
-          createdAt: string
-          createdBy: number | null
-          id: number
-          label: string | null
-        }
-        Insert: {
-          createdAt?: string
-          createdBy?: number | null
-          id?: number
-          label?: string | null
-        }
-        Update: {
-          createdAt?: string
-          createdBy?: number | null
-          id?: number
-          label?: string | null
-        }
-        Relationships: []
-      }
-      inventory_equipment: {
-        Row: {
-          createdAt: string
-          createdBy: number | null
-          equipmentId: number | null
-          id: number
-          info: string
-          updatedAt: string
-          updatedBy: number | null
-        }
-        Insert: {
-          createdAt?: string
-          createdBy?: number | null
-          equipmentId?: number | null
-          id?: number
-          info?: string
-          updatedAt?: string
-          updatedBy?: number | null
-        }
-        Update: {
-          createdAt?: string
-          createdBy?: number | null
-          equipmentId?: number | null
-          id?: number
-          info?: string
-          updatedAt?: string
-          updatedBy?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_inventory_equipment_equipmentId_fkey"
-            columns: ["equipmentId"]
-            isOneToOne: false
-            referencedRelation: "equipment"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -197,11 +195,11 @@ export type Database = {
             foreignKeyName: "public_laboratories_busyBy_fkey"
             columns: ["busy_by"]
             isOneToOne: false
-            referencedRelation: "users_profile"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "public_laboratories_subjectId_fkey"
+            foreignKeyName: "public_laboratories_subject_id_fkey"
             columns: ["subject_id"]
             isOneToOne: false
             referencedRelation: "subjects"
@@ -209,53 +207,41 @@ export type Database = {
           },
         ]
       }
-      laboratory_equipment: {
+      periods: {
         Row: {
-          createdAt: string
-          createdBy: number | null
-          equipmentId: number | null
+          created_at: string
           id: number
-          info: string
-          laboratoryId: number | null
-          updatedAt: string
-          updatedBy: number | null
+          label: string
+          updated_at: string | null
         }
         Insert: {
-          createdAt?: string
-          createdBy?: number | null
-          equipmentId?: number | null
+          created_at?: string
           id?: number
-          info?: string
-          laboratoryId?: number | null
-          updatedAt?: string
-          updatedBy?: number | null
+          label: string
+          updated_at?: string | null
         }
         Update: {
-          createdAt?: string
-          createdBy?: number | null
-          equipmentId?: number | null
+          created_at?: string
           id?: number
-          info?: string
-          laboratoryId?: number | null
-          updatedAt?: string
-          updatedBy?: number | null
+          label?: string
+          updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "public_laboratory_equipment_equipmentId_fkey"
-            columns: ["equipmentId"]
-            isOneToOne: false
-            referencedRelation: "equipment"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_laboratory_equipment_laboratoryId_fkey"
-            columns: ["laboratoryId"]
-            isOneToOne: false
-            referencedRelation: "laboratories"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
+      }
+      roles: {
+        Row: {
+          id: number
+          label: string
+        }
+        Insert: {
+          id?: number
+          label: string
+        }
+        Update: {
+          id?: number
+          label?: string
+        }
+        Relationships: []
       }
       subjects: {
         Row: {
@@ -275,22 +261,138 @@ export type Database = {
         }
         Relationships: []
       }
-      user_roles: {
+      submissions: {
         Row: {
+          assignment_id: number
+          created_at: string
+          description: string | null
+          feedback: string | null
+          feedback_score: number | null
+          file_name: string | null
           id: number
-          label: string
+          submitted_at: string
+          submitted_by: string
+          updated_at: string
         }
         Insert: {
+          assignment_id: number
+          created_at?: string
+          description?: string | null
+          feedback?: string | null
+          feedback_score?: number | null
+          file_name?: string | null
           id?: number
-          label: string
+          submitted_at: string
+          submitted_by: string
+          updated_at?: string
         }
         Update: {
+          assignment_id?: number
+          created_at?: string
+          description?: string | null
+          feedback?: string | null
+          feedback_score?: number | null
+          file_name?: string | null
           id?: number
-          label?: string
+          submitted_at?: string
+          submitted_by?: string"users"
+          updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_submissions_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_submissions_user_id_fkey"
+            columns: ["submitted_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      users_profile: {
+      syllabuses: {
+        Row: {
+          created_at: string
+          file_name: string | null
+          id: number
+          period_id: number
+          subject_id: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          file_name?: string | null
+          id?: number
+          period_id: number
+          subject_id: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string | null
+          id?: number
+          period_id?: number
+          subject_id?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_syllabuses_period_id_fkey"
+            columns: ["period_id"]
+            isOneToOne: false
+            referencedRelation: "periods"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_syllabuses_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      units: {
+        Row: {
+          course_id: number
+          created_at: string
+          file_name: string | null
+          id: number
+          unit: number
+          updated_at: string | null
+        }
+        Insert: {
+          course_id: number
+          created_at?: string
+          file_name?: string | null
+          id?: number
+          unit: number
+          updated_at?: string | null
+        }
+        Update: {
+          course_id?: number
+          created_at?: string
+          file_name?: string | null
+          id?: number
+          unit?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_units_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
         Row: {
           created_at: string
           display_name: string | null
@@ -343,7 +445,7 @@ export type Database = {
             foreignKeyName: "public_users_role_fkey"
             columns: ["role_id"]
             isOneToOne: false
-            referencedRelation: "user_roles"
+            referencedRelation: "roles"
             referencedColumns: ["id"]
           },
         ]

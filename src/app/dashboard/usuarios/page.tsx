@@ -20,7 +20,7 @@ export default async function UsersPage({ searchParams }: { searchParams?: { q?:
     const status = searchParams?.status || '';
     const currentPage = Number(searchParams?.page) || 1;
     const supabase = await createSupabaseServer();
-    const { data: roles } = await supabase.from("user_roles").select("*");
+    const { data: roles } = await supabase.from("roles").select("*");
     const { data: { user } } = await readUserSession();
 
 
@@ -33,7 +33,7 @@ export default async function UsersPage({ searchParams }: { searchParams?: { q?:
         <MainWrapper>
             <MainWrapperHeader title="Usuarios" />
             <MainWrapperContent>
-                {/* <Filters page="users" tabs={roles as Tables<"user_roles">[]} /> */}
+                {/* <Filters page="users" tabs={roles as Tables<"roles">[]} /> */}
 
                 <UsersFilters />
                 <UsersList q={query} role={role} status={status} currentPage={currentPage} />

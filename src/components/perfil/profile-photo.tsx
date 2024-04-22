@@ -10,7 +10,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import imageCompression from 'browser-image-compression';
 
-export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setFile?: Dispatch<SetStateAction<File | null>>, setPpHasChanged?: Dispatch<SetStateAction<boolean>>, name: string }) => {
+export const ProfilePhoto = (props: { targetUser?: Tables<"users">, setFile?: Dispatch<SetStateAction<File | null>>, setPpHasChanged?: Dispatch<SetStateAction<boolean>>, name: string }) => {
     const router = useRouter();
     const [imgUrl, setImgUrl] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -30,7 +30,7 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
         const updateImageUrl = async () => {
             if (user) {
                 if (user.image_url) {
-                    const { data, error } = await supabase.from("users_profile").select("updated_at").eq("id", user.id).single();
+                    const { data, error } = await supabase.from("users").select("updated_at").eq("id", user.id).single();
                     if (error) {
                         console.error(error.message);
                         return;
@@ -100,7 +100,7 @@ export const ProfilePhoto = (props: { targetUser?: Tables<"users_profile">, setF
 
 
                 // Inserting into user table
-                const { data: dbData, error: dbError } = await supabase.from("users_profile").update({ image_url: user.id }).eq("id", user.id).single();
+                const { data: dbData, error: dbError } = await supabase.from("users").update({ image_url: user.id }).eq("id", user.id).single();
                 if (dbError) {
                     console.error(dbError.message);
                     return;

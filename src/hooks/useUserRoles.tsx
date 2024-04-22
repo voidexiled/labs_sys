@@ -1,7 +1,8 @@
 "use client";
 import { createSupabaseBrowser } from "@/lib/supabase/browser";
+import { Tables } from "@/lib/types/supabase";
 import { useQuery } from "@tanstack/react-query";
-const initUsersRoles = [{
+const initUsersRoles: Tables<"roles">[] = [{
     id: 0,
     label: ""
 }]
@@ -14,7 +15,7 @@ export function useUserRoles() {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
                 // fetch user info
-                const { data: userRoles } = await supabase.from("user_roles").select("*");
+                const { data: userRoles } = await supabase.from("roles").select("*");
                 return userRoles;
             }
             return initUsersRoles;

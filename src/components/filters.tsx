@@ -11,7 +11,7 @@ type cursosTabs = "active" | "inactive" | "completed";
 type laboratoriesTabs = "busy" | "idle";
 
 
-export const Filters = ({ page, tabs }: { page: pages, tabs: Tables<"user_roles">[] | cursosTabs[] | laboratoriesTabs[] }) => {
+export const Filters = ({ page, tabs }: { page: pages, tabs: Tables<"roles">[] | cursosTabs[] | laboratoriesTabs[] }) => {
     const searchParams = useSearchParams();
     const { replace } = useRouter();
     const pathname = usePathname();
