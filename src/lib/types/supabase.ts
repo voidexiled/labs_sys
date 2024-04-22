@@ -295,7 +295,7 @@ export type Database = {
           file_name?: string | null
           id?: number
           submitted_at?: string
-          submitted_by?: string"users"
+          submitted_by?: string
           updated_at?: string
         }
         Relationships: [
