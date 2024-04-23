@@ -102,7 +102,7 @@ export const LoginForm = (props: {}) => {
                                 </div>
                                 <Input id="password" name="password" type="password" required />
                             </div>
-                            <Button className="w-full"
+                            <Button className="w-full hover:shadow-[0_20px_50px] hover:shadow-primary/15  transition-all"
                                 onClick={
                                     async (e) => {
                                         // e.preventDefault();
