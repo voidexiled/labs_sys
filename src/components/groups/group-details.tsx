@@ -24,7 +24,7 @@ export const GroupDetails = ({ course, subject }: { course: Tables<"courses"> | 
                 </Link>
                 <h1 className="text-2xl tracking-wide">{`${subject?.label} ${subject?.key}-${course.label} `}  </h1>
             </div>
-            <Tabs color="default" className="rounded-none" radius="none" selectedKey={pathname}
+            <Tabs color="default" className="rounded-none" radius="none"
                 classNames={{
                     tabList: "w-full bg-background/80 p-0 shadow-[0px_9px_20px] shadow-black/10",
                     cursor: "group-data-[selected=true]:bg-secondary ",
