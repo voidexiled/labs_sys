@@ -28,13 +28,12 @@ type prefetchUsersType = {
     email: string;
     id: string;
     image_url: string | null;
-    lab_at: number | null;
     no_identificador: string | null;
     role_id: number;
     updated_at: string;
 }
 
-const UserItem = (props: { user: Tables<"users">, laboratory: Tables<"laboratories">, userRole: Tables<"roles">, types: Tables<"roles">[], refetchUsers: (options?: RefetchOptions | undefined) => Promise<QueryObserverResult<prefetchUsersType[], Error>> }) => {
+const UserItem = (props: { isBusy: boolean, user: Tables<"users">, course: Tables<"courses">, laboratory: Tables<"laboratories">, userRole: Tables<"roles">, types: Tables<"roles">[], refetchUsers: (options?: RefetchOptions | undefined) => Promise<QueryObserverResult<prefetchUsersType[], Error>> }) => {
 
     const { toast } = useToast();
 
@@ -51,9 +50,9 @@ const UserItem = (props: { user: Tables<"users">, laboratory: Tables<"laboratori
     const router = useRouter();
 
     // Decomposing user data
-    const { user, laboratory, userRole, types } = props;
+    const { user, laboratory, userRole, types, course, isBusy } = props;
     const { refetchUsers } = props;
-    const { id, display_name, email, created_at, image_url, lab_at, no_identificador, role_id, updated_at } = user;
+    const { id, display_name, email, created_at, image_url, no_identificador, role_id, updated_at } = user;
 
     // Edit page
     const [displayName, setDisplayName] = useState<string | null>(display_name);
@@ -205,7 +204,7 @@ const UserItem = (props: { user: Tables<"users">, laboratory: Tables<"laboratori
                             <div className="relative hidden xs:flex xs:h-full xs:w-[100px] items-center overflow-visible p-4 py-3 transition-all self-center">
                                 <AspectRatio ratio={1 / 1} >
                                     <Avatar className={cn("group w-full h-full overflow-hidden [box-shadow:0_0_6px_1px_rgba(0,0,0,0.10)] shadow-black transition-all group-hover:[box-shadow:0_0_6px_1px_rgba(0,0,0,0.18)] duration-[2s] border border-transparent",
-                                        user.lab_at ? "group-hover:border-primary" : "group-hover:border-transparent"
+                                        isBusy ? "group-hover:border-primary" : "group-hover:border-transparent"
                                     )}>
                                         <AvatarImage loading="lazy" alt="" className="object-cover transition-all opacity-0 duration-[2s] group-hover:opacity-100"
                                             onLoad={(event: SyntheticEvent<HTMLImageElement>) => {
@@ -228,9 +227,9 @@ const UserItem = (props: { user: Tables<"users">, laboratory: Tables<"laboratori
                                 <div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
                                     <span >{userRole ? userRole.label : "not found"}</span>
                                     {
-                                        lab_at && lab_at >= 0 ? (<>
+                                        laboratory ? (<>
                                             <span> 	&middot; </span>
-                                            <span className="text-primary">  {lab_at ? laboratory.label : "not found"}</span>
+                                            <span className="text-primary">  {laboratory ? laboratory.label : "not found"}</span>
                                         </>) :
                                             (<>
 

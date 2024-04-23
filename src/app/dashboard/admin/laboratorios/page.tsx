@@ -1,4 +1,5 @@
 'use server';
+import { verifyRoleRedirect } from "@/app/auth-server-action/actions";
 import { Filters } from "@/components/filters";
 import { LaboratoriesFilters } from "@/components/laboratories/laboratories-filters.tsx";
 import LaboratoriesList from "@/components/laboratories/laboratories-list";
@@ -14,11 +15,7 @@ export default async function LaboratoriesPage({ searchParams }: { searchParams?
     const teacher = searchParams?.teacher || '';
     const currentPage = Number(searchParams?.page) || 1;
 
-    const { data: { user } } = await readUserSession();
-
-    if (!user) {
-        return redirect("/login");
-    }
+    await verifyRoleRedirect([1, 2]);
 
 
     return (

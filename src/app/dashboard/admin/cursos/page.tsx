@@ -1,4 +1,5 @@
 "use server";
+import { verifyIsNotLoggedIn, verifyRoleRedirect } from "@/app/auth-server-action/actions";
 import { CoursesFilters } from "@/components/courses/courses-filters";
 import { CoursesList } from "@/components/courses/courses-list";
 import { Filters } from "@/components/filters";
@@ -17,16 +18,13 @@ export default async function CursosPage({ searchParams }: { searchParams?: { q?
     const subject = searchParams?.subject || '';
     const teacher = searchParams?.teacher || '';
     const currentPage = Number(searchParams?.page) || 1;
+    await verifyRoleRedirect([1, 2]);
+
+
     const supabase = await createSupabaseServer();
 
-
-
     const { data: roles } = await supabase.from("roles").select("*");
-    const { data: { user } } = await readUserSession();
 
-    if (!user) {
-        return redirect("/login");
-    }
 
 
     return (

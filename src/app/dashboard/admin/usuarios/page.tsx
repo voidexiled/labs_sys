@@ -10,6 +10,7 @@ import { Filters } from "@/components/filters";
 import createSupabaseServer from "@/lib/supabase/server";
 import { Tables } from "@/lib/types/supabase";
 import { UsersFilters } from "@/components/users/users-filters";
+import { verifyRoleRedirect } from "@/app/auth-server-action/actions";
 
 
 
@@ -19,14 +20,11 @@ export default async function UsersPage({ searchParams }: { searchParams?: { q?:
     const role = searchParams?.role || '';
     const status = searchParams?.status || '';
     const currentPage = Number(searchParams?.page) || 1;
+
+    await verifyRoleRedirect([1, 2]);
+
     const supabase = await createSupabaseServer();
     const { data: roles } = await supabase.from("roles").select("*");
-    const { data: { user } } = await readUserSession();
-
-
-    if (!user) {
-        return redirect("/login");
-    }
 
 
     return (

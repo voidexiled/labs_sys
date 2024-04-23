@@ -5,25 +5,22 @@ import { MainWrapperHeader } from "@/components/main-wrapper-header";
 import { redirect } from "next/navigation";
 import readUserSession from "@/lib/actions";
 import createSupabaseServer, { createSupabaseAdmin } from "@/lib/supabase/server";
-import { FormEvent } from "react";
-import axios from "axios";
-// import { BodyPanel } from "@/components/providers/panel/body-test";
-export default async function PanelPage() {
-    const { data: { user } } = await readUserSession();
+import { verifyRoleRedirect } from "@/app/auth-server-action/actions";
 
-    if (!user) {
-        return redirect("/login");
-    }
-    const admin = await createSupabaseAdmin();
-    const supabase = await createSupabaseServer();
-    const authUsers = await admin.auth.admin.listUsers();
-    const users = await supabase.from("users").select("*");
+// import { BodyPanel } from "@/components/providers/panel/body-test";
+export default async function HomePage() {
+    const { data: { user } } = await readUserSession();
+    await verifyRoleRedirect([4]);
     // console.log("authUsers: ", authUsers.data.users);
     // console.log("users: ", users.data);
+    if (!user) { return <></> }
+    const supabase = await createSupabaseServer();
 
+
+    const { data: _user } = await supabase.from("users").select("*").eq("id", user?.id).single();
 
     return (<MainWrapper>
-        <MainWrapperHeader title="Panel de administración" />
+        <MainWrapperHeader title={"Bienvenido docente " + _user?.display_name} />
         <MainWrapperContent>
             <></>
         </MainWrapperContent>

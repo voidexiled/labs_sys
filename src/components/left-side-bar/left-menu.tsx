@@ -1,7 +1,5 @@
 "use client"
 
-
-
 // ICONS 
 import { SchoolIcon } from "@/icons/school-icon"
 import { HomeIcon } from "@/icons/home-icon"
@@ -23,18 +21,17 @@ import { ModeToggle } from "./theme-toggle"
 
 // Next Components
 import Link from "next/link"
-import UserPreview from "./user-preview"
 import Image from "next/image"
 import { Button } from "../ui/button"
-import { MenuIcon, TagIcon } from "lucide-react"
+import { MenuIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import clsx from "clsx"
 import { useTheme } from "next-themes"
-import { SunIcon } from "@/icons/sun-icon"
-import { MoonIcon } from "@/icons/moon-icon"
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../ui/drawer"
 import { usePathname } from "next/navigation"
 import { useUser } from "@/hooks/useUser"
+import { AssignmentsIcon } from "@/icons/assignments-icon"
+import { SubmissionsIcon } from "@/icons/submissions-icon"
 
 
 export default function LeftMenu() {
@@ -42,10 +39,18 @@ export default function LeftMenu() {
     const { theme, resolvedTheme, setTheme } = useTheme()
     const pathname = usePathname()
     const { isFetching: isFetchingUser, data: user } = useUser()
+    const [isUser, setIsUser] = useState(false);
 
+    console.log("user roleId", user?.role_id)
+    console.log(user?.role_id === 1 || user?.role_id === 2)
     useEffect(() => {
         setIsOpen(false)
     }, [pathname])
+
+    useEffect(() => {
+        setIsUser(!!user);
+    }, [user])
+
 
     return (
 
@@ -66,27 +71,28 @@ export default function LeftMenu() {
             {/* NAV SIDE */}
             <nav className="hidden lg:flex flex-row lg:flex-col items-start justify-center lg:justify-start px-1 lg:px-4 py-5 w-full h-full"
             >
+
                 {
                     /* JEFE DE DEPARTAMENTO */
-                    user?.role_id === 1 || user?.role_id === 2 && (
+                    user && (user.role_id === 1 || user.role_id === 2) && (
                         <>
-                            <NavItem href="/dashboard/panel" title="Panel de administración" >
+                            <NavItem href="/dashboard/admin/panel" title="Panel de administración" >
                                 <HomeIcon width={20} height={20} />
                             </NavItem>
 
-                            <NavItem href="/dashboard/usuarios" title="Usuarios" >
+                            <NavItem href="/dashboard/admin/usuarios" title="Usuarios" >
                                 <TeachersIcon width={20} height={20} />
                             </NavItem>
-                            <NavItem href="/dashboard/laboratorios" title="Laboratorios" >
+                            <NavItem href="/dashboard/admin/laboratorios" title="Laboratorios" >
                                 <TeachingIcon width={20} height={20} />
                             </NavItem>
-                            <NavItem href="/dashboard/cursos" title="Cursos" >
+                            <NavItem href="/dashboard/admin/cursos" title="Cursos" >
                                 <NotebookIcon width={20} height={20} />
                             </NavItem>
-                            <NavItem href="/dashboard/practicas" title="Prácticas" >
+                            <NavItem href="/dashboard/admin/practicas" title="Prácticas" >
                                 <NotesIcon width={20} height={20} />
                             </NavItem>
-                            <NavItem href="/dashboard/estadisticas" title="Estadísticas" >
+                            <NavItem href="/dashboard/admin/estadisticas" title="Estadísticas" >
                                 <AnalyticsIcon width={20} height={20} />
                             </NavItem>
 
@@ -96,10 +102,19 @@ export default function LeftMenu() {
                 }
                 {
                     /* DOCENTE */
-                    user?.role_id === 4 && (
+                    user && (user.role_id === 4) && (
                         <>
-                            <NavItem href={"/dashboard/courses/"} title="Grupos" >
+                            <NavItem href={"/dashboard/teacher/home"} title="Inicio" >
                                 <HomeIcon width={20} height={20} />
+                            </NavItem>
+                            <NavItem href={"/dashboard/teacher/grupos"} title="Grupos" >
+                                <TeachersIcon width={20} height={20} />
+                            </NavItem>
+                            <NavItem href={"/dashboard/teacher/tareas"} title="Tareas" >
+                                <AssignmentsIcon width={20} height={20} />
+                            </NavItem>
+                            <NavItem href={"/dashboard/teacher/entregas"} title="Entregas" >
+                                <SubmissionsIcon width={20} height={20} />
                             </NavItem>
                         </>
                     )

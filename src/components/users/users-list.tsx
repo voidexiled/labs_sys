@@ -11,6 +11,7 @@ import { ScrollAreaDashboard } from "../scroll-area-dashboard";
 import { normalizeString } from "@/lib/utils";
 import { ListPagination } from "../list-pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCourses } from "@/hooks/useCourses";
 
 
 const UsersList = ({ q, role, status, currentPage }: { q: string, role: string, status: string, currentPage: number }) => {
@@ -24,6 +25,7 @@ const UsersList = ({ q, role, status, currentPage }: { q: string, role: string, 
     const { isFetching: isFetchingUsers, refetch: refetchUsers, data: users } = useUsers();
     const { isFetching: isFetchingUserRoles, data: roles } = useUserRoles();
     const { isFetching: isFetchingLaboratories, data: laboratories } = useLaboratories();
+    const { isFetching: isFetchingCourses, data: courses } = useCourses();
 
     const [filteredUsers, setFilteredUsers] = useState<typeof users>(users);
     const [pagedUsers, setPagedUsers] = useState<typeof users>(users);
@@ -82,7 +84,9 @@ const UsersList = ({ q, role, status, currentPage }: { q: string, role: string, 
         }
         return users.filter((user) => {
             const _q = normalizeString(q);
-            const _role = roles?.filter((r) => r.label === role)[0]?.id || "all";
+            const _course = courses?.find((c) => c.teacher_id === user.id);
+            const _laboratory = laboratories?.find((l) => l.course_id === _course?.id);
+            // const _role = roles?.filter((r) => r.label === role)[0]?.id || "all";
             const { no_identificador, display_name, role_id, } = user;
             const _display_name = normalizeString(display_name!);
             const _role_id = parseInt(roleFilter);
@@ -92,13 +96,14 @@ const UsersList = ({ q, role, status, currentPage }: { q: string, role: string, 
             const roleFilters = _role_id ? role_id === _role_id : true;
 
             const checkFilters = _search && roleFilters;
+            const isBusy = !!_laboratory;
 
             if (status === "all" || !status) {
                 return checkFilters;
             } else if (status === "busy") {
-                return checkFilters && user.lab_at !== null;
+                return checkFilters && isBusy;
             } else if (status === "active") {
-                return checkFilters && user.lab_at === null;
+                return checkFilters && !isBusy;
             } else {
                 return true && checkFilters;
             }
@@ -113,9 +118,10 @@ const UsersList = ({ q, role, status, currentPage }: { q: string, role: string, 
                     isFetchingUsers || isFetchingUserRoles || isFetchingLaboratories
                         ? <UsersListSkeleton len={itemsPerPage} />
                         : pagedUsers!.sort((a, b) => a.display_name?.localeCompare(b.display_name!, undefined, { numeric: true })! | 0).map((user) => {
-                            const laboratory = laboratories?.find((lab) => lab.id === user.lab_at) as Tables<"laboratories">;
+                            const _course = courses?.find((c) => c.teacher_id === user.id) as Tables<"courses">;
+                            const _laboratory = laboratories?.find((lab) => lab.course_id === _course?.id) as Tables<"laboratories">;
                             const _role = roles?.find((r) => r.id === user.role_id) as Tables<"roles">;
-                            return <UserItem key={user.id} user={user as Tables<"users">} laboratory={laboratory} userRole={_role} refetchUsers={refetchUsers}
+                            return <UserItem key={user.id} user={user as Tables<"users">} laboratory={_laboratory} course={_course} isBusy={!!_laboratory} userRole={_role} refetchUsers={refetchUsers}
                                 types={roles as Tables<"roles">[]} />
                         })
                 }
