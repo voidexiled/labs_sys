@@ -22,9 +22,9 @@ const config = {
       },
     },
     extend: {
-      screens:{
-        "xxs": "375px",
-        "xs": "415px"
+      screens: {
+        xxs: "375px",
+        xs: "415px",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -91,7 +91,12 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), nextui()],
+  plugins: [
+    require("tailwindcss-animate"),
+    nextui({
+      prefix: "nextui",
+    }),
+  ],
 } satisfies Config;
 
 export default config;

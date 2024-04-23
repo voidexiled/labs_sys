@@ -6,18 +6,9 @@ import { useUsers } from "@/hooks/useUsers";
 import { useSubjects } from "@/hooks/useSubjects";
 import { CourseItem } from "./course-item";
 import { Tables } from "@/lib/types/supabase";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
-import { cn, normalizeString } from "@/lib/utils";
+
+import { normalizeString } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { CourseItemSkeleton } from "./skeletons/course-item-skeleton";
 import { CoursesListSkeleton } from "./skeletons/courses-list-skeleton";
 import { ListPagination } from "../list-pagination";
 export const CoursesList = ({ q, status, subject, teacher, currentPage }: { q: string, status: string, subject: string, teacher: string, currentPage: number }) => {

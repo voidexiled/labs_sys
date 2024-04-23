@@ -22,16 +22,19 @@ const initCourses: Tables<"courses">[] = [{
     units: 0,
 }]
 
-export function useCourses() {
+export function useCoursesByTeacher({ teacher_uuid }: { teacher_uuid?: string }) {
     return useQuery({
         queryKey: ["courses"],
         _optimisticResults: "optimistic",
         queryFn: async () => {
+            if (!teacher_uuid) {
+                return
+            }
             const supabase = createSupabaseBrowser();
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
                 // fetch labs info
-                const { data: courses } = await supabase.from("courses").select("*");
+                const { data: courses } = await supabase.from("courses").select("*").eq("teacher_id", teacher_uuid);
                 return courses as Tables<"courses">[];
             }
             return initCourses;

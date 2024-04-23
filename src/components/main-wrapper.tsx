@@ -4,7 +4,7 @@ import { ScrollArea } from "./ui/scroll-area"
 import { motion } from "framer-motion";
 export const MainWrapper = (props: { children: React.ReactNode }) => {
     return (
-        <ScrollArea className="h-full w-full bg-muted/40">
+        <ScrollArea className="h-full w-full ">
 
 
             <motion.main

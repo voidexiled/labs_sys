@@ -51,126 +51,150 @@ export default function LeftMenu() {
         setIsUser(!!user);
     }, [user])
 
-
     return (
 
         <aside className={clsx("sticky lg:relative h-[60px] w-full lg:w-[320px] lg:h-screen border-r overflow-hidden z-50 bg-background flex flex-row lg:flex-col items-center justify-between lg:items-start lg:justify-normal shadow-sm ")}
         >
-            {/* TODO: MOBILE ASIDE */}
-            {/* LOGO SIDE */}
-            <div className="hidden lg:flex flex-row w-full items-center justify-between pt-9 pb-5 px-8 border-b stroke-foreground ">
-                <Link href="/dashboard/panel" >
-                    <div className="logo flex flex-row gap-4 items-center justify-start">
-                        <Image width={150} height={150} alt="ITCM Logo" src="/logo-itcm-full-resolution.webp" className="h-[32px] w-[32px]"></Image>
-                        <h1 className="hidden xl:flex">ITCM Laboratorios</h1>
-                    </div>
-                </Link>
+            {
+                user &&
+                (
 
+                    <>
+                        <div className="hidden lg:flex flex-row w-full items-center justify-between h-[90px] pt-9 pb-5 px-8 border-b stroke-foreground ">
+                            <Link href="/dashboard/panel" >
+                                <div className="logo flex flex-row gap-4 items-center justify-start">
+                                    <Image width={150} height={150} alt="ITCM Logo" src="/logo-itcm-full-resolution.webp" className="h-[32px] w-[32px]"></Image>
+                                    <h1 className="hidden xl:flex">ITCM Laboratorios</h1>
+                                </div>
+                            </Link>
 
-            </div>
-            {/* NAV SIDE */}
-            <nav className="hidden lg:flex flex-row lg:flex-col items-start justify-center lg:justify-start px-1 lg:px-4 py-5 w-full h-full"
-            >
-
-                {
-                    /* JEFE DE DEPARTAMENTO */
-                    user && (user.role_id === 1 || user.role_id === 2) && (
-                        <>
-                            <NavItem href="/dashboard/admin/panel" title="Panel de administración" >
-                                <HomeIcon width={20} height={20} />
-                            </NavItem>
-
-                            <NavItem href="/dashboard/admin/usuarios" title="Usuarios" >
-                                <TeachersIcon width={20} height={20} />
-                            </NavItem>
-                            <NavItem href="/dashboard/admin/laboratorios" title="Laboratorios" >
-                                <TeachingIcon width={20} height={20} />
-                            </NavItem>
-                            <NavItem href="/dashboard/admin/cursos" title="Cursos" >
-                                <NotebookIcon width={20} height={20} />
-                            </NavItem>
-                            <NavItem href="/dashboard/admin/practicas" title="Prácticas" >
-                                <NotesIcon width={20} height={20} />
-                            </NavItem>
-                            <NavItem href="/dashboard/admin/estadisticas" title="Estadísticas" >
-                                <AnalyticsIcon width={20} height={20} />
-                            </NavItem>
-
-
-                        </>
-                    )
-                }
-                {
-                    /* DOCENTE */
-                    user && (user.role_id === 4) && (
-                        <>
-                            <NavItem href={"/dashboard/teacher/home"} title="Inicio" >
-                                <HomeIcon width={20} height={20} />
-                            </NavItem>
-                            <NavItem href={"/dashboard/teacher/grupos"} title="Grupos" >
-                                <TeachersIcon width={20} height={20} />
-                            </NavItem>
-                            <NavItem href={"/dashboard/teacher/tareas"} title="Tareas" >
-                                <AssignmentsIcon width={20} height={20} />
-                            </NavItem>
-                            <NavItem href={"/dashboard/teacher/entregas"} title="Entregas" >
-                                <SubmissionsIcon width={20} height={20} />
-                            </NavItem>
-                        </>
-                    )
-                }
-                <NavItem href="/dashboard/configuracion" title="Configuración" >
-                    <SettingsIcon width={20} height={20} />
-                </NavItem>
-                <LogOutButton title="Cerrar sesión" >
-                    <LogOutIcon width={20} height={20} />
-                </LogOutButton>
-            </nav>
-            {/* <ModeToggle /> */}
-
-            <div className="hidden lg:flex px-1 lg:px-4 py-6 ">
-                <ModeToggle />
-            </div>
-            <Drawer open={isOpen} onOpenChange={setIsOpen}>
-                <div className="flex px-8 lg:hidden flex-row items-center justify-between w-full">
-
-                    <DrawerTrigger asChild>
-
-                        <Button onClick={() => setIsOpen(!isOpen)} className=" flex flex-row items-center justify-center p-0 text-sm transition-all rounded-sm  stroke-foreground/80 text-foreground/80 font-normal hover:bg-inherit" variant="ghost">
-                            <MenuIcon />
-                        </Button>
-
-                    </DrawerTrigger>
-
-
-                    <Link href="/dashboard/panel" >
-                        <div className="logo flex flex-row gap-4 items-center justify-start">
-                            <Image width={150} height={150} alt="ITCM Logo" src="/logo-itcm-full-resolution.webp" className="h-[32px] w-[32px]"></Image>
 
                         </div>
-                    </Link>
-                    <ModeToggle />
-                </div>
-                <DrawerContent className=" lg:hidden">
-                    <DrawerHeader>
-                        <DrawerTitle>Instituto Tecnológico de Ciudad Madero</DrawerTitle>
-                        <DrawerDescription>Gestor de laboratorios</DrawerDescription>
-                    </DrawerHeader>
-                    <DrawerFooter>
-                        <nav className="flex flex-col items-center justify-center px-1 lg:px-4 pb-8 w-full h-full">
-                            <NavItem href="/dashboard/panel" title="Panel de administración" />
-                            <NavItem href="/dashboard/usuarios" title="Usuarios" />
-                            <NavItem href="/dashboard/laboratorios" title="Laboratorios" />
-                            <NavItem href="/dashboard/cursos" title="Cursos" />
-                            <NavItem href="/dashboard/practicas" title="Prácticas" />
-                            <NavItem href="/dashboard/horario" title="Horario" />
-                            <NavItem href="/dashboard/estadisticas" title="Estadísticas" />
-                            <NavItem href="/dashboard/configuracion" title="Configuración" />
-                            <LogOutButton title="Cerrar sesión" />
+                        <nav className="hidden lg:flex flex-row lg:flex-col items-start justify-center lg:justify-start px-1 lg:px-4 py-5 w-full h-full gap-1"
+                        >
+
+                            {
+                                /* JEFE DE DEPARTAMENTO */
+                                user && (user.role_id === 1 || user.role_id === 2) && (
+                                    <>
+                                        <NavItem href="/dashboard/admin/panel" title="Panel de administración" >
+                                            <HomeIcon width={20} height={20} />
+                                        </NavItem>
+
+                                        <NavItem href="/dashboard/admin/usuarios" title="Usuarios" >
+                                            <TeachersIcon width={20} height={20} />
+                                        </NavItem>
+                                        <NavItem href="/dashboard/admin/laboratorios" title="Laboratorios" >
+                                            <TeachingIcon width={20} height={20} />
+                                        </NavItem>
+                                        <NavItem href="/dashboard/admin/cursos" title="Cursos" >
+                                            <NotebookIcon width={20} height={20} />
+                                        </NavItem>
+                                        <NavItem href="/dashboard/admin/practicas" title="Prácticas" >
+                                            <NotesIcon width={20} height={20} />
+                                        </NavItem>
+                                        <NavItem href="/dashboard/admin/estadisticas" title="Estadísticas" >
+                                            <AnalyticsIcon width={20} height={20} />
+                                        </NavItem>
+
+
+                                    </>
+                                )
+                            }
+                            {
+                                /* DOCENTE */
+                                user && (user.role_id === 4) && (
+                                    <>
+                                        <NavItem href={"/dashboard/teacher/home"} title="Inicio" >
+                                            <HomeIcon width={20} height={20} />
+                                        </NavItem>
+                                        <NavItem href={"/dashboard/teacher/grupos"} title="Grupos" >
+                                            <TeachersIcon width={20} height={20} />
+                                        </NavItem>
+                                        <NavItem href={"/dashboard/teacher/tareas"} title="Tareas" >
+                                            <AssignmentsIcon width={20} height={20} />
+                                        </NavItem>
+                                        <NavItem href={"/dashboard/teacher/entregas"} title="Entregas" >
+                                            <SubmissionsIcon width={20} height={20} />
+                                        </NavItem>
+                                    </>
+                                )
+                            }
+                            <NavItem href="/dashboard/configuracion" title="Configuración" >
+                                <SettingsIcon width={20} height={20} />
+                            </NavItem>
+                            <LogOutButton title="Cerrar sesión" >
+                                <LogOutIcon width={20} height={20} />
+                            </LogOutButton>
                         </nav>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
+                        {/* <ModeToggle /> */}
+
+                        <div className="hidden lg:flex px-1 lg:px-4 py-6 ">
+                            <ModeToggle />
+                        </div>
+                        <Drawer open={isOpen} onOpenChange={setIsOpen}>
+                            <div className="flex px-8 lg:hidden flex-row items-center justify-between w-full">
+
+                                <DrawerTrigger asChild>
+
+                                    <Button onClick={() => setIsOpen(!isOpen)} className=" flex flex-row items-center justify-center p-0 text-sm transition-all rounded-sm  stroke-foreground/80 text-foreground/80 font-normal hover:bg-inherit" variant="ghost">
+                                        <MenuIcon />
+                                    </Button>
+
+                                </DrawerTrigger>
+
+
+                                <Link href="/dashboard/" >
+                                    <div className="logo flex flex-row gap-4 items-center justify-start">
+                                        <Image width={150} height={150} alt="ITCM Logo" src="/logo-itcm-full-resolution.webp" className="h-[32px] w-[32px]"></Image>
+
+                                    </div>
+                                </Link>
+                                <ModeToggle />
+                            </div>
+                            <DrawerContent className=" lg:hidden">
+                                <DrawerHeader>
+                                    <DrawerTitle>Instituto Tecnológico de Ciudad Madero</DrawerTitle>
+                                    <DrawerDescription>Gestor de laboratorios</DrawerDescription>
+                                </DrawerHeader>
+                                <DrawerFooter>
+                                    <nav className="flex flex-col items-center justify-center px-1 lg:px-4 pb-8 w-full h-full">
+                                        {
+                                            user && (user.role_id === 1 || user.role_id === 2) && (
+                                                <>
+                                                    <NavItem href="/dashboard/admin/panel" title="Panel de administración" />
+                                                    <NavItem href="/dashboard/admin/usuarios" title="Usuarios" />
+                                                    <NavItem href="/dashboard/admin/laboratorios" title="Laboratorios" />
+                                                    <NavItem href="/dashboard/admin/cursos" title="Cursos" />
+                                                    <NavItem href="/dashboard/admin/practicas" title="Prácticas" />
+                                                    {/* <NavItem href="/dashboard/admin/horario" title="Horario" /> */}
+                                                    <NavItem href="/dashboard/admin/estadisticas" title="Estadísticas" />
+                                                </>
+                                            )
+
+                                        }
+                                        {
+                                            user && (user.role_id === 4) && (
+                                                <>
+                                                    <NavItem href={"/dashboard/teacher/home"} title="Inicio" />
+                                                    <NavItem href={"/dashboard/teacher/grupos"} title="Grupos" />
+                                                    <NavItem href={"/dashboard/teacher/tareas"} title="Tareas" />
+                                                    <NavItem href={"/dashboard/teacher/entregas"} title="Entregas" />
+                                                </>
+                                            )
+                                        }
+
+                                        <NavItem href="/dashboard/configuracion" title="Configuración" />
+                                        <LogOutButton title="Cerrar sesión" />
+                                    </nav>
+                                </DrawerFooter>
+                            </DrawerContent>
+                        </Drawer>
+                    </>
+                )
+
+            }
+
 
 
         </aside>
