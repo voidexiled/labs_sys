@@ -7,11 +7,11 @@ import { Input, ScrollShadow, Tab, Tabs } from "@nextui-org/react"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { Button } from "../ui/button"
-import { usePathname } from "next/navigation"
+
 // import { Tab, Tabs } from "@nextui-org/react"
 
 export const GroupDetails = ({ course, subject }: { course: Tables<"courses"> | null, subject: Tables<"subjects"> | null }) => {
-    const pathname = usePathname()
+
     if (!course) return <>loading</>
     return (
         <div className="sticky w-full flex flex-col">
@@ -34,8 +34,8 @@ export const GroupDetails = ({ course, subject }: { course: Tables<"courses"> | 
 
             >
 
-                <Tab key="general" title="General" href={course.id + "/general"}></Tab>
-                <Tab key="unit1" title="Unidad 1" href={course.id + "/unit/1"}></Tab>
+                <Tab key="general" title="General"></Tab>
+                <Tab key="unit1" title="Unidad 1" ></Tab>
                 <Tab key="unit2" title="Unidad 2"></Tab>
                 <Tab key="unit3" title="Unidad 3"></Tab>
                 <Tab key="unit4" title="Unidad 4"></Tab>
