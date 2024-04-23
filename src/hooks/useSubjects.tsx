@@ -6,6 +6,8 @@ const initSubjects: Tables<"subjects">[] = [{
     id: 0,
     label: "",
     key: "",
+    created_at: "",
+    updated_at: "",
 }]
 export function useSubjects() {
     return useQuery({
