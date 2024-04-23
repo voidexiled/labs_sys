@@ -7,10 +7,11 @@ import { Input, ScrollShadow, Tab, Tabs } from "@nextui-org/react"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { Button } from "../ui/button"
+import { usePathname } from "next/navigation"
 // import { Tab, Tabs } from "@nextui-org/react"
 
 export const GroupDetails = ({ course, subject }: { course: Tables<"courses"> | null, subject: Tables<"subjects"> | null }) => {
-
+    const pathname = usePathname()
     if (!course) return <>loading</>
     return (
         <div className="sticky w-full flex flex-col">
@@ -23,7 +24,7 @@ export const GroupDetails = ({ course, subject }: { course: Tables<"courses"> | 
                 </Link>
                 <h1 className="text-2xl tracking-wide">{`${subject?.label} ${subject?.key}-${course.label} `}  </h1>
             </div>
-            <Tabs color="default" className="rounded-none" radius="none"
+            <Tabs color="default" className="rounded-none" radius="none" selectedKey={pathname}
                 classNames={{
                     tabList: "w-full bg-background/80 p-0 shadow-[0px_9px_20px] shadow-black/10",
                     cursor: "group-data-[selected=true]:bg-secondary ",
@@ -33,8 +34,8 @@ export const GroupDetails = ({ course, subject }: { course: Tables<"courses"> | 
 
             >
 
-                <Tab key="general" title="General"></Tab>
-                <Tab key="unit1" title="Unidad 1"></Tab>
+                <Tab key="general" title="General" href={course.id + "/general"}></Tab>
+                <Tab key="unit1" title="Unidad 1" href={course.id + "/unit/1"}></Tab>
                 <Tab key="unit2" title="Unidad 2"></Tab>
                 <Tab key="unit3" title="Unidad 3"></Tab>
                 <Tab key="unit4" title="Unidad 4"></Tab>
