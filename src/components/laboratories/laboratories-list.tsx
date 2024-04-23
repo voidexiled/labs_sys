@@ -14,6 +14,7 @@ import { cn, normalizeString } from "@/lib/utils";
 
 
 import { ListPagination } from "../list-pagination";
+import { useCourses } from "@/hooks/useCourses";
 
 export default function LaboratoriesList(
     { q, status, subject, teacher, currentPage }
@@ -35,6 +36,7 @@ export default function LaboratoriesList(
     const { isFetching: isFetchingSubjects, data: subjects } = useSubjects();
     const { isFetching: isFetchingTypesUsers, data: types } = useUserRoles();
     const { isFetching: isFetchingUsers, data: users } = useUsers();
+    const { isFetching: isFetchingCourses, data: courses } = useCourses();
 
 
     const [filteredLaboratories, setFilteredLaboratories] = useState(laboratories);
@@ -85,27 +87,28 @@ export default function LaboratoriesList(
         if (!laboratories) return [];
         return laboratories.filter((lab) => {
             const { label } = lab;
-
+            const _course = courses?.find((c) => c.id === lab.course_id)
             const _searchQuery = normalizeString(q);
             const _displayName = normalizeString(label);
 
             const _search = _displayName?.toLowerCase().includes(_searchQuery);
 
-            const _subject = subjects?.find((s) => s.key === subject)
-            const _teacher = users?.find((u) => u.id === teacher)
+            const _subject = subjects?.find((s) => s.key === subject);
+            const _teacher = users?.find((u) => u.id === teacher);
 
-            const subjectFilter = subject ? lab.subject_id === _subject?.id : true;
+            const teacherFilter = teacher ? _course?.teacher_id === _teacher?.id : true;
+            const subjectFilter = subject ? _course?.subject_id === _subject?.id : true;
 
-            const teacherFilter = teacher ? lab.busy_by === _teacher?.id : true;
+            const isBusy = !!_course;
 
-            const checkFilters = _search && subjectFilter && teacherFilter;
+            const checkFilters = _search && teacherFilter && subjectFilter;
 
             if (status === "all") {
                 return checkFilters;
             } else if (status === "busy") {
-                return lab.busy_by !== null && checkFilters;
+                return isBusy && checkFilters;
             } else if (status === "idle") {
-                return lab.busy_by === null && checkFilters;
+                return !isBusy && checkFilters;
             } else if (status === "oos") {
                 return true && checkFilters;
             } else {
@@ -118,21 +121,29 @@ export default function LaboratoriesList(
         <>
             <ScrollAreaDashboard>
                 {
-                    isFetchingLaboratories || isFetchingSubjects || isFetchingTypesUsers || isFetchingUsers
+                    isFetchingLaboratories || isFetchingSubjects || isFetchingTypesUsers || isFetchingUsers || isFetchingCourses
                         ? <LaboratoriesListSkeleton len={itemsPerPage} />
                         : pagedLaboratories?.map((lab) => {
 
-                            const user = users?.find((user) => user.id === lab.busy_by) as Tables<"users">;
-                            const subject = subjects?.find((subject) => subject.id === lab.subject_id) as Tables<"subjects">;
-                            const userRole = types?.find((type) => lab.busy_by ? type.id === user?.role_id : false) as Tables<"roles">;
-                            const isBusy = lab.busy_by !== null;
+                            const course = courses?.find((course) => course.id === lab.course_id) as Tables<"courses">;
+                            const subject = course && subjects?.find((subject) => subject.id === course.subject_id) as Tables<"subjects">;
+                            const teacher = course && users?.find((user) => user.id === course.teacher_id) as Tables<"users">;
+                            const userRole = course && types?.find((type) => type.id === teacher.role_id) as Tables<"roles">;
+                            const isBusy = !!course;
+
+                            // console.log("isBusy", isBusy);
+                            // console.log("course", course);
+                            // console.log("subject", subject);
+                            // console.log("teacher", teacher);
+                            // console.log("userRole", userRole);
+
 
 
                             return <LaboratoryItem key={lab.id}
                                 lab={lab}
                                 subject={subject}
                                 type={userRole}
-                                user={user}
+                                user={teacher}
                                 isBusy={isBusy}
                             />
 

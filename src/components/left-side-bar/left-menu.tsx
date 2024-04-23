@@ -34,12 +34,14 @@ import { SunIcon } from "@/icons/sun-icon"
 import { MoonIcon } from "@/icons/moon-icon"
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../ui/drawer"
 import { usePathname } from "next/navigation"
+import { useUser } from "@/hooks/useUser"
 
 
 export default function LeftMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const { theme, resolvedTheme, setTheme } = useTheme()
     const pathname = usePathname()
+    const { isFetching: isFetchingUser, data: user } = useUser()
 
     useEffect(() => {
         setIsOpen(false)
@@ -64,57 +66,50 @@ export default function LeftMenu() {
             {/* NAV SIDE */}
             <nav className="hidden lg:flex flex-row lg:flex-col items-start justify-center lg:justify-start px-1 lg:px-4 py-5 w-full h-full"
             >
+                {
+                    /* JEFE DE DEPARTAMENTO */
+                    user?.role_id === 1 || user?.role_id === 2 && (
+                        <>
+                            <NavItem href="/dashboard/panel" title="Panel de administración" >
+                                <HomeIcon width={20} height={20} />
+                            </NavItem>
 
-                <NavItem href="/dashboard/panel" title="Panel de administración" >
-                    <HomeIcon width={20} height={20} />
-                </NavItem>
-
-                <NavItem href="/dashboard/usuarios" title="Usuarios" >
-                    <TeachersIcon width={20} height={20} />
-                </NavItem>
-                <NavItem href="/dashboard/laboratorios" title="Laboratorios" >
-                    <TeachingIcon width={20} height={20} />
-                </NavItem>
-                <NavItem href="/dashboard/cursos" title="Cursos" >
-                    <NotebookIcon width={20} height={20} />
-                </NavItem>
-
-                <NavItem href="/dashboard/practicas" title="Prácticas" >
-                    <NotesIcon width={20} height={20} />
-                </NavItem>
-
-                {/* <NavItem href="/dashboard/equipment" title="Equipamento" >
-                    <EquipmentIcon width={20} height={20} />
-                </NavItem> */}
-
-                <NavItem href="/dashboard/horario" title="Horario" >
-                    <ScheduleIcon width={20} height={20} />
-                </NavItem>
-
-                <NavItem href="/dashboard/estadisticas" title="Estadísticas" >
-                    <AnalyticsIcon width={20} height={20} />
-                </NavItem>
+                            <NavItem href="/dashboard/usuarios" title="Usuarios" >
+                                <TeachersIcon width={20} height={20} />
+                            </NavItem>
+                            <NavItem href="/dashboard/laboratorios" title="Laboratorios" >
+                                <TeachingIcon width={20} height={20} />
+                            </NavItem>
+                            <NavItem href="/dashboard/cursos" title="Cursos" >
+                                <NotebookIcon width={20} height={20} />
+                            </NavItem>
+                            <NavItem href="/dashboard/practicas" title="Prácticas" >
+                                <NotesIcon width={20} height={20} />
+                            </NavItem>
+                            <NavItem href="/dashboard/estadisticas" title="Estadísticas" >
+                                <AnalyticsIcon width={20} height={20} />
+                            </NavItem>
 
 
-
+                        </>
+                    )
+                }
+                {
+                    /* DOCENTE */
+                    user?.role_id === 4 && (
+                        <>
+                            <NavItem href={"/dashboard/courses/"} title="Grupos" >
+                                <HomeIcon width={20} height={20} />
+                            </NavItem>
+                        </>
+                    )
+                }
                 <NavItem href="/dashboard/configuracion" title="Configuración" >
                     <SettingsIcon width={20} height={20} />
                 </NavItem>
-
-
-
                 <LogOutButton title="Cerrar sesión" >
                     <LogOutIcon width={20} height={20} />
                 </LogOutButton>
-
-                {/* <NavItem href="/login" title="Iniciar sesión" >
-                    <LogInIcon width={20} height={20} />
-                </NavItem> */}
-
-
-
-
-
             </nav>
             {/* <ModeToggle /> */}
 

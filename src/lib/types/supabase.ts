@@ -19,7 +19,7 @@ export type Database = {
           id: number
           title: string
           unit_id: number
-          updated_at: string | null
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -30,7 +30,7 @@ export type Database = {
           id?: number
           title: string
           unit_id: number
-          updated_at?: string | null
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -41,7 +41,7 @@ export type Database = {
           id?: number
           title?: string
           unit_id?: number
-          updated_at?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -167,42 +167,35 @@ export type Database = {
       }
       laboratories: {
         Row: {
-          busy_by: string | null
-          capacity: number | null
+          capacity: number
+          course_id: number | null
+          created_at: string
           id: number
           label: string
-          subject_id: number | null
-          updated_at: string | null
+          updated_at: string
         }
         Insert: {
-          busy_by?: string | null
-          capacity?: number | null
+          capacity?: number
+          course_id?: number | null
+          created_at?: string
           id?: number
           label: string
-          subject_id?: number | null
-          updated_at?: string | null
+          updated_at?: string
         }
         Update: {
-          busy_by?: string | null
-          capacity?: number | null
+          capacity?: number
+          course_id?: number | null
+          created_at?: string
           id?: number
           label?: string
-          subject_id?: number | null
-          updated_at?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "public_laboratories_busyBy_fkey"
-            columns: ["busy_by"]
+            foreignKeyName: "public_laboratories_course_id_fkey"
+            columns: ["course_id"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_laboratories_subject_id_fkey"
-            columns: ["subject_id"]
-            isOneToOne: false
-            referencedRelation: "subjects"
+            referencedRelation: "courses"
             referencedColumns: ["id"]
           },
         ]
@@ -212,19 +205,19 @@ export type Database = {
           created_at: string
           id: number
           label: string
-          updated_at: string | null
+          updated_at: string
         }
         Insert: {
           created_at?: string
           id?: number
           label: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Update: {
           created_at?: string
           id?: number
           label?: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -245,19 +238,25 @@ export type Database = {
       }
       subjects: {
         Row: {
+          created_at: string
           id: number
           key: string | null
           label: string
+          updated_at: string
         }
         Insert: {
+          created_at?: string
           id?: number
           key?: string | null
           label: string
+          updated_at?: string
         }
         Update: {
+          created_at?: string
           id?: number
           key?: string | null
           label?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -268,7 +267,7 @@ export type Database = {
           description: string | null
           feedback: string | null
           feedback_score: number | null
-          file_name: string | null
+          file_name: string
           id: number
           submitted_at: string
           submitted_by: string
@@ -280,7 +279,7 @@ export type Database = {
           description?: string | null
           feedback?: string | null
           feedback_score?: number | null
-          file_name?: string | null
+          file_name: string
           id?: number
           submitted_at: string
           submitted_by: string
@@ -292,7 +291,7 @@ export type Database = {
           description?: string | null
           feedback?: string | null
           feedback_score?: number | null
-          file_name?: string | null
+          file_name?: string
           id?: number
           submitted_at?: string
           submitted_by?: string
@@ -364,7 +363,7 @@ export type Database = {
           file_name: string | null
           id: number
           unit: number
-          updated_at: string | null
+          updated_at: string
         }
         Insert: {
           course_id: number
@@ -372,7 +371,7 @@ export type Database = {
           file_name?: string | null
           id?: number
           unit: number
-          updated_at?: string | null
+          updated_at?: string
         }
         Update: {
           course_id?: number
@@ -380,7 +379,7 @@ export type Database = {
           file_name?: string | null
           id?: number
           unit?: number
-          updated_at?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -399,8 +398,7 @@ export type Database = {
           email: string
           id: string
           image_url: string | null
-          lab_at: number | null
-          no_identificador: string | null
+          no_identificador: string
           role_id: number
           updated_at: string
         }
@@ -410,8 +408,7 @@ export type Database = {
           email: string
           id?: string
           image_url?: string | null
-          lab_at?: number | null
-          no_identificador?: string | null
+          no_identificador: string
           role_id?: number
           updated_at?: string
         }
@@ -421,19 +418,11 @@ export type Database = {
           email?: string
           id?: string
           image_url?: string | null
-          lab_at?: number | null
-          no_identificador?: string | null
+          no_identificador?: string
           role_id?: number
           updated_at?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "public_profiles_labAt_fkey"
-            columns: ["lab_at"]
-            isOneToOne: false
-            referencedRelation: "laboratories"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "public_users_profile_id_fkey"
             columns: ["id"]

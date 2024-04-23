@@ -78,10 +78,15 @@ export const LaboratoryItem = (props: {
                         <div className="flex basis-[320px] flex-col gap-1 text-sm font-normal text-muted-foreground ">
                             <h3 className="text-sm text-foreground ">
                                 <span className="">{lab.label}</span>{" "}
-                                <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
-                                    {" "}
-                                    &middot; {subject && subject.label}
-                                </span>{" "}
+                                {
+                                    subject && (
+                                        <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
+                                            {" "}
+                                            &middot;{subject.label}
+                                        </span>
+                                    )
+                                }
+
                             </h3>
                             <div className="flex flex-col gap-1 transition-all group-hover:pl-2">
                                 <span className="flex flex-col transition-colors group-hover:text-foreground">

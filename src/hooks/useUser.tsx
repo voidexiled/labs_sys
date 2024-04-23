@@ -8,7 +8,6 @@ const initUser: Tables<"users"> = {
     email: "",
     id: "",
     image_url: "",
-    lab_at: 0,
     no_identificador: "",
     updated_at: "",
     role_id: 0,

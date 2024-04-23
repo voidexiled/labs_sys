@@ -4,11 +4,11 @@ import { Tables } from "@/lib/types/supabase";
 import { useQuery } from "@tanstack/react-query";
 
 const initLabs: Tables<"laboratories">[] = [{
-    busy_by: "",
     capacity: 0,
     id: 0,
     label: "",
-    subject_id: 0,
+    course_id: 0,
+    created_at: "",
     updated_at: "",
 
 }]
