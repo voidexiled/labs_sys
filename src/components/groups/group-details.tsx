@@ -7,40 +7,49 @@ import { Input, ScrollShadow, Tab, Tabs } from "@nextui-org/react"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { Button } from "../ui/button"
+import { GroupUnitTab } from "./group-unit-tab"
+import { createSupabaseBrowser } from "@/lib/supabase/browser"
 
 // import { Tab, Tabs } from "@nextui-org/react"
 
-export const GroupDetails = ({ course, subject }: { course: Tables<"courses"> | null, subject: Tables<"subjects"> | null }) => {
+export const GroupDetails = ({ course, subject, units }: { course: Tables<"courses"> | null, subject: Tables<"subjects"> | null, units: Tables<"units">[] | null }) => {
+
+
+
+
 
     if (!course) return <>loading</>
     return (
-        <div className="sticky w-full flex flex-col">
-            <div className="relative z-10 flex flex-row w-full h-[90px] bg-background px-6 items-center">
+        <div className="sticky w-full h-full flex flex-col">
+            <div className="relative z-10 flex flex-row w-full h-[90px] bg-background px-6 items-center border-b dark:border-b-0 ">
                 <Link href="/dashboard/teacher/grupos" className="mr-6">
                     <Button size="icon" variant="ghost" >
                         <ArrowLeft />
                         <span className="sr-only">Back</span>
                     </Button>
                 </Link>
-                <h1 className="text-2xl tracking-wide">{`${subject?.label} ${subject?.key}-${course.label} `}  </h1>
+                <h1 className="text-2xl tracking-wide text-pretty ">{`${subject?.label} ${subject?.key}-${course.label} `}  </h1>
             </div>
-            <Tabs color="default" className="rounded-none" radius="none"
+            <Tabs color="warning" className="rounded-none" radius="none"
                 classNames={{
-                    tabList: "w-full bg-background/80 p-0 shadow-[0px_9px_20px] shadow-black/10",
-                    cursor: "group-data-[selected=true]:bg-secondary ",
-                    tab: "p-6 ",
-                    tabContent: "group-data-[selected=true]:text-foreground text-foreground/60 ",
+                    tabList: "w-full bg-background p-0 shadow-[0px_9px_20px] shadow-black/5 gap-1 rounded-lg border dark:border-none",
+                    cursor: "shadow-none  transition-shadow ease-in-out duration-400 rounded-md group-data-[selected=true]:z-10 ",
+                    tab: "px-6 py-5 max-w-[108px]",
+                    tabContent: "group-data-[selected=true]:text-primary-foreground text-foreground/60 transition-all",
+                    panel: "h-full px-3",
+                    base: "px-3 pt-2 "
                 }}
-
             >
+                {
+                    units ? units.sort((a, b) => a.unit - b.unit).map((unit) => {
+                        return (
+                            <Tab key={unit.id} title={`Unidad ${unit.unit}`}>
+                                <GroupUnitTab unit={unit} />
+                            </Tab>
+                        )
+                    }) : <Tab title="Cargando">Cargando...</Tab>
+                }
 
-                <Tab key="general" title="General"></Tab>
-                <Tab key="unit1" title="Unidad 1" ></Tab>
-                <Tab key="unit2" title="Unidad 2"></Tab>
-                <Tab key="unit3" title="Unidad 3"></Tab>
-                <Tab key="unit4" title="Unidad 4"></Tab>
-                <Tab key="unit5" title="Unidad 5"></Tab>
-                <Tab key="unit6" title="Unidad 6"></Tab>
             </Tabs>
         </div>
         // <Tabs defaultValue="general" className="w-full h-full " >

@@ -26,7 +26,7 @@ export const GroupsList = ({ teacher_user }: { teacher_user: User | null }) => {
 
     return (
         <ScrollAreaDashboard >
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-stretch  gap-9 ">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-stretch gap-12 ">
                 <AddGroupButton courses={groups!} />
                 {
                     groups?.map((course) => {

@@ -17,7 +17,7 @@ export default async function GruposPage() {
     return (<MainWrapper>
         <MainWrapperHeader title="Grupos" />
         <MainWrapperContent>
-            <CoursesFilters />
+            {/* <CoursesFilters /> */}
             <GroupsList teacher_user={user} />
         </MainWrapperContent>
 

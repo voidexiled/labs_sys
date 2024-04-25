@@ -46,7 +46,7 @@ export const AddGroupButton = ({ courses }: { courses: Tables<"courses">[] }) =>
             <div className="relative group-hover:opacity-0  transition-all flex flex-col items-center justify-center">
 
                 <span
-                    className="text-lg font-semibold text-card-foreground/90 transition-all hover:text-foreground/90">Tienes {courses?.length || "0"} grupos</span>
+                    className="text-lg font-semibold text-card-foreground/90 transition-all hover:text-foreground/90">Tienes {courses?.length || "0"} {courses?.length === 1 ? "grupo" : "grupos"}</span>
 
                 <span className="text-sm text-card-foreground/90 transition-all hover:text-foreground/90">Registrar nuevo grupo</span>
             </div>
