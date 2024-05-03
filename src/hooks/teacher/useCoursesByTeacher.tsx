@@ -18,7 +18,7 @@ const initCourses: Tables<"courses">[] = [{
     type: "",
     updated_at: "",
     visibility: "",
-    units: 0,
+
 }]
 
 export function useCoursesByTeacher({ teacher_uuid }: { teacher_uuid?: string }) {

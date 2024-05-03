@@ -18,7 +18,7 @@ const initCourses: Tables<"courses">[] = [{
     type: "",
     updated_at: "",
     visibility: "",
-    units: 0,
+
 }]
 
 export function useCourses() {
