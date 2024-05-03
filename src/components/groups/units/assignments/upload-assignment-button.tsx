@@ -30,7 +30,7 @@ export const UploadAssignmentButton = ({ isThumb, unitId, refetch }: { isThumb?:
                 {
                     title: file.name,
                     description: "",
-                    file_name: file.name + ".pdf",
+                    file_name: file.name,
                     visibility: "private",
                     grade_value: 0,
                     end_date: null,
