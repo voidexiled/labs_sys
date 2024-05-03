@@ -44,11 +44,11 @@ export const LoginForm = (props: {}) => {
             return;
         }
 
-        toast({
-            title: "Logged In",
-            description: "Sesión iniciada correctamente como " + data.user?.email,
+        // toast({
+        //     title: "Logged In",
+        //     description: "Sesión iniciada correctamente como " + data.user?.email,
 
-        })
+        // })
 
         router.refresh();
         queryClient.resetQueries();

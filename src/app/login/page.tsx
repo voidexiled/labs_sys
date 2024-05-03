@@ -21,6 +21,9 @@ export default async function LoginPage() {
         if (role) {
             if (role.id === 1 || role.id === 2) {
                 return redirect("/dashboard/admin/panel");
+            } else if (role.id === 3) {
+                return redirect("/dashboard/labadmin/home");
+
             } else if (role.id === 4) {
                 return redirect("/dashboard/teacher/home");
             }

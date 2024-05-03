@@ -13,6 +13,7 @@ const initAssignments: Tables<"assignments">[] = [{
     grade_value: 0, // quitar
     title: "",
     unit_id: 0,
+    visibility: "",
 }]
 
 export function useAssignmentsByUnit({ unit_id }: { unit_id?: number }) {

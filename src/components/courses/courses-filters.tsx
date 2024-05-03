@@ -24,8 +24,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "../ui/scroll-area";
+import { useUser } from "@/hooks/useUser";
+import { AddFile } from "@/icons/file-add-icon";
+import Link from "next/link";
 
 export const CoursesFilters = () => {
+    const { data: currentUser } = useUser();
     const { data: subjects } = useSubjects();
     const { data: users } = useUsers();
     const searchParams = useSearchParams();
@@ -228,7 +232,7 @@ export const CoursesFilters = () => {
                         <Button
                             variant="outline"
                             size="sm"
-                            className="h-7 gap-1 text-sm"
+                            className="py-1 gap-1 text-sm"
                         >
                             <ListFilter className="h-3.5 w-3.5" />
                             <span className="sr-only sm:not-sr-only">Filtros</span>
@@ -241,7 +245,7 @@ export const CoursesFilters = () => {
                             Mostrar todos
                         </DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem onSelect={() => handleFilter("active")} checked={status === "active"}>
-                            En clase
+                            Activos
                         </DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem onSelect={() => handleFilter("inactive")} checked={status === "inactive"}>
                             Inactivos
@@ -254,11 +258,25 @@ export const CoursesFilters = () => {
                 <Button
                     size="sm"
                     variant="outline"
-                    className="h-7 gap-1 text-sm"
+                    className="py-1 gap-1 text-sm"
                 >
                     <File className="h-3.5 w-3.5" />
                     <span className="sr-only sm:not-sr-only">Exportar</span>
                 </Button>
+                {
+                    currentUser?.role_id === 3 &&
+                    <Link href="grupos/registrar">
+                        <Button
+                            type="button"
+                            size="sm"
+                            variant="default"
+                            className="py-1 gap-1 text-sm stroke-primary-foreground text-primary-foreground"
+                        >
+                            <AddFile width={14} height={14} />
+                            <span className="sr-only sm:not-sr-only">Añadir</span>
+                        </Button>
+                    </Link>
+                }
             </div>
         </div>
     </>

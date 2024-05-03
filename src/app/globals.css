@@ -83,8 +83,8 @@
   user-select: none;
 }
 
-a {
-  @apply transition-all  hover:stroke-muted-foreground hover:text-muted-foreground;
+.nav-item {
+  @apply transition-all duration-100 hover:stroke-muted-foreground hover:text-muted-foreground;
 }
 
 h1 {

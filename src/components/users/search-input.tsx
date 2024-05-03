@@ -2,8 +2,9 @@
 // import { Input } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Input } from "../ui/input";
+import { cn } from "@/lib/utils";
 
-export default function Search({ placeholder }: { placeholder: string }) {
+export default function Search({ placeholder, className }: { placeholder: string, className?: string }) {
     const searchParams = useSearchParams();
     const { replace } = useRouter();
     const pathname = usePathname();
@@ -26,7 +27,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
         // searchParams.set("filter_by", "all");
     }
     return <Input
-        className="w-80"
+        className={cn("w-80", className)}
         placeholder={placeholder}
         defaultValue={searchParams.get("q")?.toString()}
         onChange={(e) => {

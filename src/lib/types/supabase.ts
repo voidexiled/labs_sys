@@ -20,6 +20,7 @@ export type Database = {
           title: string
           unit_id: number
           updated_at: string
+          visibility: string
         }
         Insert: {
           created_at?: string
@@ -31,6 +32,7 @@ export type Database = {
           title: string
           unit_id: number
           updated_at?: string
+          visibility?: string
         }
         Update: {
           created_at?: string
@@ -42,6 +44,7 @@ export type Database = {
           title?: string
           unit_id?: number
           updated_at?: string
+          visibility?: string
         }
         Relationships: [
           {
@@ -65,10 +68,8 @@ export type Database = {
           meeting_schedule: Json
           status: string
           subject_id: number
-          syllabus_id: number | null
           teacher_id: string
           type: string
-          units: number
           updated_at: string
           visibility: string
         }
@@ -83,10 +84,8 @@ export type Database = {
           meeting_schedule: Json
           status?: string
           subject_id: number
-          syllabus_id?: number | null
           teacher_id: string
           type?: string
-          units?: number
           updated_at?: string
           visibility?: string
         }
@@ -101,10 +100,8 @@ export type Database = {
           meeting_schedule?: Json
           status?: string
           subject_id?: number
-          syllabus_id?: number | null
           teacher_id?: string
           type?: string
-          units?: number
           updated_at?: string
           visibility?: string
         }
@@ -114,13 +111,6 @@ export type Database = {
             columns: ["subject_id"]
             isOneToOne: false
             referencedRelation: "subjects"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_courses_syllabus_id_fkey"
-            columns: ["syllabus_id"]
-            isOneToOne: false
-            referencedRelation: "syllabuses"
             referencedColumns: ["id"]
           },
           {
@@ -192,7 +182,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "public_laboratories_course_id_fkey"
+            foreignKeyName: "laboratories_course_id_fkey"
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
@@ -242,6 +232,7 @@ export type Database = {
           id: number
           key: string | null
           label: string
+          syllabus_id: number | null
           updated_at: string
         }
         Insert: {
@@ -249,6 +240,7 @@ export type Database = {
           id?: number
           key?: string | null
           label: string
+          syllabus_id?: number | null
           updated_at?: string
         }
         Update: {
@@ -256,9 +248,18 @@ export type Database = {
           id?: number
           key?: string | null
           label?: string
+          syllabus_id?: number | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "subjects_syllabus_id_fkey"
+            columns: ["syllabus_id"]
+            isOneToOne: false
+            referencedRelation: "syllabuses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       submissions: {
         Row: {
@@ -321,6 +322,7 @@ export type Database = {
           id: number
           period_id: number
           subject_id: number
+          units: number
           updated_at: string
         }
         Insert: {
@@ -329,6 +331,7 @@ export type Database = {
           id?: number
           period_id: number
           subject_id: number
+          units?: number
           updated_at?: string
         }
         Update: {
@@ -337,6 +340,7 @@ export type Database = {
           id?: number
           period_id?: number
           subject_id?: number
+          units?: number
           updated_at?: string
         }
         Relationships: [
@@ -364,6 +368,7 @@ export type Database = {
           id: number
           unit: number
           updated_at: string
+          visibility: string
         }
         Insert: {
           course_id: number
@@ -372,6 +377,7 @@ export type Database = {
           id?: number
           unit: number
           updated_at?: string
+          visibility?: string
         }
         Update: {
           course_id?: number
@@ -380,6 +386,7 @@ export type Database = {
           id?: number
           unit?: number
           updated_at?: string
+          visibility?: string
         }
         Relationships: [
           {

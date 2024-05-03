@@ -53,7 +53,7 @@ export default function LeftMenu() {
 
     return (
 
-        <aside className={clsx("sticky lg:relative h-[60px] w-full lg:w-[320px] lg:h-screen overflow-hidden z-50 bg-background flex flex-row lg:flex-col items-center justify-between lg:items-start lg:justify-normal shadow-sm border-r dark:border-r-0")}
+        <aside className={clsx("sticky lg:relative h-[60px] w-full  lg:w-[320px] lg:h-screen overflow-hidden z-50 bg-background flex flex-row lg:flex-col items-center justify-between lg:items-start lg:justify-normal shadow-sm border-r ")}
         >
             {
                 user &&
@@ -102,6 +102,19 @@ export default function LeftMenu() {
                                 )
                             }
                             {
+                                /* JEFE DE LABORATORIO */
+                                user && (user.role_id === 3) && (
+                                    <>
+                                        <NavItem href={"/dashboard/labadmin/home"} title="Inicio" >
+                                            <HomeIcon width={20} height={20} />
+                                        </NavItem>
+                                        <NavItem href={"/dashboard/labadmin/grupos"} title="Grupos" >
+                                            <TeachersIcon width={20} height={20} />
+                                        </NavItem>
+                                    </>
+                                )
+                            }
+                            {
                                 /* DOCENTE */
                                 user && (user.role_id === 4) && (
                                     <>
@@ -120,6 +133,7 @@ export default function LeftMenu() {
                                     </>
                                 )
                             }
+
                             <NavItem href="/dashboard/configuracion" title="Configuración" >
                                 <SettingsIcon width={20} height={20} />
                             </NavItem>

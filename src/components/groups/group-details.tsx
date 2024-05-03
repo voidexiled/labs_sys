@@ -3,25 +3,25 @@
 import { Tables } from "@/lib/types/supabase"
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { Card, CardContent, CardHeader } from "../ui/card"
-import { Input, ScrollShadow, Tab, Tabs } from "@nextui-org/react"
-import { ArrowLeft } from "lucide-react"
+
+import { ArrowLeft, Scroll } from "lucide-react"
 import Link from "next/link"
 import { Button } from "../ui/button"
 import { GroupUnitTab } from "./group-unit-tab"
 import { createSupabaseBrowser } from "@/lib/supabase/browser"
+import { ScrollArea } from "../ui/scroll-area"
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs"
+import { TabsContent } from "@radix-ui/react-tabs"
+import { GroupDetailsTabs } from "./group-details-tabs"
 
 // import { Tab, Tabs } from "@nextui-org/react"
 
 export const GroupDetails = ({ course, subject, units }: { course: Tables<"courses"> | null, subject: Tables<"subjects"> | null, units: Tables<"units">[] | null }) => {
 
-
-
-
-
     if (!course) return <>loading</>
     return (
-        <div className="sticky w-full h-full flex flex-col">
-            <div className="relative z-10 flex flex-row w-full h-[90px] bg-background px-6 items-center border-b dark:border-b-0 ">
+        <>
+            <div className="z-10 flex flex-row w-full h-[90px]  items-center px-6 ">
                 <Link href="/dashboard/teacher/grupos" className="mr-6">
                     <Button size="icon" variant="ghost" >
                         <ArrowLeft />
@@ -30,71 +30,7 @@ export const GroupDetails = ({ course, subject, units }: { course: Tables<"cours
                 </Link>
                 <h1 className="text-2xl tracking-wide text-pretty ">{`${subject?.label} ${subject?.key}-${course.label} `}  </h1>
             </div>
-            <Tabs color="warning" className="rounded-none" radius="none"
-                classNames={{
-                    tabList: "w-full bg-background p-0 shadow-[0px_9px_20px] shadow-black/5 gap-1 rounded-lg border dark:border-none",
-                    cursor: "shadow-none  transition-shadow ease-in-out duration-400 rounded-md group-data-[selected=true]:z-10 ",
-                    tab: "px-6 py-5 max-w-[108px]",
-                    tabContent: "group-data-[selected=true]:text-primary-foreground text-foreground/60 transition-all",
-                    panel: "h-full px-3",
-                    base: "px-3 pt-2 "
-                }}
-            >
-                {
-                    units ? units.sort((a, b) => a.unit - b.unit).map((unit) => {
-                        return (
-                            <Tab key={unit.id} title={`Unidad ${unit.unit}`}>
-                                <GroupUnitTab unit={unit} />
-                            </Tab>
-                        )
-                    }) : <Tab title="Cargando">Cargando...</Tab>
-                }
-
-            </Tabs>
-        </div>
-        // <Tabs defaultValue="general" className="w-full h-full " >
-
-        //     <div className="sticky w-full flex flex-col">
-        //         <div className="flex flex-row w-full h-[90px] bg-background border-b px-4">
-        //             <h1 className="text-2xl tracking-wide">{`${subject?.label} `}</h1>
-
-        //         </div>
-        //         <ScrollShadow orientation="horizontal" hideScrollBar className="w-96">
-        //             <div className="flex flex-row w-[800px]">
-
-        //                 <TabsList className="bg-background/80 rounded-none m-0 p-2 py-6 gap-2 md:gap-3 w-full justify-start shadow-[0px_9px_20px] shadow-muted/20">
-
-        //                     <TabsTrigger value="general" className="px-4 py-2 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">General</TabsTrigger>
-        //                     <TabsTrigger value="unit1" className="px-4 py-2 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">Unidad 1</TabsTrigger>
-        //                     <TabsTrigger value="unit2" className="px-4 py-2 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">Unidad 2</TabsTrigger>
-        //                     <TabsTrigger value="unit3" className="px-4 py-2 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">Unidad 3</TabsTrigger>
-        //                     <TabsTrigger value="unit4" className="px-4 py-2 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">Unidad 4</TabsTrigger>
-        //                     <TabsTrigger value="unit5" className="px-4 py-2 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">Unidad 5</TabsTrigger>
-        //                     <TabsTrigger value="unit6" className="px-4 py-2 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">Unidad 6</TabsTrigger>
-        //                     <TabsTrigger value="manage" className="px-4 py-2 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">Gestión del curso</TabsTrigger>
-        //                 </TabsList>
-
-        //             </div>
-        //         </ScrollShadow>
-        //     </div>
-        //     <div className=" px-2 py-0">
-
-        //         <TabsContent value="general">
-        //             <Card className="w-full h-full">
-        //                 <CardHeader>General</CardHeader>
-        //                 <CardContent><Input></Input><Button>Enviar</Button></CardContent>
-        //             </Card>
-        //         </TabsContent>
-        //         <TabsContent value="unit1">unidad1</TabsContent>
-        //         <TabsContent value="unit2">unidad2</TabsContent>
-        //         <TabsContent value="unit3">unidad3</TabsContent>
-        //         <TabsContent value="unit4">unidad4</TabsContent>
-        //         <TabsContent value="unit5">unidad5</TabsContent>
-        //         <TabsContent value="unit6">unidad6</TabsContent>
-        //         <TabsContent value="unit6">gestion del curso</TabsContent>
-        //     </div>
-
-
-        // </Tabs>
+            <GroupDetailsTabs tabs={Array.from(units!, (unit) => unit.unit)} courseId={course.id} />
+        </>
     )
 }

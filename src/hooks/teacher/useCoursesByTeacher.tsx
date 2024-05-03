@@ -18,7 +18,6 @@ const initCourses: Tables<"courses">[] = [{
     type: "",
     updated_at: "",
     visibility: "",
-    syllabus_id: 0,
     units: 0,
 }]
 
