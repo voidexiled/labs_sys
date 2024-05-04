@@ -18,6 +18,15 @@ export function formatDate(date: Date): string {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}+00`;
 }
 
+export function getPeriodFromDate(date: Date): string {
+  const mes = date.getMonth() + 1; // Sumamos 1 porque los meses van de 0 a 11 en JavaScript
+  if (mes >= 1 && mes <= 6) {
+      return `ene/${date.getFullYear()}-jun/${date.getFullYear()}`;
+  } else {
+      return `ago/${date.getFullYear()}-dec/${date.getFullYear()}`;
+  }
+}
+
 export function normalizeString (str: string): string{
   return str
   .normalize("NFD")

@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 export const GroupDetailsTabItem = ({ title, href }: { title: string, href: string }) => {
     const pathname = usePathname()
     const isActive = pathname.startsWith(href)
+    console.log(pathname)
+    console.log(href)
 
     return (
         <Link href={href} title={title}

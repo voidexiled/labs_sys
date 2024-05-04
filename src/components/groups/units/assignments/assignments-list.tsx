@@ -5,7 +5,7 @@ import { AssignmentsListHeader } from "./assignments-list-header"
 import { UploadAssignmentButton } from "./upload-assignment-button"
 import { useQuery } from "@tanstack/react-query"
 import { createSupabaseBrowser } from "@/lib/supabase/browser"
-export const AssignmentsList = ({ unit, assignments: ass, allAssignments }: { unit: Tables<"units">, assignments?: Tables<"assignments">[], allAssignments?: Tables<"assignments">[] }) => {
+export const AssignmentsList = ({ unit, assignments: ass, allAssignments, course }: { unit: Tables<"units">, assignments?: Tables<"assignments">[], allAssignments?: Tables<"assignments">[], course: Tables<"courses"> }) => {
 
     const { data: assignments, refetch } = useQuery({
         queryKey: ['assignments', unit.id], queryFn: async () => {
@@ -37,7 +37,7 @@ export const AssignmentsList = ({ unit, assignments: ass, allAssignments }: { un
                                 {
                                     assignments.map((assignment) => {
                                         return (
-                                            <AssignmentItem key={assignment.id} assignment={assignment} refetch={refetch} />
+                                            <AssignmentItem key={assignment.id} assignment={assignment} refetch={refetch} unit={unit} course={course} />
 
                                         )
                                     })

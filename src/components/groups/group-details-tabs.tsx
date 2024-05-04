@@ -1,4 +1,6 @@
+import Link from "next/link"
 import { GroupDetailsTabItem } from "./group-details-tab-item"
+import { cn } from "@nextui-org/react"
 
 export const GroupDetailsTabs = ({ tabs, courseId }: { tabs: number[], courseId: number }) => {
 
@@ -12,6 +14,8 @@ export const GroupDetailsTabs = ({ tabs, courseId }: { tabs: number[], courseId:
                         )
                     })
                 }
+                <GroupDetailsTabItem title={`Gestión`} href={`/dashboard/teacher/grupos/${courseId}/gestion`} />
+
             </nav>
 
         </div>

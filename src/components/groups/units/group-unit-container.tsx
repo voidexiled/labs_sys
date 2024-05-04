@@ -21,7 +21,7 @@ export const GroupUnitContainer = ({ course, unit, assignments, allAssignments, 
         >
             {
                 children ??
-                <AssignmentsList unit={unit!} assignments={assignments!} allAssignments={allAssignments} />
+                <AssignmentsList unit={unit!} assignments={assignments!} allAssignments={allAssignments!} course={course!} />
             }
         </motion.div>
     )

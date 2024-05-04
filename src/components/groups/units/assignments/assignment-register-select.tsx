@@ -5,7 +5,7 @@ import { Button as NextButton } from "@nextui-org/react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Tables } from "@/lib/types/supabase";
-import { cn } from "@/lib/utils";
+import { cn, getPeriodFromDate } from "@/lib/utils";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -14,7 +14,9 @@ import { AddFile } from "@/icons/file-add-icon";
 import { useMediaQuery } from "usehooks-ts"
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { createSupabaseBrowser } from "@/lib/supabase/browser";
+import { useToast } from "@/components/ui/use-toast";
 export const AssignmentRegisterSelect = ({ assignments, refetch, unit }: { refetch: () => void, unit: Tables<"units">, assignments: Tables<"assignments">[] }) => {
+    const { toast } = useToast()
     const isDesktop = useMediaQuery("(min-width: 640px)")
     const [open, setOpen] = useState(false);
 
@@ -33,14 +35,30 @@ export const AssignmentRegisterSelect = ({ assignments, refetch, unit }: { refet
                     grade_value: 0,
                     end_date: null,
                     unit_id: unit.id,
+                }).select("*").single();
+            if (assignmentError) {
+                console.error(assignmentError.message);
+                toast({
+                    title: "Error",
+                    description: assignmentError.message,
+                    variant: "destructive",
+                });
+                return;
+
+            } else {
+                toast({
+                    title: "Practica clonada",
+                    description: "La practica " + assignmentData.title + " ha sido creada.",
+                    variant: "default",
                 })
+            }
             refetch()
             setOpen(false)
         }
     }
 
-
-
+    console.log(unit)
+    console.log(assignments)
     if (isDesktop) {
         return (
             <>
@@ -51,17 +69,19 @@ export const AssignmentRegisterSelect = ({ assignments, refetch, unit }: { refet
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
-                            className=" flex-grow w-[300px] justify-between"
+                            className=" flex-grow min-w-[400px] justify-between"
                         >
                             {selected ? selected.title : "Seleccionar práctica..."}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[300px] p-0">
+                    <PopoverContent className="min-w-[400px] p-0">
                         <List isDesktop={isDesktop} assignments={assignments.filter((ass) => ass.visibility === "public" && ass.unit_id != unit.id)} setSelected={setSelected} selected={selected} open={open} setOpen={setOpen} />
                     </PopoverContent>
                 </Popover>
-                <Button variant="outline" size="icon" className="stroke-primary border-primary" onClick={handleAddSelected}>
+                <Button variant="outline" size="icon" className="stroke-primary border-primary" onClick={handleAddSelected}
+                    disabled={!selected}
+                >
                     <AddFile width={20} height={20} />
                 </Button>
             </>
@@ -75,7 +95,7 @@ export const AssignmentRegisterSelect = ({ assignments, refetch, unit }: { refet
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className=" flex-grow w-[300px] justify-between"
+                        className=" flex-grow min-w-[250px] justify-between"
                     >
                         {selected ? selected.title : "Seleccionar práctica..."}
                         <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -86,7 +106,9 @@ export const AssignmentRegisterSelect = ({ assignments, refetch, unit }: { refet
 
                 </DrawerContent>
             </Drawer>
-            <Button variant="outline" size="icon" className="stroke-primary border-primary" onClick={handleAddSelected}>
+            <Button variant="outline" size="icon" className="stroke-primary border-primary" onClick={handleAddSelected}
+                disabled={!selected}
+            >
                 <AddFile width={20} height={20} />
             </Button>
         </>
@@ -138,9 +160,21 @@ const List = ({
                                     setSelected(selected && selected.id === assignment.id ? null : assignment)
                                     setOpen(false)
                                 }}
-                                    className={cn(isDesktop ? "text-xs" : "text-base py-3")}
+                                    className={cn(isDesktop ? "text-xs" : "text-base py-4 ", "relative")}
                                 >
-                                    {assignment.title}
+                                    <div className="flex flex-row justify-between gap-2 relative flex-grow pr-2">
+                                        <div className="flex flex-col justify-between w-7/12 gap-1">
+                                            <span className="font-bold inline-block text-ellipsis text-nowrap whitespace-nowrap overflow-hidden">{assignment.title}</span>
+                                            <span className="text-xs inline-block text-ellipsis text-nowrap whitespace-nowrap overflow-hidden">{assignment.file_name}</span>
+                                        </div>
+                                        <div className="flex flex-col justify-between w-5/12 gap-1 items-end">
+
+                                            <span className="text-xs inline-block text-ellipsis text-nowrap whitespace-nowrap overflow-hidden">{assignment.grade_value} pts</span>
+                                            <span className="text-xs inline-block text-ellipsis text-nowrap whitespace-nowrap overflow-hidden">{getPeriodFromDate(new Date(assignment.created_at))}</span>
+                                        </div>
+
+                                    </div>
+
                                     <CheckIcon
                                         className={cn(
                                             "ml-auto h-4 w-4",

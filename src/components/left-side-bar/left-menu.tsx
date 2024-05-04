@@ -90,9 +90,9 @@ export default function LeftMenu() {
                                         <NavItem href="/dashboard/admin/cursos" title="Cursos" >
                                             <NotebookIcon width={20} height={20} />
                                         </NavItem>
-                                        <NavItem href="/dashboard/admin/practicas" title="Prácticas" >
+                                        {/* <NavItem href="/dashboard/admin/practicas" title="Prácticas" >
                                             <NotesIcon width={20} height={20} />
-                                        </NavItem>
+                                        </NavItem> */}
                                         <NavItem href="/dashboard/admin/estadisticas" title="Estadísticas" >
                                             <AnalyticsIcon width={20} height={20} />
                                         </NavItem>
@@ -124,12 +124,12 @@ export default function LeftMenu() {
                                         <NavItem href={"/dashboard/teacher/grupos"} title="Grupos" >
                                             <TeachersIcon width={20} height={20} />
                                         </NavItem>
-                                        <NavItem href={"/dashboard/teacher/tareas"} title="Tareas" >
+                                        {/* <NavItem href={"/dashboard/teacher/tareas"} title="Tareas" >
                                             <AssignmentsIcon width={20} height={20} />
                                         </NavItem>
                                         <NavItem href={"/dashboard/teacher/entregas"} title="Entregas" >
                                             <SubmissionsIcon width={20} height={20} />
-                                        </NavItem>
+                                        </NavItem> */}
                                     </>
                                 )
                             }
@@ -180,7 +180,7 @@ export default function LeftMenu() {
                                                     <NavItem href="/dashboard/admin/usuarios" title="Usuarios" />
                                                     <NavItem href="/dashboard/admin/laboratorios" title="Laboratorios" />
                                                     <NavItem href="/dashboard/admin/cursos" title="Cursos" />
-                                                    <NavItem href="/dashboard/admin/practicas" title="Prácticas" />
+                                                    {/* <NavItem href="/dashboard/admin/practicas" title="Prácticas" /> */}
                                                     {/* <NavItem href="/dashboard/admin/horario" title="Horario" /> */}
                                                     <NavItem href="/dashboard/admin/estadisticas" title="Estadísticas" />
                                                 </>
@@ -188,12 +188,20 @@ export default function LeftMenu() {
 
                                         }
                                         {
+                                            user && (user.role_id === 3) && (
+                                                <>
+                                                    <NavItem href={"/dashboard/labadmin/home"} title="Inicio" />
+                                                    <NavItem href={"/dashboard/labadmin/grupos"} title="Grupos" />
+                                                </>
+                                            )
+                                        }
+                                        {
                                             user && (user.role_id === 4) && (
                                                 <>
                                                     <NavItem href={"/dashboard/teacher/home"} title="Inicio" />
                                                     <NavItem href={"/dashboard/teacher/grupos"} title="Grupos" />
-                                                    <NavItem href={"/dashboard/teacher/tareas"} title="Tareas" />
-                                                    <NavItem href={"/dashboard/teacher/entregas"} title="Entregas" />
+                                                    {/* <NavItem href={"/dashboard/teacher/tareas"} title="Tareas" />
+                                                    <NavItem href={"/dashboard/teacher/entregas"} title="Entregas" /> */}
                                                 </>
                                             )
                                         }
