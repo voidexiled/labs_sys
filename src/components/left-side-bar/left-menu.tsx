@@ -32,13 +32,40 @@ import { usePathname } from "next/navigation"
 import { useUser } from "@/hooks/useUser"
 import { AssignmentsIcon } from "@/icons/assignments-icon"
 import { SubmissionsIcon } from "@/icons/submissions-icon"
+/*
+    TODO: Dynamizar la renderizacion de la barra de navegación
 
+    const navItems = {
+        admin: [
+            { href: "/dashboard/admin/panel", title: "Panel de administración", icon: <HomeIcon /> },
+            { href: "/dashboard/admin/usuarios", title: "Usuarios", icon: <TeachersIcon /> },
+            { href: "/dashboard/admin/laboratorios", title: "Laboratorios", icon: <TeachingIcon /> },
+            { href: "/dashboard/admin/cursos", title: "Cursos", icon: <NotebookIcon /> },
+            { href: "/dashboard/admin/practicas", title: "Prácticas", icon: <NotesIcon /> },
+            { href: "/dashboard/admin/estadisticas", title: "Estadísticas", icon: <AnalyticsIcon /> },
+        ],
+        labadmin: [
+            { href: "/dashboard/labadmin/home", title: "Inicio", icon: <HomeIcon /> },
+            { href: "/dashboard/labadmin/grupos", title: "Grupos", icon: <TeachersIcon /> },
+        ],
+        teacher: [
+            { href: "/dashboard/teacher/home", title: "Inicio", icon: <HomeIcon /> },
+            { href: "/dashboard/teacher/grupos", title: "Grupos", icon: <TeachersIcon /> },
+            { href: "/dashboard/teacher/tareas", title: "Tareas", icon: <AssignmentsIcon /> },
+            { href: "/dashboard/teacher/entregas", title: "Entregas", icon: <SubmissionsIcon /> },
+        ],
+    }
+    <Aside isDesktop={isDesktop} user={user} />
+
+*/
 
 export default function LeftMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const { theme, resolvedTheme, setTheme } = useTheme()
     const pathname = usePathname()
     const { isFetching: isFetchingUser, data: user } = useUser()
+
+    // TODO: Delete this
     const [isUser, setIsUser] = useState(false);
 
     console.log("user roleId", user?.role_id)
@@ -53,7 +80,7 @@ export default function LeftMenu() {
 
     return (
 
-        <aside className={clsx("sticky lg:relative h-[60px] w-full  lg:w-[320px] lg:h-screen overflow-hidden z-50 bg-background flex flex-row lg:flex-col items-center justify-between lg:items-start lg:justify-normal shadow-sm border-r ")}
+        <aside className={clsx("sticky lg:relative h-[60px] w-full lg:w-[320px] lg:h-screen overflow-hidden z-50 bg-background flex flex-row lg:flex-col items-center justify-between lg:items-start lg:justify-normal shadow-sm border-r ")}
         >
             {
                 user &&

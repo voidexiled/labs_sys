@@ -4,6 +4,9 @@ import createSupabaseServer from "@/lib/supabase/server";
 import { Tables } from "@/lib/types/supabase";
 import { dehydrate, HydrationBoundary, QueryClient, useQuery } from "@tanstack/react-query";
 
+// TODO: Switch all to useQueryClient hook . prefetchQuery
+// So can load easy
+
 export default async function Page({ params }: { params: { courseId: number, unitId: number } }) {
     const queryClient = new QueryClient();
 

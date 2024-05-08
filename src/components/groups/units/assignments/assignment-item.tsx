@@ -94,7 +94,7 @@ export const AssignmentItem = ({
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.08 }}
                             exit={{ opacity: 0 }}
-                            className="cursor-pointer h-16 w-full px-4 py-2 bg-accent/40 flex flex-row items-center justify-between rounded-sm text-sm  tracking-wider shadow-medium border relative">
+                            className="cursor-pointer h-16 w-full px-4 py-2 bg-accent/40 flex flex-row items-center justify-between rounded-sm text-sm  tracking-wider shadow-medium border relative hover:bg-accent/80 transition-all">
                             <div className="h-full flex flex-col gap-1 justify-between relative w-3/4 overflow-hidden text-ellipsis text-nowrap whitespace-nowrap ">
                                 <span className="inline-block text-ellipsis text-nowrap whitespace-nowrap overflow-hidden ">
                                     {assignment.title}
