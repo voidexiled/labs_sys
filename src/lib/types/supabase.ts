@@ -65,7 +65,7 @@ export type Database = {
           enrollment_limit: number
           id: number
           label: string
-          meeting_schedule: Json
+          meeting_schedule: Json | null
           status: string
           subject_id: number
           teacher_id: string
@@ -81,7 +81,7 @@ export type Database = {
           enrollment_limit: number
           id?: number
           label: string
-          meeting_schedule: Json
+          meeting_schedule?: Json | null
           status?: string
           subject_id: number
           teacher_id: string
@@ -97,7 +97,7 @@ export type Database = {
           enrollment_limit?: number
           id?: number
           label?: string
-          meeting_schedule?: Json
+          meeting_schedule?: Json | null
           status?: string
           subject_id?: number
           teacher_id?: string
@@ -124,16 +124,19 @@ export type Database = {
       }
       courses_students: {
         Row: {
+          assistance_type: string
           course_id: number
           id: number
           student_id: string
         }
         Insert: {
+          assistance_type?: string
           course_id: number
           id?: number
           student_id: string
         }
         Update: {
+          assistance_type?: string
           course_id?: number
           id?: number
           student_id?: string
