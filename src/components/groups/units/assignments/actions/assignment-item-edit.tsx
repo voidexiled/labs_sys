@@ -40,7 +40,7 @@ export const AssignmentItemEdit = ({ assignment, unit_id, refetch, closeDialog }
             title: assignment.title,
             description: assignment.description,
             grade_value: assignment.grade_value,
-            end_date: assignment.end_date ?? "",
+            end_date: assignment.end_date || "",
             visibility: assignment.visibility as "private" | "public",
         },
     })
@@ -51,11 +51,12 @@ export const AssignmentItemEdit = ({ assignment, unit_id, refetch, closeDialog }
             title: data.title,
             description: data.description,
             grade_value: data.grade_value,
-            end_date: data.end_date,
+            end_date: data.end_date !== "" ? data.end_date : null,
             visibility: data.visibility,
             updated_at: formatDate(new Date()),
         }).eq("id", assignment.id).select().single()
         if (error) {
+            console.log(error)
             toast({
                 title: "Error",
                 description: error.message,
@@ -174,7 +175,7 @@ export const AssignmentItemEdit = ({ assignment, unit_id, refetch, closeDialog }
                                     <FormItem>
                                         <FormLabel>Fecha de entrega</FormLabel>
                                         <FormControl>
-                                            <Input type="date" min={minDate} {...field} />
+                                            <Input type="date" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             Fecha de entrega de la práctica

@@ -102,7 +102,7 @@ export const AssignmentRegisterSelect = ({ assignments, refetch, unit }: { refet
                     </Button>
                 </DrawerTrigger>
                 <DrawerContent className="border-t">
-                    <List isDesktop={isDesktop} assignments={assignments} setSelected={setSelected} selected={selected} open={open} setOpen={setOpen} />
+                    <List isDesktop={isDesktop} assignments={assignments.filter((ass) => ass.visibility === "public" && ass.unit_id != unit.id)} setSelected={setSelected} selected={selected} open={open} setOpen={setOpen} />
 
                 </DrawerContent>
             </Drawer>
