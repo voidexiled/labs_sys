@@ -20,8 +20,8 @@ export const GroupDetails = ({ course, subject, units }: { course: Tables<"cours
 
     if (!course) return <>loading</>
     return (
-        <>
-            <div className="z-10 flex flex-row w-full h-[90px]  items-center px-6 ">
+        <div className="flex flex-col">
+            <div className="z-10 flex flex-row w-full min-h-[90px] flex-basis-[90px]   items-center px-6 ">
                 <Link href="/dashboard/teacher/grupos" className="mr-6">
                     <Button size="icon" variant="ghost" >
                         <ArrowLeft />
@@ -31,6 +31,6 @@ export const GroupDetails = ({ course, subject, units }: { course: Tables<"cours
                 <h1 className="text-2xl tracking-wide text-pretty ">{`${subject?.label} ${subject?.key}-${course.label} `}  </h1>
             </div>
             <GroupDetailsTabs tabs={Array.from(units!, (unit) => unit.unit)} courseId={course.id} />
-        </>
+        </div>
     )
 }

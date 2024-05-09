@@ -5,7 +5,7 @@ import { cn } from "@nextui-org/react"
 export const GroupDetailsTabs = ({ tabs, courseId }: { tabs: number[], courseId: number }) => {
 
     return (
-        <div className="overflow-x-auto scrollbar-hide border-b h-[52px]">
+        <div className="flex overflow-x-auto scrollbar-hide border-b min-h-[52px] basis-[52px]">
             <nav className="flex flex-row h-full">
                 {
                     tabs.map((tab, index) => {
