@@ -5,18 +5,10 @@ import { AssignmentsListHeader } from "./assignments-list-header"
 import { UploadAssignmentButton } from "./upload-assignment-button"
 import { useQuery } from "@tanstack/react-query"
 import { createSupabaseBrowser } from "@/lib/supabase/browser"
-export const AssignmentsList = ({ unit, assignments: ass, allAssignments, course }: { unit: Tables<"units">, assignments?: Tables<"assignments">[], allAssignments?: Tables<"assignments">[], course: Tables<"courses"> }) => {
+export const AssignmentsList = ({ unit, assignments, refetch, allAssignments, course }: { unit: Tables<"units">, assignments?: Tables<"assignments">[], refetch: () => void, allAssignments?: Tables<"assignments">[], course: Tables<"courses"> }) => {
 
-    const { data: assignments, refetch } = useQuery({
-        queryKey: ['assignments', unit.id], queryFn: async () => {
-            const supabase = createSupabaseBrowser();
 
-            // fetch practices info
-            const { data: assignments } = await supabase.from("assignments").select("*").eq("unit_id", unit.id);
-            return assignments as Tables<"assignments">[]
 
-        }
-    })
 
     return (
         <motion.div
@@ -26,7 +18,7 @@ export const AssignmentsList = ({ unit, assignments: ass, allAssignments, course
             className="flex flex-col items-start justify-start w-full h-full">
             {
 
-                assignments && (assignments.length > 0
+                (assignments && unit && allAssignments && course) && (assignments.length > 0
                     ? (
                         <>
                             <AssignmentsListHeader allAssignments={allAssignments} refetch={refetch} unit={unit}>
@@ -35,7 +27,7 @@ export const AssignmentsList = ({ unit, assignments: ass, allAssignments, course
                             <div className="flex flex-col gap-3 w-full">
                                 <UploadAssignmentButton refetch={refetch} unitId={unit.id} />
                                 {
-                                    assignments.map((assignment) => {
+                                    assignments.sort((a, b) => b.id - a.id).map((assignment) => {
                                         return (
                                             <AssignmentItem key={assignment.id} assignment={assignment} refetch={refetch} unit={unit} course={course} />
 

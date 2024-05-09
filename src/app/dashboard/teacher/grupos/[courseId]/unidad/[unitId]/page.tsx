@@ -4,64 +4,111 @@ import createSupabaseServer from "@/lib/supabase/server";
 import { Tables } from "@/lib/types/supabase";
 import { dehydrate, HydrationBoundary, QueryClient, useQuery } from "@tanstack/react-query";
 
-// TODO: Switch all to useQueryClient hook . prefetchQuery
-// So can load easy
+// TODO:✅ Switch all to useQueryClient hook . prefetchQuery
 
 export default async function Page({ params }: { params: { courseId: number, unitId: number } }) {
     const queryClient = new QueryClient();
 
-
-
-    const supabase = await createSupabaseServer();
-    const { data: course, error: ECourse } = await supabase.from('courses').select('*').eq('id', params.courseId).single()
-    const { data: unit, error: EUnit } = await supabase.from('units').select('*').eq('course_id', params.courseId).eq('unit', params.unitId).single()
-    console.log("ids", params.courseId, params.unitId)
-    console.log("unit of url", unit, EUnit)
-    const { data: unitAssignments, error: EAssignments } = await supabase.from('assignments').select('*').eq('unit_id', params.unitId)
-    const { data: subject, error: ESubject } = await supabase.from('subjects').select('*').eq('id', course!.subject_id).single();
-
+    /* 1. Prefetch unit of the current course */
     await queryClient.prefetchQuery({
-        queryKey: ['assignments'],
+        queryKey: ['unit', params.courseId, params.unitId],
         queryFn: async () => {
             const supabase = await createSupabaseServer();
-            const { data: assignments, error } = await supabase.from('assignments').select('*').eq('unit_id', params.unitId);
-            return assignments;
+            const { data: unitData, error } = await supabase.from('units').select('*').eq('course_id', params.courseId).eq('unit', params.unitId).single();
+            if (unitData) {
+                /* 2. Prefetch assignments of the current unit of the current course */
+                await queryClient.prefetchQuery({
+                    queryKey: ['assignments', params.courseId, params.unitId],
+                    queryFn: async () => {
+                        const supabase = await createSupabaseServer();
+                        const { data: assignments, error } = await supabase.from('assignments').select('*').eq('unit_id', unitData.id!);
+                        return assignments;
+                    }
+                })
+            }
+            return unitData;
         }
     })
 
-    if (!course || !unit || !unitAssignments || !subject) {
-        return <></>;
-    }
-
-    const { data: allCourses, error: EAllCourses } = await supabase.from('courses').select('*').eq('subject_id', subject.id);
-    if (!allCourses) {
-        return <></>;
-    }
-
-    const coursesIds = allCourses.map((course) => course.id);
-    const { data: allUnits, error: EAllUnits } = await supabase.from('units').select('*').in('course_id', coursesIds).eq('unit', params.unitId);
-    if (!allUnits) {
-        return <></>;
-    }
-
-
-    const unitsIds = allUnits!.map((unit) => unit.id);
-    const { data: allAssignments, error: EAllAssignments } = await supabase.from('assignments').select('*').in('unit_id', unitsIds);
-    if (!allAssignments) {
-        return <></>;
-    }
 
 
 
+    /* 1. Prefech course data */
 
-    console.table([ECourse, EAssignments, EUnit, ESubject, EUnit, ECourse])
+    await queryClient.prefetchQuery({
+        queryKey: ['course', params.courseId],
+        queryFn: async () => {
+            const supabase = await createSupabaseServer();
+            const { data: courseData, error: courseError } = await supabase.from('courses').select('*').eq('id', params.courseId).single();
+
+            if (courseData) {
+
+                /* 2. Prefetch subject data of course */
+
+                await queryClient.prefetchQuery({
+                    queryKey: ['subject', params.courseId],
+                    queryFn: async () => {
+                        const supabase = await createSupabaseServer();
+                        const { data: subjectData, error: subjectError } = await supabase.from("subjects").select("*").eq("id", courseData.subject_id).single();
+                        if (subjectData) {
+
+                            /* 3. Prefetch all courses of the subject */
+                            await queryClient.prefetchQuery({
+                                queryKey: ['subject_courses', subjectData.id],
+                                queryFn: async () => {
+                                    const supabase = await createSupabaseServer();
+                                    const { data: allCoursesData, error: allCoursesError } = await supabase.from('courses').select('*').eq('subject_id', subjectData.id);
+                                    if (allCoursesData) {
+                                        const allCoursesIds = allCoursesData.map((course) => course.id);
+
+                                        /* 4. Prefetch all units of all courses of the subject */
+
+                                        await queryClient.prefetchQuery({
+                                            queryKey: ['subject_courses_units', params.courseId, params.unitId],
+                                            queryFn: async () => {
+                                                const supabase = await createSupabaseServer();
+                                                const { data: allUnitsData, error: allUnitsError } = await supabase.from('units').select('*').in('course_id', allCoursesIds).eq('unit', params.unitId);
+                                                if (allUnitsData) {
+                                                    const allUnitsIds = allUnitsData.map((unit) => unit.id);
+
+                                                    /* 5. Prefetch all assignments of all units of all courses of the subject */
+
+                                                    await queryClient.prefetchQuery({
+                                                        queryKey: ['subject_courses_units_assignments', params.courseId, params.unitId],
+                                                        queryFn: async () => {
+                                                            const supabase = await createSupabaseServer();
+                                                            const { data: allAssignmentsData, error: allAssignmentsError } = await supabase.from('assignments').select('*').in('unit_id', allUnitsIds);
+
+                                                            return allAssignmentsData as Tables<"assignments">[]
+                                                        }
+                                                    })
+                                                }
+
+                                                return allUnitsData as Tables<"units">[]
+                                            }
+                                        })
+
+                                    }
+
+                                    return allCoursesData as Tables<"courses">[];
+                                }
+                            })
+                        }
+
+                        return subjectData as Tables<"subjects">;
+                    }
+                })
+            }
+
+            return courseData as Tables<"courses">;
+        }
+    })
+
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
             <GroupUnitContainer
-                course={course as Tables<"courses">}
-                unit={unit as Tables<"units">}
-                assignments={unitAssignments as Tables<"assignments">[]}
-                allAssignments={allAssignments as Tables<"assignments">[]}
+                courseId={params.courseId}
+                unitId={params.unitId}
             />
         </HydrationBoundary>
     )

@@ -2,7 +2,7 @@
 import { Tables } from "@/lib/types/supabase"
 import { Button } from "@nextui-org/react"
 import { Delete, DeleteIcon, Download, Edit, Trash } from "lucide-react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { createSupabaseBrowser } from "@/lib/supabase/browser"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Button as ShadcnButton } from "@/components/ui/button"
@@ -14,6 +14,7 @@ import { useCourseById } from "@/hooks/teacher/useCourseByUnit"
 import { AssignmentItemEdit } from "./actions/assignment-item-edit"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { useState } from "react"
+import { cn } from "@/lib/utils"
 
 export const AssignmentItem = ({
     course,
@@ -29,6 +30,15 @@ export const AssignmentItem = ({
     }
 ) => {
     const { toast } = useToast()
+
+    // calculate if assignment.created_at was 1 min around now
+    const created_at = new Date(assignment.created_at)
+    const now = new Date()
+
+    const created_at_diff = Math.abs(now.getTime() - created_at.getTime())
+    const created_at_diff_minutes = Math.ceil(created_at_diff / (1000 * 60))
+
+    const [isNew, setIsNew] = useState(created_at_diff_minutes <= 1)
     const [isOpenEditAssignmentDialog, setIsOpenEditAssignmentDialog] = useState(false)
 
     const { isFetching: isFetchingSubmissions, data: submissions } = useSubmissionsByAssignment({ assignment_id: assignment?.id })
@@ -94,7 +104,32 @@ export const AssignmentItem = ({
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.08 }}
                             exit={{ opacity: 0 }}
-                            className="cursor-pointer h-16 w-full px-4 py-2 bg-accent/40 flex flex-row items-center justify-between rounded-sm text-sm  tracking-wider shadow-medium border relative hover:bg-accent/80 transition-all">
+                            onHoverStart={() => {
+                                if (isNew) {
+                                    setIsNew(false)
+                                }
+                            }}
+                            onTapStart={() => {
+                                if (isNew) {
+                                    setIsNew(false)
+                                }
+                            }}
+                            className={cn("cursor-pointer h-16 w-full px-4 py-2 bg-accent/40 flex flex-row items-center justify-between rounded-sm text-sm  tracking-wider shadow-medium border relative hover:bg-accent/80 transition-all", isNew && "border-primary/30")}>
+                            <AnimatePresence>
+                                {
+                                    isNew && (
+                                        <motion.span
+                                            key={assignment.id + "_isnew"}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ delay: 0.08 }}
+                                            exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                                            className="absolute top-4 -left-5 h-2 w-2 text-primary drop-shadow-lg shadow-primary tracking-widest z-20 -rotate-45 ">
+                                            Reciente!
+                                        </motion.span>
+                                    )
+                                }
+                            </AnimatePresence>
                             <div className="h-full flex flex-col gap-1 justify-between relative w-3/4 overflow-hidden text-ellipsis text-nowrap whitespace-nowrap ">
                                 <span className="inline-block text-ellipsis text-nowrap whitespace-nowrap overflow-hidden ">
                                     {assignment.title}
@@ -105,9 +140,9 @@ export const AssignmentItem = ({
                             </div>
 
                             <div className="flex flex-row gap-1 items-center justify-end h-full">
-                                <div className="flex flex-col justify-between items-end h-full text-xs text-muted-foreground tracking-widest">
+                                <div className={cn("flex flex-col justify-between items-end h-full text-xs text-muted-foreground tracking-widest", assignment.grade_value === 0 ? "text-red-500" : "text-green-500")}>
                                     <span>{assignment.grade_value} pts.</span>
-                                    <span>
+                                    <span className="text-muted-foreground">
                                         {
                                             course && submissions && (
                                                 <>
