@@ -23,7 +23,7 @@ const initCourses: Tables<"courses">[] = [{
 
 export function useCoursesByTeacher({ teacher_uuid }: { teacher_uuid?: string }) {
     return useQuery({
-        queryKey: ["courses"],
+        queryKey: ["courses", teacher_uuid],
         _optimisticResults: "optimistic",
         queryFn: async () => {
             if (!teacher_uuid) {
@@ -37,6 +37,7 @@ export function useCoursesByTeacher({ teacher_uuid }: { teacher_uuid?: string })
                 return courses as Tables<"courses">[];
             }
             return initCourses;
-        }
+        },
+        retry: true
     })
 }

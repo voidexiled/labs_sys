@@ -26,6 +26,7 @@ export default async function GestionPage({ params }: { params: { courseId: numb
                     queryFn: async () => {
                         const supabase = await createSupabaseServer();
                         const studentsIds = data?.map(student => student.student_id);
+                        console.log("server studentsIds", studentsIds)
                         const { data: dataProfiles } = await supabase.from("users").select("*").in("id", studentsIds!).eq("role_id", 5);
                         return dataProfiles as Tables<"users">[];
                     }

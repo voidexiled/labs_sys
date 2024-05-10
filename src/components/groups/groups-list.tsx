@@ -24,10 +24,11 @@ export const GroupsList = ({ teacher_user }: { teacher_user: User | null }) => {
 
 
 
+
     return (
         <ScrollAreaDashboard >
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-stretch gap-12 ">
-                <AddGroupButton courses={groups!} />
+                <AddGroupButton courses={groups!} isFetching={isFetchingGroups} />
                 {
                     groups?.map((course) => {
                         const _subject = subjects?.find((s) => s.id === course.subject_id);

@@ -23,6 +23,7 @@ export const GroupUserList = ({ courseId }: { courseId: number }) => {
         queryFn: async () => {
             const supabase = createSupabaseBrowser();
             const studentsIds = courseStudents?.map(student => student.student_id);
+            console.log("client studentsIds", studentsIds)
             const { data } = await supabase.from("users").select("*").in("id", studentsIds!).eq("role_id", 5);
             return data as Tables<"users">[];
         }
@@ -32,6 +33,9 @@ export const GroupUserList = ({ courseId }: { courseId: number }) => {
     useEffect(() => {
         refetchProfilesStudents();
     }, [courseStudents])
+    useEffect(() => {
+        refetchProfilesStudents();
+    })
 
     return (
         <div className="flex flex-col w-full">

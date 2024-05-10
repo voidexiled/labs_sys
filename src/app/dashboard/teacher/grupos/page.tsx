@@ -7,12 +7,35 @@ import createSupabaseServer from "@/lib/supabase/server";
 import readUserSession from "@/lib/actions";
 import { GroupsList } from "@/components/groups/groups-list";
 import { CoursesFilters } from "@/components/courses/courses-filters";
+import { QueryClient } from "@tanstack/react-query";
 
 export default async function GruposPage() {
+    const queryClient = new QueryClient();
     await verifyRoleRedirect([4]);
 
-    const supabase = await createSupabaseServer();
     const { data: { user } } = await readUserSession();
+
+    await queryClient.prefetchQuery({
+        queryKey: ["courses", user?.id],
+        queryFn: async () => {
+            const supabase = await createSupabaseServer();
+            const { data: coursesData, error } = await supabase.from("courses").select("*").eq("teacher_id", user?.id!);
+
+            return coursesData
+        },
+        retry: true
+    })
+
+    await queryClient.prefetchQuery({
+        queryKey: ["subjects"],
+        queryFn: async () => {
+            const supabase = await createSupabaseServer();
+            const { data: subjectsData, error } = await supabase.from("subjects").select("*");
+
+            return subjectsData
+        }
+    })
+
 
     return (
         <MainWrapper>

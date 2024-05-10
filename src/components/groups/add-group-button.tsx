@@ -3,7 +3,7 @@ import { Tables } from "@/lib/types/supabase"
 import { Skeleton } from "@nextui-org/react";
 import { motion, useAnimate } from "framer-motion"
 
-export const AddGroupButton = ({ courses }: { courses: Tables<"courses">[] }) => {
+export const AddGroupButton = ({ courses, isFetching }: { courses: Tables<"courses">[], isFetching: boolean }) => {
     const [scope, animate] = useAnimate();
 
     const onButtonClick = () => {
@@ -44,11 +44,15 @@ export const AddGroupButton = ({ courses }: { courses: Tables<"courses">[] }) =>
                 <GroupAdd width={128} height={128} />
             </div>
             <div className="relative group-hover:opacity-0  transition-all flex flex-col items-center justify-center">
+                {
+                    isFetching ? <span className="text-lg font-semibold text-card-foreground/90 transition-all hover:text-foreground/90">Cargando...</span> :
+                        <>
+                            <span
+                                className="text-lg font-semibold text-card-foreground/90 transition-all hover:text-foreground/90">Tienes {courses?.length || "0"} {courses?.length === 1 ? "grupo" : "grupos"}</span>
 
-                <span
-                    className="text-lg font-semibold text-card-foreground/90 transition-all hover:text-foreground/90">Tienes {courses?.length || "0"} {courses?.length === 1 ? "grupo" : "grupos"}</span>
-
-                <span className="text-sm text-card-foreground/90 transition-all hover:text-foreground/90">Registrar nuevo grupo</span>
+                            <span className="text-sm text-card-foreground/90 transition-all hover:text-foreground/90">Registrar nuevo grupo</span>
+                        </>
+                }
             </div>
         </motion.div>
     )
