@@ -2,7 +2,7 @@
 import { GroupUserList } from "@/components/teacher/groups/group_user_list";
 import createSupabaseServer from "@/lib/supabase/server";
 import { Tables } from "@/lib/types/supabase";
-import { QueryClient } from "@tanstack/react-query";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 
 
 // switch to useQueryClient hook . prefetchQuery
@@ -11,7 +11,6 @@ import { QueryClient } from "@tanstack/react-query";
 export default async function GestionPage({ params }: { params: { courseId: number } }) {
     const queryClient = new QueryClient();
 
-    const supabase = await createSupabaseServer();
 
 
     await queryClient.prefetchQuery({
@@ -40,9 +39,13 @@ export default async function GestionPage({ params }: { params: { courseId: numb
 
 
     return (
-        <div className="flex flex-col items-start justify-start w-full h-full px-6 py-5 bg-card text-card-foreground">
-            <GroupUserList courseId={params.courseId} />
+        <HydrationBoundary state={dehydrate(queryClient)}>
 
-        </div>
+            <div className="flex flex-col items-start justify-start w-full h-full px-6 py-5 bg-card text-card-foreground">
+
+                <GroupUserList courseId={params.courseId} />
+
+            </div>
+        </HydrationBoundary>
     )
 }

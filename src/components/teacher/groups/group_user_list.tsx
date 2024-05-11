@@ -5,6 +5,9 @@ import { useQuery } from "@tanstack/react-query"
 
 import { GroupUserListItem } from "./group_user_list_item";
 import { useEffect } from "react";
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button";
+import { Link } from "lucide-react";
 
 export const GroupUserList = ({ courseId }: { courseId: number }) => {
 
@@ -30,29 +33,44 @@ export const GroupUserList = ({ courseId }: { courseId: number }) => {
     })
 
 
-    useEffect(() => {
-        refetchProfilesStudents();
-    }, [courseStudents])
-    useEffect(() => {
-        refetchProfilesStudents();
-    })
+
+    // useEffect(() => {
+    //     refetchProfilesStudents();
+    // }, [courseStudents])
+    // useEffect(() => {
+    //     refetchProfilesStudents();
+    // })
 
     return (
-        <div className="flex flex-col w-full">
-            {
-                (courseStudents && profilesStudents) ?
-                    courseStudents.map(async (course_student) => {
-                        const user = profilesStudents.find(user => user.id === course_student.student_id)
-                        if (!user) {
-                            return null;
-                        }
-                        return (
-                            <GroupUserListItem key={user.id} student={course_student} user={user} />
+        <motion.div className="flex flex-col w-full h-full justify-start"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.08 }}
+        >
+            <div className="flex flex-row py-3 text-lg gap-2 justify-center md:justify-between items-center w-full flex-wrap">
+                <Button variant="link" className="gap-3">
+                    <Link width={16} height={16}></Link>
+                    Compartir enlace de grupo
+                </Button>
+
+            </div>
+            <div className="flex flex-col gap-3 w-full">
+                {
+                    (courseStudents && profilesStudents) ?
+                        courseStudents.map(async (course_student) => {
+                            const user = profilesStudents.find(user => user.id === course_student.student_id)
+                            if (!user) {
+                                return null;
+                            }
+                            return (
+                                <GroupUserListItem key={user.id} student={course_student} user={user} />
+                            )
+                        }) : (
+                            <>Cargando</>
                         )
-                    }) : (
-                        <>Cargando</>
-                    )
-            }
-        </div>
+                }
+            </div>
+
+        </motion.div>
     )
 }
