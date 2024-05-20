@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
 
-      <body className={" min-h-screen bg-background text-foreground " + roboto.className}>
+      <body className={` min-h-screen bg-background text-foreground ${roboto.className}`}>
         <Providers>
           <main className="h-full w-full relative flex flex-col overflow-hidden bg-muted/40" >
             {children}

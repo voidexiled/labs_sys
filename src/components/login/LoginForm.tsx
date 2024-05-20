@@ -11,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Label } from "../ui/label";
 import Link from "next/link";
 import Image from "next/image";
+import { ModeToggle } from "../left-side-bar/theme-toggle";
 
 
 export const LoginForm = (props: {}) => {
@@ -60,6 +61,7 @@ export const LoginForm = (props: {}) => {
         <>
 
 
+            <ModeToggle isSmall />
             <div className="w-full lg:grid lg:grid-cols-2 h-screen ">
                 <div className="hidden bg-muted lg:block">
                     <Image
@@ -67,7 +69,7 @@ export const LoginForm = (props: {}) => {
                         alt="Image"
                         width="1920"
                         height="1080"
-                        className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+                        className="h-full w-full object-cover dark:brightness-[0.4] "
                     />
                 </div>
                 <div className="flex items-center justify-center py-12">

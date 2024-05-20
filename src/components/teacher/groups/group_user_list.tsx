@@ -32,15 +32,6 @@ export const GroupUserList = ({ courseId }: { courseId: number }) => {
         }
     })
 
-
-
-    // useEffect(() => {
-    //     refetchProfilesStudents();
-    // }, [courseStudents])
-    // useEffect(() => {
-    //     refetchProfilesStudents();
-    // })
-
     return (
         <motion.div className="flex flex-col w-full h-full justify-start"
             initial={{ opacity: 0 }}
