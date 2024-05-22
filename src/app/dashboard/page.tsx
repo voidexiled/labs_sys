@@ -7,7 +7,7 @@ import { verifyIsNotLoggedIn, verifyRoleRedirect } from "../auth-server-action/a
 
 export default async function DashboardPage() {
 
-    await verifyRoleRedirect();
+    // await verifyRoleRedirect();
 
     return (
         <>

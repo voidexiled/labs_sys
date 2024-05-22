@@ -4,48 +4,48 @@ import createSupabaseServer from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
 export async function signInWithEmaildAndPassword(data: {
-  email: string;
-  password: string;
+	email: string;
+	password: string;
 }) {}
 
 export async function verifyRoleRedirect(expectedRoles?: number[]) {
-  const {
-    data: { user },
-  } = await readUserSession();
+	const {
+		data: { user },
+	} = await readUserSession();
 
-  if (user) {
-    const supabase = await createSupabaseServer();
-    const { data: roles } = await supabase.from("roles").select("*");
-    const { data: currUser } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-    const role = roles?.find((r) => r.id === currUser?.role_id);
+	if (user) {
+		const supabase = await createSupabaseServer();
+		const { data: roles } = await supabase.from("roles").select("*");
+		const { data: currUser } = await supabase
+			.from("users")
+			.select("*")
+			.eq("id", user.id)
+			.single();
+		const role = roles?.find((r) => r.id === currUser?.role_id);
 
-    if (role) {
-      if (expectedRoles) {
-        if (!expectedRoles.includes(role.id)) {
-          return redirect("/dashboard/");
-        }
-      } else {
-        if (role.id === 1 || role.id === 2) {
-          return redirect("/dashboard/admin/panel");
-        } else if (role.id === 4) {
-          return redirect("/dashboard/teacher/home");
-        }
-      }
-    }
-  } else {
-    return redirect("/login");
-  }
+		if (role) {
+			if (expectedRoles) {
+				if (!expectedRoles.includes(role.id)) {
+					return redirect("/dashboard/");
+				}
+			} else {
+				if (role.id === 1 || role.id === 2) {
+					return redirect("/dashboard/admin/panel");
+				} else if (role.id === 4) {
+					return redirect("/dashboard/teacher/home");
+				}
+			}
+		}
+	} else {
+		return redirect("/login");
+	}
 }
 
 export async function verifyIsNotLoggedIn() {
-  const {
-    data: { user },
-  } = await readUserSession();
-  if (!user) {
-    return redirect("/login");
-  }
+	const {
+		data: { user },
+	} = await readUserSession();
+	if (!user) {
+		return redirect("/login");
+	}
 }

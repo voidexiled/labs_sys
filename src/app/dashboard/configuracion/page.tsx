@@ -13,8 +13,10 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { verifyRoleRedirect } from "@/app/auth-server-action/actions"
 
-export default function ConfiguracionPage() {
+export default async function ConfiguracionPage() {
+    await verifyRoleRedirect();
 
     // TODO: ENVOLVER EN UN LAYOUT PARA MANEJAR LAS DISTINTAS CONFIGURACIONES CON RUTAS "dashboard/configuracion/general", "dashboard/configuracion/seguridad"
     return (

@@ -5,6 +5,7 @@ import type { NextRequest } from 'next/server'
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
+  console.log("middleware", req)
   const supabase = createMiddlewareClient({ req, res })
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -18,5 +19,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/dashboard'],
+  matcher: [ '/dashboard', '/invite'],
 }
