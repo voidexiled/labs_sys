@@ -31,8 +31,10 @@ export async function verifyRoleRedirect(expectedRoles?: number[]) {
 			} else {
 				if (role.id === 1 || role.id === 2) {
 					return redirect("/dashboard/admin/panel");
-				} else if (role.id === 4) {
+				}if (role.id === 4) {
 					return redirect("/dashboard/teacher/home");
+				}if (role.id === 5) {
+					return redirect("/dashboard/student/home");
 				}
 			}
 		}

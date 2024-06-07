@@ -1,6 +1,6 @@
-export default async function StudentHomePage() {
+import { verifyRoleRedirect } from "@/app/auth-server-action/actions";
 
-    return (
-        <></>
-    )
+export default async function StudentHomePage() {
+  await verifyRoleRedirect([5]);
+  return <></>;
 }

@@ -122,6 +122,42 @@ export type Database = {
           },
         ]
       }
+      courses_join_requests: {
+        Row: {
+          course_id: number
+          created_at: string
+          id: number
+          student_id: string
+        }
+        Insert: {
+          course_id: number
+          created_at?: string
+          id?: number
+          student_id: string
+        }
+        Update: {
+          course_id?: number
+          created_at?: string
+          id?: number
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courses_join_requests_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "courses_join_requests_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       courses_students: {
         Row: {
           assistance_type: string
