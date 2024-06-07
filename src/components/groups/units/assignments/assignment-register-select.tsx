@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Button as NextButton } from "@nextui-org/react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { Tables } from "@/lib/types/supabase";
+import type { Tables } from "@/lib/types/supabase";
 import { cn, getPeriodFromDate } from "@/lib/utils";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { GroupAdd } from "@/icons/group-add";
 import { AddFile } from "@/icons/file-add-icon";
 import { useMediaQuery } from "usehooks-ts"
@@ -45,13 +45,12 @@ export const AssignmentRegisterSelect = ({ assignments, refetch, unit }: { refet
                 });
                 return;
 
-            } else {
+            }
                 toast({
                     title: "Practica clonada",
-                    description: "La practica " + assignmentData.title + " ha sido creada.",
+                    description: `La practica ${assignmentData.title} ha sido creada.`,
                     variant: "default",
                 })
-            }
             refetch()
             setOpen(false)
         }
@@ -76,7 +75,7 @@ export const AssignmentRegisterSelect = ({ assignments, refetch, unit }: { refet
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="min-w-[400px] p-0">
-                        <List isDesktop={isDesktop} assignments={assignments.filter((ass) => ass.visibility === "public" && ass.unit_id != unit.id)} setSelected={setSelected} selected={selected} open={open} setOpen={setOpen} />
+                        <List isDesktop={isDesktop} assignments={assignments.filter((ass) => ass.visibility === "public" && ass.unit_id !== unit.id)} setSelected={setSelected} selected={selected} open={open} setOpen={setOpen} />
                     </PopoverContent>
                 </Popover>
                 <Button variant="outline" size="icon" className="stroke-primary border-primary" onClick={handleAddSelected}
@@ -102,7 +101,7 @@ export const AssignmentRegisterSelect = ({ assignments, refetch, unit }: { refet
                     </Button>
                 </DrawerTrigger>
                 <DrawerContent className="border-t">
-                    <List isDesktop={isDesktop} assignments={assignments.filter((ass) => ass.visibility === "public" && ass.unit_id != unit.id)} setSelected={setSelected} selected={selected} open={open} setOpen={setOpen} />
+                    <List isDesktop={isDesktop} assignments={assignments.filter((ass) => ass.visibility === "public" && ass.unit_id !== unit.id)} setSelected={setSelected} selected={selected} open={open} setOpen={setOpen} />
 
                 </DrawerContent>
             </Drawer>
@@ -148,11 +147,7 @@ const List = ({
             <CommandInput placeholder="Buscar practica..." className={cn(isDesktop ? "text-xs h-9" : "text-base h-12")} />
             <CommandEmpty>No se encontraron practicas.</CommandEmpty>
             <CommandList className={cn(isDesktop && "max-h-[130px]")} data-radix-scroll-area-viewport>
-
-
                 <CommandGroup>
-
-
                     {
                         assignments?.map((assignment) => {
                             return (

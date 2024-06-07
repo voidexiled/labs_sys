@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Lato, Roboto } from "next/font/google";
@@ -12,22 +11,21 @@ const roboto = Roboto({
   style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
-})
+});
 const lato = Lato({
   weight: ["100", "300", "400", "700", "900"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
-})
-  // Add CSS imports for specific routes
-  ;
-
+});
+// Add CSS imports for specific routes
 export const metadata: Metadata = {
   title: "ITCM - Gestión de laboratorios",
-  description: "Aplicación web para la gestión de practicas, laboratorios, alumnos, horarios y cursos del Instituto Tecnológico de Ciudad Madero.",
+  description:
+    "Aplicación web para la gestión de practicas, laboratorios, alumnos, horarios y cursos del Instituto Tecnológico de Ciudad Madero.",
   icons: {
     icon: "/logo-itcm-v2.png",
-  }
+  },
 };
 
 export default function RootLayout({
@@ -37,10 +35,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" suppressHydrationWarning>
-
-      <body className={` min-h-screen bg-background text-foreground ${roboto.className}`}>
+      <body
+        className={` min-h-screen bg-secondary text-secondary-foreground ${roboto.className}`}
+      >
         <Providers>
-          <main className="h-full w-full relative flex flex-col overflow-hidden bg-muted/40" >
+          <main className="relative flex h-full w-full flex-col overflow-hidden">
             {children}
             <Toaster />
           </main>

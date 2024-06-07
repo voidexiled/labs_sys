@@ -1,12 +1,13 @@
 "use client"
 
-import { Tables } from "@/lib/types/supabase"
+import type { Tables } from "@/lib/types/supabase"
 import { motion } from "framer-motion"
 import { AssignmentsList } from "./assignments/assignments-list";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { createSupabaseBrowser } from "@/lib/supabase/browser";
 import { LoadingUnit } from "@/components/teacher/groups/loading_unit";
+import { getUnitAssignments } from "@/app/actions/teachers";
 
 type Props = {
     unitId: number;
@@ -18,26 +19,13 @@ type Props = {
 export const GroupUnitContainer = ({ courseId, unitId, className, children }: Props) => {
 
 
-    const { data: unitData, error: unitError, refetch: refetchUnit, isFetching: isFetchingUnit } = useQuery({
-        queryKey: ['unit', courseId, unitId],
-        queryFn: async () => {
-            const supabase = createSupabaseBrowser();
-            const { data: unitData, error } = await supabase.from('units').select('*').eq('course_id', courseId).eq('unit', unitId).single();
-            console.log("unitData", unitData);
-            return unitData as Tables<"units">;
-        },
-        retry: true,
+    const { data: unitAssignmentsData, error: unitAssignmentsError, refetch: refetchUnitAssignments, isFetching: isFetchingUnitAssignments } = useQuery({
+        queryKey: ['unit_assignments', courseId, unitId],
+        queryFn: () => getUnitAssignments({ params: { courseId, unitId } }),
+        enabled: !!children,
     })
 
-    const { data: assignments, error: assignmentsError, refetch: refetchAssignments, isFetching: isFetchingAssignments } = useQuery({
-        queryKey: ['assignments', courseId, unitId],
-        queryFn: async () => {
-            const supabase = createSupabaseBrowser();
-            const { data: assignments, error } = await supabase.from('assignments').select('*').eq('unit_id', unitData?.id!);
-            return assignments;
-        },
-        retry: true,
-    })
+
 
     const { data: courseData, error: courseError, refetch: refetchCourse, isFetching: isFetchingCourse } = useQuery({
         queryKey: ['course', courseId],
@@ -46,7 +34,7 @@ export const GroupUnitContainer = ({ courseId, unitId, className, children }: Pr
             const { data: courseData, error } = await supabase.from('courses').select('*').eq('id', courseId).single();
             return courseData as Tables<"courses">;
         },
-        retry: true,
+        enabled: !!children,
     })
 
     const { data: subjectData, error: subjectError, refetch: refetchSubject, isFetching: isFetchingSubject } = useQuery({
@@ -55,10 +43,10 @@ export const GroupUnitContainer = ({ courseId, unitId, className, children }: Pr
             const supabase = createSupabaseBrowser();
 
             // validate possible undefined subject_id
-            const { data: subjectData, error: error } = await supabase.from("subjects").select("*").eq("id", courseData?.subject_id!).single();
+            const { data: subjectData, error } = await supabase.from("subjects").select("*").eq("id", courseData?.subject_id!).single();
             return subjectData as Tables<"subjects">;
         },
-        retry: true,
+        enabled: !!children,
     })
 
     const { data: allCoursesData, error: allCoursesError, refetch: refetchAllCourses, isFetching: isFetchingAllCourses } = useQuery({
@@ -69,7 +57,7 @@ export const GroupUnitContainer = ({ courseId, unitId, className, children }: Pr
             const { data: allCoursesData, error } = await supabase.from('courses').select('*').eq('subject_id', subjectData?.id!);
             return allCoursesData;
         },
-        retry: true,
+        enabled: !!children,
     })
 
     // noww all units of all the courses of the subject
@@ -81,7 +69,7 @@ export const GroupUnitContainer = ({ courseId, unitId, className, children }: Pr
             const { data: allUnitsData, error } = await supabase.from('units').select('*').in('course_id', allCoursesIds!).eq('unit_id', unitId);
             return allUnitsData;
         },
-        retry: true,
+        enabled: !!children,
     })
 
     const { data: allAssignments, error: allAssignmentsError, refetch: refetchAllAssignments, isFetching: isFetchingAllAssignments } = useQuery({
@@ -92,21 +80,25 @@ export const GroupUnitContainer = ({ courseId, unitId, className, children }: Pr
             const { data: allAssignmentsData, error } = await supabase.from('assignments').select('*').in('unit_id', allUnitsIds!);
             return allAssignmentsData;
         },
-        retry: true,
+        enabled: !!children,
     })
 
 
 
 
 
+
+    const isLoadingSomething = isFetchingUnitAssignments || isFetchingCourse || isFetchingSubject || isFetchingAllCourses || isFetchingAllUnits || isFetchingAllAssignments;
+
     return (
         <motion.div
-            className={cn("flex flex-col items-start justify-start w-full h-full px-6 py-5 bg-card text-card-foreground", className)}
+            className={cn("flex flex-col items-start justify-start w-full h-full px-6 py-5  text-secondary-foreground", className)}
         >
             {
-                children ??
-                    ((isFetchingAssignments || isFetchingUnit || isFetchingCourse || isFetchingSubject || isFetchingAllCourses || isFetchingAllUnits || isFetchingAllAssignments) && (!assignments || !unitData || !courseData || !subjectData || !allCoursesData || !allUnitsData || !allAssignments)) ? <LoadingUnit /> :
-                    <AssignmentsList unit={unitData!} assignments={assignments!} allAssignments={allAssignments!} course={courseData!} refetch={refetchAssignments} />
+                children ? children :
+                    isLoadingSomething
+                        ? <LoadingUnit />
+                        : <AssignmentsList unit={unitAssignmentsData!} allAssignments={allAssignments!} course={courseData!} refetch={refetchUnitAssignments} />
             }
         </motion.div>
     )

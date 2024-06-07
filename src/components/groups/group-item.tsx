@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { motion } from "framer-motion"
-import { Tables } from "@/lib/types/supabase"
+import type { Tables } from "@/lib/types/supabase"
 import { Skeleton } from "@nextui-org/react"
 import { AspectRatio } from "../ui/aspect-ratio"
 import { Avatar, AvatarFallback } from "../ui/avatar"
@@ -16,7 +16,7 @@ export const GroupItem = ({ course, subject, laboratory }: { course: Tables<"cou
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="bg-card text-card-foreground border rounded-md group-hover:scale-[0.95] transition-all w-full h-full flex flex-col justify-center items-center p-5 gap-2 group-hover:border-card-foreground/20"
+                        className="bg-background text-background-foreground border rounded-md group-hover:scale-[0.95] transition-all w-full h-full flex flex-col justify-center items-center p-5 gap-2 group-hover:border-secondary-foreground/20"
                     >
                         <div className="rounded-xl w-[76px] h-[76px] bg-secondary flex items-center justify-center p-1 border text-sm">
 

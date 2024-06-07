@@ -1,7 +1,7 @@
 import Search from "@/components/users/search-input"
 import { Button } from "@nextui-org/react"
 import { AssignmentRegisterSelect } from "./assignment-register-select"
-import { Tables } from "@/lib/types/supabase"
+import type { Tables } from "@/lib/types/supabase"
 
 export const AssignmentsListHeader = ({ allAssignments, refetch, unit }: { refetch: () => void, unit: Tables<"units">, allAssignments?: Tables<"assignments">[] }) => {
 

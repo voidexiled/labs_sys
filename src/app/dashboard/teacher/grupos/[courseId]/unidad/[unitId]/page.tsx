@@ -1,7 +1,8 @@
 "use server"
+import { getUnitAssignments } from "@/app/actions/teachers";
 import { GroupUnitContainer } from "@/components/groups/units/group-unit-container";
 import createSupabaseServer from "@/lib/supabase/server";
-import { Tables } from "@/lib/types/supabase";
+import type { Tables } from "@/lib/types/supabase";
 import { dehydrate, HydrationBoundary, QueryClient, useQuery } from "@tanstack/react-query";
 
 // TODO:✅ Switch all to useQueryClient hook . prefetchQuery
@@ -9,27 +10,12 @@ import { dehydrate, HydrationBoundary, QueryClient, useQuery } from "@tanstack/r
 export default async function Page({ params }: { params: { courseId: number, unitId: number } }) {
     const queryClient = new QueryClient();
 
+
     /* 1. Prefetch unit of the current course */
     await queryClient.prefetchQuery({
-        queryKey: ['unit', params.courseId, params.unitId],
-        queryFn: async () => {
-            const supabase = await createSupabaseServer();
-            const { data: unitData, error } = await supabase.from('units').select('*').eq('course_id', params.courseId).eq('unit', params.unitId).single();
-            if (unitData) {
-                /* 2. Prefetch assignments of the current unit of the current course */
-                await queryClient.prefetchQuery({
-                    queryKey: ['assignments', params.courseId, params.unitId],
-                    queryFn: async () => {
-                        const supabase = await createSupabaseServer();
-                        const { data: assignments, error } = await supabase.from('assignments').select('*').eq('unit_id', unitData.id!);
-                        return assignments;
-                    }
-                })
-            }
-            return unitData;
-        }
+        queryKey: ['unit_assignments', params.courseId, params.unitId],
+        queryFn: () => getUnitAssignments({ params })
     })
-
 
 
 

@@ -26,6 +26,8 @@ export default async function LoginPage() {
 
             } else if (role.id === 4) {
                 return redirect("/dashboard/teacher/home");
+            } else if (role.id === 5) {
+                return redirect("/dashboard/student/home");
             }
         }
     }

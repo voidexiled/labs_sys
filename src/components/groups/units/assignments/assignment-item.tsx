@@ -1,5 +1,5 @@
 "use client"
-import { Tables } from "@/lib/types/supabase"
+import type { Tables } from "@/lib/types/supabase"
 import { Button } from "@nextui-org/react"
 import { Delete, DeleteIcon, Download, Edit, Trash } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -15,6 +15,7 @@ import { AssignmentItemEdit } from "./actions/assignment-item-edit"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
 
 export const AssignmentItem = ({
     course,
@@ -61,7 +62,7 @@ export const AssignmentItem = ({
         } else {
             toast({
                 title: "Practica eliminada",
-                description: "La practica " + assignment.title + " ha sido eliminada.",
+                description: `La practica ${assignment.title} ha sido eliminada.`,
                 variant: "default",
             })
             // window.location.reload()
@@ -99,61 +100,63 @@ export const AssignmentItem = ({
             <Dialog open={isOpenEditAssignmentDialog} onOpenChange={setIsOpenEditAssignmentDialog}>
                 <ContextMenu>
                     <ContextMenuTrigger asChild>
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.08 }}
-                            exit={{ opacity: 0 }}
-                            onHoverStart={() => {
-                                if (isNew) {
-                                    setIsNew(false)
-                                }
-                            }}
-                            onTapStart={() => {
-                                if (isNew) {
-                                    setIsNew(false)
-                                }
-                            }}
-                            className={cn("cursor-pointer h-16 w-full px-4 py-2 bg-accent/40 flex flex-row items-center justify-between rounded-sm text-sm  tracking-wider shadow-medium border relative hover:bg-accent/80 transition-all", isNew && "border-primary/30")}>
-                            <AnimatePresence>
-                                {
-                                    isNew && (
-                                        <motion.span
-                                            key={assignment.id + "_isnew"}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ delay: 0.08 }}
-                                            exit={{ opacity: 0, transition: { duration: 0.15 } }}
-                                            className="absolute top-4 -left-5 h-2 w-2 text-primary drop-shadow-lg shadow-primary tracking-widest z-20 -rotate-45 ">
-                                            Reciente!
-                                        </motion.span>
-                                    )
-                                }
-                            </AnimatePresence>
-                            <div className="h-full flex flex-col gap-1 justify-between relative w-3/4 overflow-hidden text-ellipsis text-nowrap whitespace-nowrap ">
-                                <span className="inline-block text-ellipsis text-nowrap whitespace-nowrap overflow-hidden ">
-                                    {assignment.title}
-                                </span>
-                                <span className="text-xs text-muted-foreground inline-block text-ellipsis text-nowrap whitespace-nowrap overflow-hidden">
-                                    <span className="text-muted-foreground/80"> {assignment.file_name}</span>
-                                </span>
-                            </div>
-
-                            <div className="flex flex-row gap-1 items-center justify-end h-full">
-                                <div className={cn("flex flex-col justify-between items-end h-full text-xs text-muted-foreground tracking-widest", assignment.grade_value === 0 ? "text-red-500" : "text-green-500")}>
-                                    <span>{assignment.grade_value} pts.</span>
-                                    <span className="text-muted-foreground">
-                                        {
-                                            course && submissions && (
-                                                <>
-                                                    {`${submissions?.length}/${course?.current_enrollment}`} entr.
-                                                </>
-                                            )
-                                        }
+                        <Link href={`/dashboard/teacher/grupos/${course.id}/unidad/${unit.unit}/${assignment.id}`} title={`Ver entregas de ${assignment.title}`}>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.08 }}
+                                exit={{ opacity: 0 }}
+                                onHoverStart={() => {
+                                    if (isNew) {
+                                        setIsNew(false)
+                                    }
+                                }}
+                                onTapStart={() => {
+                                    if (isNew) {
+                                        setIsNew(false)
+                                    }
+                                }}
+                                className={cn("cursor-pointer h-16 w-full px-4 py-2 bg-background/70 flex flex-row items-center justify-between rounded-sm text-sm  tracking-wider shadow-sm border relative hover:bg-secondary/50 transition-all", isNew && "border-primary/30")}>
+                                <AnimatePresence>
+                                    {
+                                        isNew && (
+                                            <motion.span
+                                                key={`${assignment.id}_isnew`}
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ delay: 0.08 }}
+                                                exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                                                className="absolute top-4 -left-5 h-2 w-2 text-primary drop-shadow-lg shadow-primary tracking-widest z-20 -rotate-45 ">
+                                                Reciente!
+                                            </motion.span>
+                                        )
+                                    }
+                                </AnimatePresence>
+                                <div className="h-full flex flex-col gap-1 justify-between relative w-3/4 overflow-hidden text-ellipsis text-nowrap whitespace-nowrap ">
+                                    <span className="inline-block text-ellipsis text-nowrap whitespace-nowrap overflow-hidden ">
+                                        {assignment.title}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground inline-block text-ellipsis text-nowrap whitespace-nowrap overflow-hidden">
+                                        <span className="text-muted-foreground/80"> {assignment.file_name}</span>
                                     </span>
                                 </div>
-                            </div>
-                        </motion.div >
+
+                                <div className="flex flex-row gap-1 items-center justify-end h-full">
+                                    <div className={cn("flex flex-col justify-between items-end h-full text-xs text-muted-foreground tracking-widest", assignment.grade_value === 0 ? "text-red-500" : "text-green-500")}>
+                                        <span>{assignment.grade_value} pts.</span>
+                                        <span className="text-muted-foreground">
+                                            {
+                                                course && submissions && (
+                                                    <>
+                                                        {`${submissions?.length}/${course?.current_enrollment}`} entr.
+                                                    </>
+                                                )
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                            </motion.div >
+                        </Link>
                     </ContextMenuTrigger>
                     <ContextMenuContent>
                         <ContextMenuLabel>

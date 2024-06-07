@@ -7,7 +7,7 @@ import createSupabaseServer from "@/lib/supabase/server";
 import readUserSession from "@/lib/actions";
 import { GroupsList } from "@/components/groups/groups-list";
 import { CoursesFilters } from "@/components/courses/courses-filters";
-import { QueryClient } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
 export default async function GruposPage() {
     const queryClient = new QueryClient();
@@ -38,14 +38,16 @@ export default async function GruposPage() {
 
 
     return (
-        <MainWrapper>
-            <MainWrapperHeader title="Grupos" />
-            <MainWrapperContent>
-                {/* <CoursesFilters /> */}
-                <GroupsList teacher_user={user} />
-            </MainWrapperContent>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+            <MainWrapper>
+                <MainWrapperHeader title="Grupos" />
+                <MainWrapperContent>
+                    {/* <CoursesFilters /> */}
+                    <GroupsList teacher_user={user} />
+                </MainWrapperContent>
 
-        </MainWrapper>
+            </MainWrapper>
+        </HydrationBoundary>
     );
 
 

@@ -10,7 +10,7 @@ export default async function Page({ params }: { params: { courseCode: string } 
     const queryClient = new QueryClient();
     const supabase = await createSupabaseServer();
 
-    const { data: courseData, error: courseError } = await supabase.from("courses").select(`id, teacher_id, label, classroom_code, subject_id, subjects ( id, label )`).eq("classroom_code", params.courseCode).single();
+    const { data: courseData, error: courseError } = await supabase.from("courses").select("id, teacher_id, label, classroom_code, subject_id, subjects ( id, label )").eq("classroom_code", params.courseCode).single();
 
     console.log("courseData", courseData)
 
@@ -27,11 +27,9 @@ export default async function Page({ params }: { params: { courseCode: string } 
 
 
 
-
-
     let teacherUrlImage: string | null = null;
     if (teacherData.image_url) {
-        teacherUrlImage = supabase.storage.from("avatars").getPublicUrl(teacherData.image_url).data.publicUrl + "?t=" + new Date().getTime();
+        teacherUrlImage = `${supabase.storage.from("avatars").getPublicUrl(teacherData.image_url).data.publicUrl}?t=${new Date().getTime()}`;
     }
 
     const nameInitialsTeacher = teacherData.display_name?.split(" ").map((name) => name[0]).join("").slice(0, 1).toUpperCase();
@@ -42,7 +40,7 @@ export default async function Page({ params }: { params: { courseCode: string } 
             <div className="m-auto flex flex-col items-center justify-center gap-8 bg-card border rounded-md p-6  shadow-lg w-[400px] max-w-md">
                 <div className="flex flex-col items-center justify-center gap-1">
                     <h1 className="text-2xl font-semibold ">Has recibido una invitación!</h1>
-                    <span className="text-base text-muted-foreground underline">{courseData.subjects?.label + "  <Grupo " + courseData.label + ">"}</span>
+                    <span className="text-base text-muted-foreground underline">{`${courseData.subjects?.label}  <Grupo ${courseData.label}>`}</span>
                     {/* <span className="text-xs text-muted-foreground">Ingresa a la clase con tu profesor.</span> */}
                 </div>
                 <div className="flex grow flex-col gap-6">
