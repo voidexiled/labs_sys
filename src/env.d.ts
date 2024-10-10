@@ -35,4 +35,12 @@ export type Profile = {
   loggedIn: boolean;
 };
 
+export type Schedule = {
+    [day: Day]: {
+        start_time: string;
+        end_time: string;
+        lab_id: number;                              
+    }
+}
 
+export type Day = "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday";
