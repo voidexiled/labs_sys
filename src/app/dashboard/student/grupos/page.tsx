@@ -8,37 +8,37 @@ import { MainWrapperHeader } from "@/components/main-wrapper-header";
 import { StudentGroupsList } from "@/components/students/StudentGroupsList";
 import createSupabaseServer from "@/lib/supabase/server";
 import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
+	HydrationBoundary,
+	QueryClient,
+	dehydrate,
 } from "@tanstack/react-query";
 
 export default async function StudentGruposPage() {
-  await verifyRoleRedirect([5]);
-  const queryClient = new QueryClient();
+	await verifyRoleRedirect([5]);
+	const queryClient = new QueryClient();
 
-  const supabase = await createSupabaseServer();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+	const supabase = await createSupabaseServer();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
 
-  if (!user) {
-    return <></>;
-  }
+	if (!user) {
+		return <></>;
+	}
 
-  await queryClient.prefetchQuery({
-    queryKey: ["groups", user.id],
-    queryFn: getStudentsCourses,
-  });
+	await queryClient.prefetchQuery({
+		queryKey: ["groups", user.id],
+		queryFn: getStudentsCourses,
+	});
 
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <MainWrapper>
-        <MainWrapperHeader title="Grupos" />
-        <MainWrapperContent>
-          <StudentGroupsList user={user} />
-        </MainWrapperContent>
-      </MainWrapper>
-    </HydrationBoundary>
-  );
+	return (
+		<HydrationBoundary state={dehydrate(queryClient)}>
+			<MainWrapper>
+				<MainWrapperHeader title="Grupos" />
+				<MainWrapperContent>
+					<StudentGroupsList user={user} />
+				</MainWrapperContent>
+			</MainWrapper>
+		</HydrationBoundary>
+	);
 }

@@ -1,4 +1,19 @@
 "use client";
+/* React */
+import { useEffect, useState } from "react";
+
+/* NEXTJS */
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+/* Lib */
+import type { Tables } from "@/lib/types/supabase";
+import { cn } from "@/lib/utils";
+
+/* Hooks */
+import { useSubjects } from "@/hooks/useSubjects";
+import { useUsers } from "@/hooks/useUsers";
+
+/* UI Components */
 import { Button } from "@/components/ui/button";
 import {
 	Command,
@@ -21,35 +36,33 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
+
 import Search from "@/components/users/search-input";
-import { useSubjects } from "@/hooks/useSubjects";
-import { useUser } from "@/hooks/useUser";
-import { useUsers } from "@/hooks/useUsers";
-import { AddFile } from "@/icons/file-add-icon";
-import type { Tables } from "@/lib/types/supabase";
-import { cn } from "@/lib/utils";
+
+/* Icons */
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { File, ListFilter } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ScrollArea } from "../ui/scroll-area";
 
-export const CoursesFilters = () => {
-	const { data: currentUser } = useUser();
+export const LaboratoriesFilters = () => {
 	const { data: subjects } = useSubjects();
 	const { data: users } = useUsers();
+
 	const searchParams = useSearchParams();
-	const { replace } = useRouter();
 	const pathname = usePathname();
 
+	const { replace } = useRouter();
+
+	// COMBOBOX TRIGGER OPEN
 	const [openSubjectComboBox, setOpenSubjectComboBox] = useState(false);
 	const [openUserComboBox, setOpenUserComboBox] = useState(false);
-	const [selectedSubject, setSelectedSubject] =
-		useState<Tables<"subjects"> | null>();
-	const [selectedTeacher, setSelectedTeacher] =
-		useState<Tables<"users"> | null>();
 
+	// SELECTED FILTERS
+	const [selectedSubject, setSelectedSubject] =
+		useState<Tables<"subjects"> | null>(null);
+	const [selectedTeacher, setSelectedTeacher] =
+		useState<Tables<"users"> | null>(null);
+
+	// FILTER USERS THAT ARE TEACHERS
 	const [teachers, setTeachers] = useState<Tables<"users">[]>([]);
 
 	/* Este useEffect se encarga de:
@@ -127,7 +140,7 @@ export const CoursesFilters = () => {
 	return (
 		<>
 			<div className="mb-4 flex w-full flex-row flex-wrap justify-between gap-1 rounded-md p-3 py-1 lg:pl-0 lg:pr-8">
-				<div className="flex flex-wrap items-center justify-center gap-2 lg:justify-normal">
+				<div className="flex flex-grow flex-wrap items-center justify-center gap-2 lg:flex-grow-0 lg:justify-normal">
 					<Search placeholder="Buscar por codigo de clase..." />
 					<Popover
 						open={openSubjectComboBox}
@@ -187,7 +200,6 @@ export const CoursesFilters = () => {
 							</Command>
 						</PopoverContent>
 					</Popover>
-
 					<Popover open={openUserComboBox} onOpenChange={setOpenUserComboBox}>
 						<PopoverTrigger asChild>
 							<Button
@@ -208,10 +220,7 @@ export const CoursesFilters = () => {
 							<Command>
 								<CommandInput placeholder="Buscar docente..." className="h-9" />
 								<CommandEmpty>No se encontraron docentes.</CommandEmpty>
-								<CommandList
-									className="max-h-[130px]"
-									data-radix-scroll-area-viewport
-								>
+								<CommandList>
 									<CommandGroup>
 										{teachers?.map((teacher) => {
 											return (
@@ -251,11 +260,7 @@ export const CoursesFilters = () => {
 				<div className="flex flex-grow flex-wrap items-center justify-center gap-2 lg:flex-grow-0 lg:justify-normal">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button
-								variant="outline"
-								size="sm"
-								className="gap-1 py-1 text-sm"
-							>
+							<Button variant="outline" size="sm" className="h-7 gap-1 text-sm">
 								<ListFilter className="h-3.5 w-3.5" />
 								<span className="sr-only sm:not-sr-only">Filtros</span>
 							</Button>
@@ -270,42 +275,29 @@ export const CoursesFilters = () => {
 								Mostrar todos
 							</DropdownMenuCheckboxItem>
 							<DropdownMenuCheckboxItem
-								onSelect={() => handleFilter("active")}
-								checked={status === "active"}
+								onSelect={() => handleFilter("busy")}
+								checked={status === "busy"}
 							>
-								Activos
+								Ocupado
 							</DropdownMenuCheckboxItem>
 							<DropdownMenuCheckboxItem
-								onSelect={() => handleFilter("inactive")}
-								checked={status === "inactive"}
+								onSelect={() => handleFilter("idle")}
+								checked={status === "idle"}
 							>
-								Inactivos
+								Disponible
 							</DropdownMenuCheckboxItem>
 							<DropdownMenuCheckboxItem
-								onSelect={() => handleFilter("completed")}
-								checked={status === "completed"}
+								onSelect={() => handleFilter("oos")}
+								checked={status === "oos"}
 							>
-								Completados
+								Fuera de servicio
 							</DropdownMenuCheckboxItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
-					<Button size="sm" variant="outline" className="gap-1 py-1 text-sm">
+					<Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
 						<File className="h-3.5 w-3.5" />
 						<span className="sr-only sm:not-sr-only">Exportar</span>
 					</Button>
-					{currentUser?.role_id === 3 && (
-						<Link href="grupos/registrar">
-							<Button
-								type="button"
-								size="sm"
-								variant="outline"
-								className="gap-1 bg-primary stroke-primary-foreground py-1 text-sm text-primary-foreground hover:stroke-secondary-foreground active:stroke-secondary-foreground"
-							>
-								<AddFile width={14} height={14} />
-								<span className="sr-only sm:not-sr-only">Añadir</span>
-							</Button>
-						</Link>
-					)}
 				</div>
 			</div>
 		</>

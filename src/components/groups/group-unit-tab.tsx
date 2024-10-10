@@ -12,11 +12,9 @@
 // import { ExitIcon } from "@radix-ui/react-icons";
 // import { ScrollArea } from "../ui/scroll-area";
 
-
 // export const GroupUnitTab = ({ unit }: { unit: Tables<"units"> }) => {
 //     const [isRegisteringAssignments, setIsRegisteringAssignments] = useState(false)
 //     const { isFetching: isFetchingAssignments, data: assignments } = useAssignmentsByUnit({ unit_id: unit.id })
-
 
 //     useEffect(() => {
 //         console.log("assignments --", assignments)
@@ -25,7 +23,6 @@
 
 //     return (
 
-
 //         <motion.div
 //             initial={{ opacity: 0 }}
 //             animate={{ opacity: 1 }}
@@ -33,7 +30,6 @@
 
 //             className={cn(" flex-shrink relative w-full h-full flex flex-col p-6 bg-background/80 shadow-[0px_9px_20px] shadow-black/5 rounded-lg border dark:border-none overflow-hidden")}
 //         >
-
 
 //             {
 //                 isFetchingAssignments ? (
@@ -73,7 +69,6 @@
 //                     )
 //                 )
 //             }
-
 
 //         </motion.div>
 //     )

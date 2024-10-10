@@ -16,192 +16,192 @@ import { useUsers } from "@/hooks/useUsers";
 /* UI Components */
 import { Button } from "@/components/ui/button";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
 } from "@/components/ui/command";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 
 import Search from "@/components/users/search-input";
 
+import { useUserRoles } from "@/hooks/useUserRoles";
 /* Icons */
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { File, ListFilter } from "lucide-react";
-import { useUserRoles } from "@/hooks/useUserRoles";
 
 export const UsersFilters = () => {
-  const { data: roles } = useUserRoles();
+	const { data: roles } = useUserRoles();
 
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+	const searchParams = useSearchParams();
+	const pathname = usePathname();
 
-  const { replace } = useRouter();
+	const { replace } = useRouter();
 
-  // COMBOBOX TRIGGER OPEN
-  const [openRoleComboBox, setOpenRoleComboBox] = useState(false);
+	// COMBOBOX TRIGGER OPEN
+	const [openRoleComboBox, setOpenRoleComboBox] = useState(false);
 
-  // SELECTED FILTERS
-  const [selectedRole, setSelectedRole] = useState<Tables<"roles"> | null>(
-    null
-  );
+	// SELECTED FILTERS
+	const [selectedRole, setSelectedRole] = useState<Tables<"roles"> | null>(
+		null,
+	);
 
-  /* Este useEffect se encarga de:
+	/* Este useEffect se encarga de:
         * 1. Verificar si la URL tiene el parametro "page"
         * 2. Si la URL no tiene el parametro "page", se lo agrega y le da el valor de 1
      (Se ejecuta solo una vez, al montarse el componente.)
     */
-  useEffect(() => {
-    if (!searchParams.has("page")) {
-      replace(`${pathname}?page=1`);
-    }
-  });
+	useEffect(() => {
+		if (!searchParams.has("page")) {
+			replace(`${pathname}?page=1`);
+		}
+	});
 
-  /* Este useEffect se encarga de:
+	/* Este useEffect se encarga de:
         * 1. Verificar si hay una materia seleccionada para filtrar
         * 2. Si hay una seleccionada, agrega la clave de materia al parametro "subject"
         * 3. Si no hay una seleccionada, elimina el parametro "subject"
         * 4. Pasa los parametros a la URL
      (Se ejecuta al montarse el componente y cada que la materia cambia.)
     */
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    if (selectedRole) {
-      params.set("role", selectedRole.id.toString() || "");
-    } else {
-      params.delete("role");
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }, [selectedRole]);
+	useEffect(() => {
+		const params = new URLSearchParams(searchParams.toString());
+		if (selectedRole) {
+			params.set("role", selectedRole.id.toString() || "");
+		} else {
+			params.delete("role");
+		}
+		replace(`${pathname}?${params.toString()}`);
+	}, [selectedRole]);
 
-  function handleFilter(term: string) {
-    console.log(term);
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set("status", term);
-    } else {
-      params.set("status", "all");
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }
+	function handleFilter(term: string) {
+		console.log(term);
+		const params = new URLSearchParams(searchParams.toString());
+		if (term) {
+			params.set("status", term);
+		} else {
+			params.set("status", "all");
+		}
+		replace(`${pathname}?${params.toString()}`);
+	}
 
-  const _status = searchParams.get("status") || "all";
-  const _role = searchParams.get("role") || "";
+	const _status = searchParams.get("status") || "all";
+	const _role = searchParams.get("role") || "";
 
-  return (
-    <>
-      <div className="mb-4 flex w-full flex-row flex-wrap justify-between gap-1 rounded-md p-3 py-1 lg:pl-0 lg:pr-8">
-        <div className="flex flex-grow flex-wrap items-center justify-center gap-2 lg:flex-grow-0 lg:justify-normal  ">
-          <Search placeholder="Buscar por nombre o folio..." />
-          <Popover open={openRoleComboBox} onOpenChange={setOpenRoleComboBox}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={openRoleComboBox}
-                className=" w-[200px] justify-between"
-              >
-                {_role
-                  ? roles?.find((r) => r.id.toString() === _role)?.label
-                  : selectedRole
-                  ? selectedRole.label
-                  : "Seleccionar rango..."}
-                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
-              <Command>
-                <CommandInput placeholder="Buscar rango..." className="h-9" />
-                <CommandEmpty>
-                  No se encontraron rangos de usuarios.
-                </CommandEmpty>
-                <CommandList>
-                  <CommandGroup>
-                    {roles?.map((r) => {
-                      return (
-                        <CommandItem
-                          key={r.id}
-                          value={r.label}
-                          onSelect={(value) => {
-                            setSelectedRole(
-                              selectedRole?.label === value
-                                ? null
-                                : (roles.find(
-                                    (r) => r.label === value
-                                  ) as Tables<"roles">) || null
-                            );
-                            setOpenRoleComboBox(false);
-                          }}
-                        >
-                          {r.label}
-                          <CheckIcon
-                            className={cn(
-                              "ml-auto h-4 w-4",
-                              selectedRole?.label === r.label
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                        </CommandItem>
-                      );
-                    })}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </div>
-        <div className="flex flex-grow flex-wrap items-center justify-center gap-2 lg:flex-grow-0 lg:justify-normal">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-7 gap-1 text-sm">
-                <ListFilter className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only">Filtros</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="center">
-              <DropdownMenuLabel>Filtrar por</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem
-                onSelect={() => handleFilter("all")}
-                checked={_status === "all"}
-              >
-                Mostrar todos
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                onSelect={() => handleFilter("busy")}
-                checked={_status === "busy"}
-              >
-                Ocupado
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                onSelect={() => handleFilter("active")}
-                checked={_status === "active"}
-              >
-                Disponible
-              </DropdownMenuCheckboxItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
-            <File className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only">Exportar</span>
-          </Button>
-        </div>
-      </div>
-    </>
-  );
+	return (
+		<>
+			<div className="mb-4 flex w-full flex-row flex-wrap justify-between gap-1 rounded-md p-3 py-1 lg:pl-0 lg:pr-8">
+				<div className="flex flex-grow flex-wrap items-center justify-center gap-2 lg:flex-grow-0 lg:justify-normal  ">
+					<Search placeholder="Buscar por nombre o folio..." />
+					<Popover open={openRoleComboBox} onOpenChange={setOpenRoleComboBox}>
+						<PopoverTrigger asChild>
+							<Button
+								variant="outline"
+								role="combobox"
+								aria-expanded={openRoleComboBox}
+								className=" w-[200px] justify-between"
+							>
+								{_role
+									? roles?.find((r) => r.id.toString() === _role)?.label
+									: selectedRole
+										? selectedRole.label
+										: "Seleccionar rango..."}
+								<CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent className="w-[200px] p-0">
+							<Command>
+								<CommandInput placeholder="Buscar rango..." className="h-9" />
+								<CommandEmpty>
+									No se encontraron rangos de usuarios.
+								</CommandEmpty>
+								<CommandList>
+									<CommandGroup>
+										{roles?.map((r) => {
+											return (
+												<CommandItem
+													key={r.id}
+													value={r.label}
+													onSelect={(value) => {
+														setSelectedRole(
+															selectedRole?.label === value
+																? null
+																: (roles.find(
+																		(r) => r.label === value,
+																	) as Tables<"roles">) || null,
+														);
+														setOpenRoleComboBox(false);
+													}}
+												>
+													{r.label}
+													<CheckIcon
+														className={cn(
+															"ml-auto h-4 w-4",
+															selectedRole?.label === r.label
+																? "opacity-100"
+																: "opacity-0",
+														)}
+													/>
+												</CommandItem>
+											);
+										})}
+									</CommandGroup>
+								</CommandList>
+							</Command>
+						</PopoverContent>
+					</Popover>
+				</div>
+				<div className="flex flex-grow flex-wrap items-center justify-center gap-2 lg:flex-grow-0 lg:justify-normal">
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant="outline" size="sm" className="h-7 gap-1 text-sm">
+								<ListFilter className="h-3.5 w-3.5" />
+								<span className="sr-only sm:not-sr-only">Filtros</span>
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="center">
+							<DropdownMenuLabel>Filtrar por</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							<DropdownMenuCheckboxItem
+								onSelect={() => handleFilter("all")}
+								checked={_status === "all"}
+							>
+								Mostrar todos
+							</DropdownMenuCheckboxItem>
+							<DropdownMenuCheckboxItem
+								onSelect={() => handleFilter("busy")}
+								checked={_status === "busy"}
+							>
+								Ocupado
+							</DropdownMenuCheckboxItem>
+							<DropdownMenuCheckboxItem
+								onSelect={() => handleFilter("active")}
+								checked={_status === "active"}
+							>
+								Disponible
+							</DropdownMenuCheckboxItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+					<Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
+						<File className="h-3.5 w-3.5" />
+						<span className="sr-only sm:not-sr-only">Exportar</span>
+					</Button>
+				</div>
+			</div>
+		</>
+	);
 };

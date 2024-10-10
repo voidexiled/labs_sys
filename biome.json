@@ -7,7 +7,10 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": []
+		"ignore": [
+			"/src/icons/crud-actions/not-ready",
+			"/src/icons/social/not-ready"
+		]
 	},
 	"formatter": {
 		"enabled": true,
@@ -26,11 +29,15 @@
 				"useAltText": "warn",
 				"useAriaPropsForRole": "warn",
 				"useValidAriaProps": "warn",
-				"useValidAriaValues": "warn"
+				"useValidAriaValues": "warn",
+				"useSemanticElements": "off",
+				"useFocusableInteractive": "off",
+				"noRedundantRoles": "off",
+				"noSvgWithoutTitle": "off"
 			},
 			"correctness": {
 				"noChildrenProp": "error",
-				"useExhaustiveDependencies": "warn",
+				"useExhaustiveDependencies": "off",
 				"useHookAtTopLevel": "error",
 				"useJsxKeyInIterable": "error"
 			},
@@ -43,7 +50,10 @@
 				"noMisleadingCharacterClass": "info"
 			},
 			"style": {
-				"noNonNullAssertion": "info"
+				"noNonNullAssertion": "off"
+			},
+			"complexity": {
+				"noForEach": "off"
 			}
 		}
 	},

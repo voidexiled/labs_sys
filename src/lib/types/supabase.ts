@@ -271,7 +271,6 @@ export type Database = {
           id: number
           key: string | null
           label: string
-          syllabus_id: number | null
           updated_at: string
         }
         Insert: {
@@ -279,7 +278,6 @@ export type Database = {
           id?: number
           key?: string | null
           label: string
-          syllabus_id?: number | null
           updated_at?: string
         }
         Update: {
@@ -287,18 +285,9 @@ export type Database = {
           id?: number
           key?: string | null
           label?: string
-          syllabus_id?: number | null
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "subjects_syllabus_id_fkey"
-            columns: ["syllabus_id"]
-            isOneToOne: false
-            referencedRelation: "syllabuses"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       submissions: {
         Row: {

@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { verifyRoleRedirect } from "./auth-server-action/actions";
 
 export default async function Home() {
-  await verifyRoleRedirect();
-  console.log("user");
+	await verifyRoleRedirect();
+	console.log("user");
 
-  return <></>;
+	return <></>;
 }

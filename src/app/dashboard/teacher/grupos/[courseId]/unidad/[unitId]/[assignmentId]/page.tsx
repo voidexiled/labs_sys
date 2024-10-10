@@ -8,24 +8,30 @@ import { QueryClient } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-export default async function Page({ params }: { params: { courseId: string, unitId: string, assignmentId: string } }) {
-    const courseId: number = Number(params.courseId);
-    const unitId: number = Number(params.unitId);
-    const assignmentId: number = Number(params.assignmentId);
+export default async function Page({
+	params,
+}: { params: { courseId: string; unitId: string; assignmentId: string } }) {
+	const courseId: number = Number(params.courseId);
+	const unitId: number = Number(params.unitId);
+	const assignmentId: number = Number(params.assignmentId);
 
-    const queryClient = new QueryClient();
+	const queryClient = new QueryClient();
 
-    queryClient.prefetchQuery({
-        queryKey: ['unit_assignments', courseId, unitId],
-        queryFn: () => getAssignmentSubmissionsFrom({ params: { assignmentId } })
-    })
+	queryClient.prefetchQuery({
+		queryKey: ["unit_assignments", courseId, unitId],
+		queryFn: () => getAssignmentSubmissionsFrom({ params: { assignmentId } }),
+	});
 
-    return (
-        <>
-            <SubmissionsHeader assignmentId={assignmentId} courseId={courseId} unitId={unitId} />
-            <GroupUnitContainer courseId={courseId} unitId={unitId}>
-                <SubmissionsList assignmentId={assignmentId} />
-            </GroupUnitContainer>
-        </>
-    )
+	return (
+		<>
+			<SubmissionsHeader
+				assignmentId={assignmentId}
+				courseId={courseId}
+				unitId={unitId}
+			/>
+			<GroupUnitContainer courseId={courseId} unitId={unitId}>
+				<SubmissionsList assignmentId={assignmentId} />
+			</GroupUnitContainer>
+		</>
+	);
 }
