@@ -135,11 +135,11 @@ export const ProfilePhoto = (props: {
 	};
 
 	return (
-		<Avatar className="w-40 h-40 group">
-			<div className="absolute opacity-0 top-0 left-0 w-full h-full flex items-center justify-center group-hover:opacity-100 group-hover:bg-background/45 transition-all group-hover:cursor-pointer">
+		<Avatar className="group h-40 w-40">
+			<div className="absolute top-0 left-0 flex h-full w-full items-center justify-center opacity-0 transition-all group-hover:cursor-pointer group-hover:bg-background/45 group-hover:opacity-100">
 				<Label
 					htmlFor="upload_image"
-					className="group-hover:cursor-pointer w-full h-full flex justify-center items-center"
+					className="flex h-full w-full items-center justify-center group-hover:cursor-pointer"
 				>
 					Cambiar imagen...
 				</Label>
@@ -147,7 +147,7 @@ export const ProfilePhoto = (props: {
 					id="upload_image"
 					accept="image/jpeg"
 					type="file"
-					className="hidden w-full h-full"
+					className="hidden h-full w-full"
 					onChange={handleFileInputChange}
 					name={props.name}
 				/>

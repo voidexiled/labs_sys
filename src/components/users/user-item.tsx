@@ -236,11 +236,11 @@ const UserItem = (props: {
 							}}
 							className="group relative mb-3 flex max-h-24 min-h-24 flex-row rounded-md border transition-all duration-300 hover:cursor-pointer hover:bg-card"
 						>
-							<div className="relative hidden items-center self-center overflow-visible p-4 py-3 transition-all xs:flex xs:h-full xs:w-[100px]">
+							<div className="relative xs:flex hidden xs:h-full xs:w-[100px] items-center self-center overflow-visible p-4 py-3 transition-all">
 								<AspectRatio ratio={1 / 1}>
 									<Avatar
 										className={cn(
-											"duration-[2s] group h-full w-full overflow-hidden border border-transparent shadow-black transition-all [box-shadow:0_0_6px_1px_rgba(0,0,0,0.10)] group-hover:[box-shadow:0_0_6px_1px_rgba(0,0,0,0.18)]",
+											"group h-full w-full overflow-hidden border border-transparent shadow-black transition-all duration-[2s] [box-shadow:0_0_6px_1px_rgba(0,0,0,0.10)] group-hover:[box-shadow:0_0_6px_1px_rgba(0,0,0,0.18)]",
 											isBusy
 												? "group-hover:border-primary"
 												: "group-hover:border-transparent",
@@ -249,7 +249,7 @@ const UserItem = (props: {
 										<AvatarImage
 											loading="lazy"
 											alt=""
-											className="duration-[2s] object-cover opacity-0 transition-all group-hover:opacity-100"
+											className="object-cover opacity-0 transition-all duration-[2s] group-hover:opacity-100"
 											onLoad={(event: SyntheticEvent<HTMLImageElement>) => {
 												event.currentTarget.classList.remove("opacity-0");
 												event.currentTarget.classList.add("opacity-80");
@@ -267,11 +267,11 @@ const UserItem = (props: {
 									</Avatar>
 								</AspectRatio>
 							</div>
-							<div className="flex flex-col justify-between text-pretty px-5 py-4 text-sm tracking-wider text-muted-foreground transition-all ">
-								<span className="text-foreground  transition-all">
+							<div className="flex flex-col justify-between text-pretty px-5 py-4 text-muted-foreground text-sm tracking-wider transition-all ">
+								<span className="text-foreground transition-all">
 									{display_name}
 								</span>
-								<div className="flex flex-row  text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
+								<div className="flex flex-row text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
 									<span>{no_identificador}</span>
 								</div>
 								<div className="flex flex-row gap-3 text-sm transition-all group-hover:pl-2 group-hover:text-foreground">
